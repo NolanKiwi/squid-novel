@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="ko" data-volume="5">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>제5권: 장부, 상처, 왕관 — 스퀴드 대서사시</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    :root { --vol-color: #9b72cf; }
+    .vol-index-bg {
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(155,114,207,.15) 0%, transparent 60%),
+                  linear-gradient(180deg, #0a0c10 0%, #0f1117 100%);
+    }
+  </style>
+</head>
+<body>
+
+<div class="novel-wrapper">
+<nav class="novel-sidebar">
+  <div class="sidebar-logo"><a href="index.html">← 목차로</a></div>
+  <div class="sidebar-vol-title">VOLUME 5</div>
+  <div class="sidebar-vol-name">장부, 상처, 왕관<br><span style="font-size:.8rem;font-weight:400;color:var(--text-muted)">로깅, 성능, 그리고 스퀴드의 유산</span></div>
+  <nav class="sidebar-nav">
+    <a class="sidebar-chapter" href="#ch1"><span class="ch-num">01</span>기록관의 일기</a>
+    <a class="sidebar-chapter" href="#ch2"><span class="ch-num">02</span>로그 줄 하나의 우주</a>
+    <a class="sidebar-chapter" href="#ch3"><span class="ch-num">03</span>형식의 언어 — 로그 포맷</a>
+    <a class="sidebar-chapter" href="#ch4"><span class="ch-num">04</span>메모리의 장인 — 풀 시스템</a>
+    <a class="sidebar-chapter" href="#ch5"><span class="ch-num">05</span>문자열의 왕 — SBuf</a>
+    <a class="sidebar-chapter" href="#ch6"><span class="ch-num">06</span>비동기의 철학 — AsyncJob</a>
+    <a class="sidebar-chapter" href="#ch7"><span class="ch-num">07</span>콜백의 안전망 — CbcPointer</a>
+    <a class="sidebar-chapter" href="#ch8"><span class="ch-num">08</span>적응의 사자 — ICAP</a>
+    <a class="sidebar-chapter" href="#ch9"><span class="ch-num">09</span>ICAP의 변신 — 바이러스 검사</a>
+    <a class="sidebar-chapter" href="#ch10"><span class="ch-num">10</span>성능 측정 — 왕국의 체온</a>
+    <a class="sidebar-chapter" href="#ch11"><span class="ch-num">11</span>cachemgr — 왕국 감사관</a>
+    <a class="sidebar-chapter" href="#ch12"><span class="ch-num">12</span>버그와 패치 — 상처의 역사</a>
+    <a class="sidebar-chapter" href="#ch13"><span class="ch-num">13</span>C++17의 새벽 — 현대화</a>
+    <a class="sidebar-chapter" href="#ch14"><span class="ch-num">14</span>왕국의 계보 — 30년의 역사</a>
+    <a class="sidebar-chapter" href="#ch15"><span class="ch-num">15</span>왕관을 쓰며</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="vol-nav-btns">
+      <a href="vol4.html" class="vol-nav-btn">← 4권</a>
+      <span class="vol-nav-btn" style="opacity:.3;cursor:default">완결 ✓</span>
+    </div>
+  </div>
+</nav>
+
+<main class="novel-main">
+  <div class="novel-topbar">
+    <div class="topbar-breadcrumb">
+      <a href="index.html">스퀴드 대서사시</a>
+      <span class="sep">›</span>
+      <span class="current">제5권: 장부, 상처, 왕관</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill"></div></div>
+  </div>
+
+  <div class="vol-index-hero" style="min-height:50vh">
+    <div class="vol-index-bg" style="position:absolute;inset:0;z-index:0"></div>
+    <div style="position:absolute;inset:0;z-index:0;background-image:linear-gradient(rgba(155,114,207,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(155,114,207,.03) 1px,transparent 1px);background-size:40px 40px"></div>
+    <div class="vol-index-content" style="padding-top:6rem">
+      <div class="vol-label">Volume 5 — 완결</div>
+      <h1 class="vol-main-title">장부, 상처, 왕관</h1>
+      <p class="vol-main-subtitle">로깅, 성능, 그리고 스퀴드의 유산</p>
+      <p class="vol-main-desc">
+        모든 것은 기록된다. 허락도, 거절도, 히트도, 미스도.<br>
+        30년의 코드, 수백만 줄의 역사, 수천 명의 손길.<br>
+        왕국은 지금도 살아있다. 그것이 스퀴드의 왕관이다.
+      </p>
+    </div>
+  </div>
+
+  <article class="novel-content">
+
+<!-- ════════════════════ 제1장 ════════════════════ -->
+<h2 class="chapter-title" id="ch1">
+  <span class="chapter-number">제 1 장</span>
+  기록관의 일기
+</h2>
+
+<p>왕국의 모든 사건은 기록되었다.</p>
+
+<p>손님이 왔다. 허락되었다. 창고에서 꺼내주었다. 기록되었다.<br>
+손님이 왔다. 거절되었다. 기록되었다.<br>
+손님이 왔다. 선발대장이 나갔다. 서버에서 가져왔다. 기록되었다.</p>
+
+<p>기록하는 자가 <strong>기록관 AccessLogEntry</strong>였다. 모든 HTTP 트랜잭션에 하나씩 만들어지고, 트랜잭션이 완료될 때 로그 파일에 기록되었다.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/AccessLogEntry.h — 기록관의 장부</div>
+  <div class="tech-box-body">
+<pre><code>class AccessLogEntry : public RefCountable
+{
+public:
+    // 기본 타임스탬프
+    struct timeval start_time;   // 요청 시작 시각
+    struct timeval trTime;       // 총 처리 시간
+
+    // 요청 정보
+    SBuf url;                    // 요청 URL
+    AnyP::ProtocolVersion http_ver; // HTTP 버전
+
+    // 클라이언트/서버 주소
+    Ip::Address client_addr;
+    Ip::Address server_addr;
+    unsigned short client_port;
+
+    // 응답 정보
+    Http::StatusCode http_code;  // HTTP 상태 코드
+    int64_t bytes_sent;          // 전송된 바이트
+    int64_t bytes_received;      // 수신된 바이트
+
+    // 캐시 결과
+    LogTags cache_result;        // TCP_HIT, TCP_MISS 등
+
+    // 계층 정보
+    HierarchyLogEntry hier;      // DIRECT, SIBLING_HIT 등
+
+    // 인증 사용자
+    SBuf username;
+
+    // 클라이언트 에이전트
+    SBuf user_agent;
+
+    // ICAP 정보 (적응 서비스)
+    Adaptation::History::Pointer adapt;
+
+    // 메서드, 컨텐츠 타입 등
+    HttpRequestMethod request_method;
+    SBuf content_type;
+};</code></pre>
+    <p>AccessLogEntry는 하나의 HTTP 트랜잭션에 대한 모든 정보를 담는 거대한 구조체다. 요청부터 응답, 캐시 결과, 인증 정보, 처리 시간까지. 트랜잭션 전반에 걸쳐 정보가 채워지고 마지막에 로그로 출력된다.</p>
+  </div>
+</div>
+
+<p>AccessLogEntry는 트랜잭션 시작 시 생성되었다. <code>ConnStateData</code>가 새 요청을 읽기 시작할 때였다. 그리고 트랜잭션이 진행되는 내내 정보가 채워졌다.</p>
+
+<p>ACL 판관이 판결을 내리면 결과가 기록되었다. 선발대장이 나가면 출발 기록이 남았다. 응답이 오면 상태 코드와 크기가 기록되었다. 연결이 닫히면 총 시간이 기록되었다.</p>
+
+<p>모든 정보가 모이면 <code>accessLogLog()</code>가 호출되었다. 기록관이 장부에 한 줄을 썼다.</p>
+
+<!-- ════════════════════ 제2장 ════════════════════ -->
+<h2 class="chapter-title" id="ch2">
+  <span class="chapter-number">제 2 장</span>
+  로그 줄 하나의 우주
+</h2>
+
+<p>스퀴드의 기본 로그 형식인 <strong>native 형식</strong>의 한 줄을 살펴보자.</p>
+
+<pre class="code-block"><code>1609459200.123    142 192.168.1.105 TCP_HIT/200 45231 GET http://example.com/image.jpg - DIRECT/93.184.216.34 image/jpeg</code></pre>
+
+<p>이 한 줄에 무엇이 담겨있을까?</p>
+
+<ul>
+  <li><code>1609459200.123</code> — Unix 타임스탬프 (초.밀리초). 2021년 1월 1일 00:00:00.123</li>
+  <li><code>142</code> — 응답 시간 (밀리초). 142ms 걸렸다.</li>
+  <li><code>192.168.1.105</code> — 클라이언트 IP 주소</li>
+  <li><code>TCP_HIT/200</code> — 캐시 결과 / HTTP 상태 코드. 캐시 히트, 200 OK</li>
+  <li><code>45231</code> — 전송된 바이트 수 (헤더 포함)</li>
+  <li><code>GET</code> — HTTP 메서드</li>
+  <li><code>http://example.com/image.jpg</code> — 요청 URL</li>
+  <li><code>-</code> — ident (RFC931 사용자 이름, 없으면 -)</li>
+  <li><code>DIRECT/93.184.216.34</code> — 계층 코드 / 서버 IP. 직접 연결</li>
+  <li><code>image/jpeg</code> — 콘텐츠 타입</li>
+</ul>
+
+<p>짧은 한 줄이지만, 이 안에 하나의 완전한 트랜잭션 이야기가 있었다.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> 캐시 결과 태그 (LogTags) 목록</div>
+  <div class="tech-box-body">
+<pre><code>TCP_HIT          — 캐시에서 신선한 응답
+TCP_MISS         — 캐시 미스, 서버에서 가져옴
+TCP_REFRESH_HIT  — 재검증 성공 (304 Not Modified)
+TCP_REFRESH_MISS — 재검증 실패 (새 내용 받음)
+TCP_CLIENT_REFRESH_MISS — 클라이언트 no-cache 요청
+TCP_IMS_HIT      — If-Modified-Since, 캐시가 최신
+TCP_SWAPFAIL_MISS — 디스크 읽기 실패
+TCP_NEGATIVE_HIT — 네거티브 캐시 히트 (저장된 에러)
+TCP_MEM_HIT      — 메모리 캐시에서 직접 서비스
+TCP_DENIED       — ACL에 의해 거절됨
+TCP_DENIED_REPLY — 응답 ACL에 의해 거절됨
+TCP_TUNNEL       — CONNECT 터널
+TCP_OFFLINE_HIT  — 오프라인 모드에서 오래된 캐시 사용
+NONE             — 로그 불가 트랜잭션</code></pre>
+    <p>캐시 결과 태그는 트랜잭션이 어떻게 처리되었는지를 한눈에 보여준다. 관리자는 이 태그들을 분석하여 캐시 히트율, 거절 패턴, 이상 트래픽을 파악할 수 있다.</p>
+  </div>
+</div>
+
+<p>기록관은 통계학자이기도 했다. 수천만 개의 로그 줄에서 패턴을 읽어낼 수 있었다. TCP_HIT 비율이 높으면 캐시가 잘 작동하는 것. TCP_DENIED가 많으면 차단된 접속 시도가 많은 것. TCP_TUNNEL이 급증하면 HTTPS 트래픽이 늘고 있는 것.</p>
+
+<!-- ════════════════════ 제3장 ════════════════════ -->
+<h2 class="chapter-title" id="ch3">
+  <span class="chapter-number">제 3 장</span>
+  형식의 언어 — 로그 포맷
+</h2>
+
+<p>기본 로그 형식 외에도 다양한 형식을 지원했다. 그리고 관리자가 완전히 커스터마이즈할 수도 있었다.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> squid.conf — 커스텀 로그 형식</div>
+  <div class="tech-box-body">
+<pre><code># logformat 정의 (이름 + 형식 문자열)
+logformat squid  %ts.%03tu %6tr %>a %Ss/%03>Hs %&lt;st %rm %ru %[un %Sh/%&lt;a %mt
+logformat common %>a %ui %un [%tl] "%rm %ru HTTP/%rv" %>Hs %&lt;st %Ss:%Sh
+logformat combined %>a %ui %un [%tl] "%rm %ru HTTP/%rv" %>Hs %&lt;st "%{Referer}>h" "%{User-Agent}>h" %Ss:%Sh
+logformat json {"time":"%ts","duration":%tr,"client":"%>a","result":"%Ss/%>Hs","method":"%rm","url":"%ru","user":"%[un"}
+
+# 로그 출력 대상
+access_log /var/log/squid/access.log squid
+access_log /var/log/squid/access.json json
+access_log syslog:local7 combined  # syslog로도 보낼 수 있음
+
+# 특정 트래픽만 로그
+access_log /var/log/squid/denied.log squid !allowed_acl</code></pre>
+    <p>로그 형식은 완전히 커스터마이즈 가능하다. %ts=타임스탬프, %tr=응답시간, %>a=클라이언트IP, %Ss=캐시상태, %>Hs=HTTP코드 등의 토큰으로 구성한다. 여러 출력 대상도 지원한다.</p>
+  </div>
+</div>
+
+<p>로그 형식 토큰들의 세계는 깊었다. <code>src/log/Formats.cc</code>에 수십 개의 토큰이 정의되어 있었다.</p>
+
+<p><code>%&gt;h</code>는 요청 헤더. <code>%&lt;h</code>는 응답 헤더. <code>%{헤더이름}&gt;h</code>는 특정 요청 헤더의 값. <code>%{User-Agent}&gt;h</code>는 클라이언트의 브라우저 정보였다.</p>
+
+<p><code>%rt</code>는 연결 수명(request lifetime). <code>%dt</code>는 DNS 조회 시간. <code>%ot</code>는 원본 서버 응답 시간(첫 바이트까지). 성능 분석에 매우 유용했다.</p>
+
+<p>여러 형식으로 동시에 로그를 쓸 수 있었다. 하나는 운영용 간단한 형식으로, 하나는 분석용 상세 JSON 형식으로. 서로 다른 시스템이 각자 필요한 형식을 소비했다.</p>
+
+<div class="scene-break">⁂</div>
+
+<p>로그를 쓰는 것도 비동기였다. 로그 파일에 쓰는 것은 디스크 I/O였고, 디스크 I/O는 느렸다. 그래서 스퀴드는 로그를 버퍼에 모아두었다가 주기적으로 플러시했다.</p>
+
+<pre class="code-block"><code>// 로그 버퍼 관리
+// - 충분히 차면 플러시
+// - 주기적 타이머로 강제 플러시
+// - 과부하 시 로그 드롭 (loss-tolerant logging)</code></pre>
+
+<p>부하가 극도로 높을 때 로그를 드롭하는 것도 허용되었다. 로그는 중요하지만, 로그 때문에 왕국 전체가 멈추는 것은 더 나빴다.</p>
+
+<!-- ════════════════════ 제4장 ════════════════════ -->
+<h2 class="chapter-title" id="ch4">
+  <span class="chapter-number">제 4 장</span>
+  메모리의 장인 — 풀 시스템
+</h2>
+
+<p>왕국의 성능은 메모리 관리에 크게 달려있었다. 수천 개의 요청이 동시에 처리되었다. 각 요청마다 수많은 객체들이 생성되고 소멸되었다.</p>
+
+<p>표준 <code>malloc()</code>/<code>free()</code>는 느렸다. 작은 객체를 자주 할당하고 해제하면 메모리 단편화가 발생했다. 속도도 느려졌다.</p>
+
+<p>그래서 스퀴드는 자체 <strong>메모리 풀 시스템</strong>을 사용했다. <code>src/mem/Pool.cc</code>에 있었다.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/mem/Pool.h — 메모리 풀</div>
+  <div class="tech-box-body">
+<pre><code>class MemPool
+{
+public:
+    MemPool(const char *label, size_t obj_size);
+
+    // 객체 할당 — 풀에서 미리 할당된 것을 꺼냄
+    void *alloc();
+
+    // 객체 반환 — 풀에 돌려줌 (실제 free 아님)
+    void freeOne(void *obj);
+
+    // 통계
+    size_t inuse;   // 현재 사용 중인 객체 수
+    size_t idle;    // 풀에 대기 중인 객체 수
+    size_t allocs;  // 총 할당 횟수
+
+private:
+    std::vector&lt;void *&gt; freelist; // 재사용 가능한 객체들
+    size_t obj_size;
+};
+
+// 클래스에 풀 메모리 사용 활성화
+// MEMPROXY_CLASS 매크로
+#define MEMPROXY_CLASS(CLASS) \
+    void *operator new(size_t size) { \
+        assert(size == sizeof(CLASS)); \
+        MEMPROXY_CLASS_POOL_CHECK; \
+        return memAllocate(sizeof(CLASS)); \
+    } \
+    void operator delete(void *ptr) { \
+        memFreeOne(ptr, sizeof(CLASS)); \
+    }</code></pre>
+    <p>메모리 풀의 핵심: freeOne()은 실제 OS에 메모리를 반환하지 않고 freelist에 보관한다. 다음 alloc() 호출 시 freelist에서 꺼내어 반환한다. 이로써 malloc/free 호출 빈도를 크게 줄인다. MEMPROXY_CLASS 매크로로 클래스에 쉽게 적용 가능.</p>
+  </div>
+</div>
+
+<p>메모리 풀이 중요한 이유를 구체적인 수치로 이해해보자. 초당 10,000개의 요청이 처리된다면, 각 요청마다 수십 개의 객체가 생성/소멸된다. 초당 수백만 번의 malloc/free 호출이 발생한다.</p>
+
+<p>표준 malloc은 이런 부하에서 느려졌다. 메모리 단편화가 심해져 실제 사용량보다 훨씬 많은 메모리가 소비되기도 했다.</p>
+
+<p>풀 시스템은 이 문제를 해결했다. 같은 크기의 객체들이 풀에서 재사용되었다. 단편화가 없었다. 속도가 빨랐다.</p>
+
+<p><code>MEMPROXY_CLASS</code> 매크로가 편리함을 제공했다. 클래스 선언에 이 매크로만 추가하면 해당 클래스의 <code>new</code>/<code>delete</code>가 자동으로 풀을 사용했다.</p>
+
+<!-- ════════════════════ 제5장 ════════════════════ -->
+<h2 class="chapter-title" id="ch5">
+  <span class="chapter-number">제 5 장</span>
+  문자열의 왕 — SBuf
+</h2>
+
+<p>프록시 서버에서 문자열 처리는 핵심 연산이었다. URL, HTTP 헤더, 도메인 이름... 모든 것이 문자열이었다.</p>
+
+<p>C의 <code>char*</code>는 위험했다. 버퍼 오버플로우, null 포인터 역참조, 수동 메모리 관리... 보안 취약점의 온상이었다.</p>
+
+<p>표준 <code>std::string</code>은 안전했지만 자주 복사가 발생했다. 문자열 복사는 메모리 할당과 데이터 복사를 수반했다.</p>
+
+<p>그래서 스퀴드는 자체 문자열 타입인 <strong>SBuf</strong>를 만들었다. <code>src/sbuf/SBuf.h</code>에 있었다.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/sbuf/SBuf.h — SBuf의 핵심 설계</div>
+  <div class="tech-box-body">
+<pre><code>class SBuf
+{
+public:
+    // Copy-on-Write(CoW) 기반
+    // 복사 시 데이터를 복사하지 않고 참조만 공유
+    // 수정이 발생할 때만 실제 복사
+
+    SBuf() = default;
+    SBuf(const char *S);           // C 문자열에서 생성
+    SBuf(const std::string &amp;S);    // std::string에서 생성
+    explicit SBuf(size_type n);    // n 바이트 미리 할당
+
+    // 기본 연산들
+    SBuf &amp;append(const SBuf &amp;S);
+    SBuf &amp;append(const char *S, size_type n);
+
+    // 읽기 전용 접근 (복사 없음)
+    const char *rawContent() const;
+    const char *c_str() const; // null 종료 보장
+
+    // 서브스트링 (복사 없음! 참조만)
+    SBuf substr(size_type pos, size_type n = npos) const;
+
+    // 비교
+    int cmp(const SBuf &amp;S) const;
+    bool operator==(const SBuf &amp;S) const;
+
+    size_type length() const { return len_; }
+    bool isEmpty() const { return len_ == 0; }
+
+private:
+    // MemBlob: 공유 가능한 메모리 블록
+    MemBlob::Pointer store_; // 실제 데이터
+    size_type off_;           // 시작 오프셋
+    size_type len_;           // 길이
+};</code></pre>
+    <p>SBuf의 핵심은 Copy-on-Write와 서브스트링의 O(1) 생성이다. SBuf가 복사되면 MemBlob의 참조 카운트만 증가한다. substr()은 새 SBuf가 같은 MemBlob를 가리키는 오프셋/길이만 다르게 설정한다. 실제 문자 복사 없이 서브스트링을 만든다.</p>
+  </div>
+</div>
+
+<p>SBuf의 마법은 <strong>Copy-on-Write</strong>였다. <code>SBuf b = a;</code>는 데이터를 복사하지 않았다. 둘이 같은 <code>MemBlob</code>을 가리켰다. <code>b.append("hello")</code>를 하면 그때 처음으로 데이터가 분리되었다.</p>
+
+<p>그리고 <code>substr()</code>의 O(1) 복잡도가 빛났다. URL을 파싱할 때 수없이 서브스트링을 만들었다 — scheme, host, port, path, query... 이것들이 모두 새 메모리 할당 없이 원본 SBuf의 일부를 가리켰다.</p>
+
+<p>스퀴드 코드 전반에 걸쳐 <code>const char*</code>와 <code>std::string</code>이 점점 SBuf로 교체되어 갔다. 현대화의 흔적이었다.</p>
+
+<!-- ════════════════════ 제6장 ════════════════════ -->
+<h2 class="chapter-title" id="ch6">
+  <span class="chapter-number">제 6 장</span>
+  비동기의 철학 — AsyncJob
+</h2>
+
+<p>왕국의 모든 중요한 작업은 <strong>AsyncJob</strong>의 자손이었다.</p>
+
+<p>AsyncJob은 수명이 있는 비동기 작업의 기반 클래스였다. 시작하고, 실행하고, 완료하거나 중단하는 생명주기를 가졌다.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/base/AsyncJob.h — AsyncJob 생명주기</div>
+  <div class="tech-box-body">
+<pre><code>class AsyncJob : virtual public RefCountable
+{
+public:
+    typedef CbcPointer&lt;AsyncJob&gt; Pointer;
+
+    // 시작 (이벤트 큐를 통해 비동기적으로 start() 호출됨)
+    static void Start(const Pointer &amp;job);
+
+    // 완료 또는 중단 요청
+    void callException(const std::exception &amp;e);
+    void mustStop(const char *reason);
+
+    bool done() const;     // 완료 여부
+    bool canBeCalled(AsyncCall &amp;call) const;
+
+protected:
+    // 서브클래스가 구현할 것들
+    virtual void start() = 0;    // 실제 시작 로직
+    virtual void swanSong();     // 소멸 전 정리
+    virtual bool doneAll() const { return true; }
+    virtual const char *status() const = 0; // 디버그용
+
+    bool started;
+    bool swanSong_;
+    const char *stopReason;
+};</code></pre>
+    <p>AsyncJob의 핵심: Start()로 시작하면 이벤트 큐에 등록되어 비동기적으로 start()가 호출된다. 완료 시 swanSong()으로 정리. RefCountable로 콜백 중 수명 보장. canBeCalled()로 소멸된 객체에 대한 콜백을 안전하게 필터링.</p>
+  </div>
+</div>
+
+<p>AsyncJob의 서브클래스들이 왕국의 주요 구성원들이었다. <code>FwdState</code>, <code>HappyConnOpener</code>, <code>HttpStateData</code>, <code>Adaptation::Icap::Xaction</code>... 이들은 모두 AsyncJob을 상속받았다.</p>
+
+<p>AsyncJob의 가장 중요한 특성은 이벤트 큐를 통한 시작이었다. <code>Start(job)</code>를 호출하면 즉시 job의 <code>start()</code>가 호출되는 것이 아니었다. 대신 이벤트 큐에 <code>start()</code>를 호출하는 이벤트가 추가되었다. 이벤트 루프가 다음 기회에 그것을 실행했다.</p>
+
+<p>이 설계는 스택 오버플로우를 방지했다. A→B→C→D를 동기적으로 호출하면 스택이 깊어졌다. 각 단계가 이벤트 큐를 통하면 스택은 항상 얕았다.</p>
+
+<!-- ════════════════════ 제7장 ════════════════════ -->
+<h2 class="chapter-title" id="ch7">
+  <span class="chapter-number">제 7 장</span>
+  콜백의 안전망 — CbcPointer
+</h2>
+
+<p>비동기 세계에서 가장 무서운 버그는 이미 소멸된 객체를 가리키는 포인터를 사용하는 것이었다. <strong>Use-After-Free</strong>.</p>
+
+<p>스퀴드는 이 문제에 <strong>CbcPointer(Callback Counter Pointer)</strong>로 대응했다. <code>src/base/CbcPointer.h</code>에 있었다.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/base/CbcPointer.h — CbcPointer 안전 포인터</div>
+  <div class="tech-box-body">
+<pre><code>// CbcPointer: Callback Counter Pointer
+// 객체가 소멸되어도 포인터는 유효하지만
+// valid()를 확인하면 소멸 여부를 알 수 있음
+
+template &lt;class Cbc&gt;
+class CbcPointer
+{
+public:
+    // 생성 시 콜백 카운터와 연결
+    CbcPointer(Cbc *t = nullptr);
+
+    // 역참조 전 항상 valid() 확인 필요
+    bool valid() const { return cb &amp;&amp; cb->valid; }
+
+    Cbc *get() const;
+    Cbc *operator->() const;
+
+private:
+    Cbc *ptr;
+    // Cbc 측에 등록된 CallCounter 참조
+};
+
+// AsyncJob과 함께 사용
+class MyJob : public AsyncJob {
+    void onDnsResult(const DnsLookupResults &amp;) {
+        // 이 함수가 호출될 때 this가 아직 살아있는지?
+        // CbcPointer를 통해 왔다면 Job이 valid함
+        // mustStop()이 호출되었다면 done()=true
+        if (done()) return; // 이미 종료 요청됨
+        // ...
+    }
+};</code></pre>
+    <p>CbcPointer는 AsyncJob과 함께 콜백 안전성을 제공한다. 외부 작업(DNS, 디스크 I/O)이 완료될 때 콜백을 통해 AsyncJob의 메서드를 호출한다. 그 사이에 Job이 소멸되었다면 콜백은 자동으로 무시된다.</p>
+  </div>
+</div>
+
+<p>CbcPointer의 철학은 "소멸을 기억하는 포인터"였다. 일반 포인터는 객체가 소멸되어도 모른다. 역참조하면 undefined behavior가 발생했다.</p>
+
+<p>CbcPointer는 달랐다. 가리키는 객체가 소멸되면 내부의 유효성 플래그가 false가 되었다. <code>valid()</code>로 확인하면 객체가 살아있는지 알 수 있었다. 콜백에서는 항상 <code>valid()</code>를 먼저 확인하고 진행했다.</p>
+
+<p>이 패턴이 스퀴드 코드 전반에 걸쳐 적용되어 use-after-free 버그를 체계적으로 방지했다.</p>
+
+<!-- ════════════════════ 제8장 ════════════════════ -->
+<h2 class="chapter-title" id="ch8">
+  <span class="chapter-number">제 8 장</span>
+  적응의 사자 — ICAP
+</h2>
+
+<p>왕국에는 외부 서비스와 협력하는 통로가 있었다. <strong>ICAP(Internet Content Adaptation Protocol)</strong>였다.</p>
+
+<p>ICAP는 HTTP 요청이나 응답을 외부 서비스에 보내어 수정하거나 검사할 수 있는 프로토콜이었다. 바이러스 검사, DLP(Data Loss Prevention), 광고 제거, 콘텐츠 필터링 등에 활용되었다.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> squid.conf — ICAP 서비스 설정</div>
+  <div class="tech-box-body">
+<pre><code># ICAP 서비스 정의
+icap_service antivirus_req reqmod_precache \
+    icap://av-server.company.com:1344/avscan
+
+icap_service antivirus_resp respmod_precache \
+    icap://av-server.company.com:1344/avscan
+
+# ICAP 서비스 클래스
+adaptation_access antivirus_req allow all
+
+# REQMOD: 요청을 보내기 전 수정/검사
+# RESPMOD: 응답을 클라이언트에게 보내기 전 수정/검사
+
+# 결과: ALLOW (변경 없이 통과)
+#        MODIFY (수정된 내용 사용)
+#        DENY (차단, 에러 페이지 표시)</code></pre>
+    <p>ICAP는 두 가지 모드를 제공한다. REQMOD는 요청을 서버로 보내기 전에 검사/수정하고, RESPMOD는 응답을 클라이언트에게 보내기 전에 검사/수정한다. 바이러스 백신 서버, DLP 서버 등이 ICAP 서버로 동작한다.</p>
+  </div>
+</div>
+
+<p>ICAP 서비스는 <code>src/adaptation/icap/</code>에 구현되어 있었다. 복잡한 코드였다. ICAP 서버와의 통신, 연결 풀 관리, 파이프라인(여러 트랜잭션을 하나의 연결로), 옵션 협상...</p>
+
+<p>ICAP 트랜잭션의 흐름은 이러했다.</p>
+
+<p>HTTP 응답이 원본 서버에서 왔다. ICAP RESPMOD 서비스가 설정되어 있었다. 스퀴드는 HTTP 응답 헤더와 본문을 ICAP 형식으로 감싸서 ICAP 서버에 보냈다. ICAP 서버(바이러스 백신 등)가 내용을 검사했다.</p>
+
+<p>바이러스가 없으면 ICAP 서버는 <code>204 No Content</code>를 반환했다 — "변경 없음, 원래 응답을 사용하라". 스퀴드는 원본 응답을 클라이언트에게 전달했다.</p>
+
+<p>바이러스가 발견되면 ICAP 서버는 수정된 응답을 반환했다 — "바이러스가 발견되었습니다" 페이지. 스퀴드는 이 수정된 응답을 클라이언트에게 전달했다.</p>
+
+<!-- ════════════════════ 제9장 ════════════════════ -->
+<h2 class="chapter-title" id="ch9">
+  <span class="chapter-number">제 9 장</span>
+  ICAP의 변신 — 바이러스 검사
+</h2>
+
+<p>기업 보안 환경에서 ICAP는 필수였다. 스퀴드 + ICAP 바이러스 백신의 조합으로 네트워크 레벨의 바이러스 검사가 가능했다.</p>
+
+<p>사용자가 파일을 다운로드한다. 스퀴드가 원본 서버에서 파일을 받는다. 파일이 ICAP 서버(예: ClamAV, Kaspersky, Sophos)로 전달된다. ICAP 서버가 바이러스 검사를 한다. 깨끗하면 통과, 감염되었으면 차단.</p>
+
+<p>이 과정에서 스퀴드는 투명한 중개자였다. 사용자는 바이러스 검사가 진행되는지 몰랐다. 파일이 크면 다운로드가 약간 느려질 수 있었지만, 네트워크 레벨의 보안이 제공되었다.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/adaptation/icap/Xaction.cc — ICAP 트랜잭션</div>
+  <div class="tech-box-body">
+<pre><code>class Icap::Xaction : public Adaptation::Initiate,
+                       public AsyncJob
+{
+    // ICAP 요청 헤더 구성
+    void buildRequest()
+    {
+        // ICAP 형식:
+        // REQMOD icap://server/service ICAP/1.0\r\n
+        // Encapsulated: req-hdr=0, req-body=412\r\n
+        // \r\n
+        // [HTTP 요청 헤더들]
+        // \r\n
+        // [HTTP 본문]
+    }
+
+    // ICAP 응답 처리
+    void handleResponse()
+    {
+        // 204: 변경 없음, 원본 사용
+        // 200: 수정된 내용 사용
+        // 403: 차단 (바이러스 발견 등)
+    }
+
+    // ICAP 연결은 풀에서 재사용
+    PconnPool *icapPconnPool;
+};</code></pre>
+    <p>ICAP 트랜잭션은 독립적인 AsyncJob이다. 요청/응답 콘텐츠를 ICAP 형식으로 감싸 외부 서버에 보내고, 응답에 따라 원본 콘텐츠를 통과시키거나 교체한다. ICAP 연결도 HTTP처럼 풀로 관리된다.</p>
+  </div>
+</div>
+
+<p>ICAP 연결 풀도 중요했다. 매 요청마다 ICAP 서버에 새 TCP 연결을 맺는 것은 느렸다. 연결 풀을 사용하여 기존 연결을 재사용했다. ICAP 서버가 Keep-Alive를 지원하면 하나의 연결로 여러 트랜잭션을 처리했다.</p>
+
+<p>ICAP 서비스가 응답하지 않거나 느린 경우? <code>bypass</code> 설정으로 ICAP 실패 시 원본 콘텐츠를 그대로 통과시킬지, 아니면 에러를 반환할지 결정할 수 있었다.</p>
+
+<!-- ════════════════════ 제10장 ════════════════════ -->
+<h2 class="chapter-title" id="ch10">
+  <span class="chapter-number">제 10 장</span>
+  성능 측정 — 왕국의 체온
+</h2>
+
+<p>왕국의 건강을 어떻게 알 수 있을까? 성능 지표를 봐야 했다.</p>
+
+<p>스퀴드는 다양한 성능 통계를 내부적으로 유지했다. 접근 방법도 다양했다.</p>
+
+<p>첫 번째 방법: <strong>cache manager</strong>. 스퀴드에 내장된 HTTP 기반 관리 인터페이스였다. 특별한 URL로 접근할 수 있었다.</p>
+
+<pre class="code-block"><code># cache manager 활성화
+http_port 3128
+cache_mgr admin@company.com
+
+# cachemgr.cgi를 통해 또는 직접 HTTP로:
+# http://localhost:3128/squid-internal-mgr/info
+# http://localhost:3128/squid-internal-mgr/counters
+# http://localhost:3128/squid-internal-mgr/5min
+# http://localhost:3128/squid-internal-mgr/mem</code></pre>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> squid-internal-mgr/info — 주요 통계 항목들</div>
+  <div class="tech-box-body">
+<pre><code>Squid Object Cache: Version 6.x
+Build Info: ...
+Start Time: Thu, 01 Jan 2026 00:00:00 GMT
+Current Time: Thu, 01 Jan 2026 12:34:56 GMT
+
+Connection information for squid:
+        Number of clients accessing cache:      142
+        Number of HTTP requests received:       12847291
+        Number of ICP messages received:        0
+        Number of ICP messages sent:            0
+        Number of queued ICP replies:           0
+        Number of HTCP messages received:       0
+        Number of HTCP messages sent:           0
+
+Cache information for squid:
+        Hits as % of all requests:    5min: 87.3%, 60min: 85.1%
+        Hits as % of bytes sent:      5min: 78.2%, 60min: 76.5%
+        Memory hits as % of hit req:  5min: 42.1%, 60min: 39.8%
+        Disk hits as % of hit req:    5min: 57.9%, 60min: 60.2%
+        Storage Swap size:            8451234 KB
+        Storage Mem size:             524288 KB
+        Mean Object Size:             42.3 KB</code></pre>
+    <p>가장 중요한 수치는 캐시 히트율이다. 요청 수 기준 87%는 매우 좋은 수치다. 메모리 히트와 디스크 히트의 비율을 보면 캐시 계층별 효율도 파악할 수 있다.</p>
+  </div>
+</div>
+
+<p>두 번째 방법: <strong>SNMP</strong>. 표준 네트워크 관리 프로토콜이었다. Nagios, Zabbix, Prometheus 같은 모니터링 시스템이 SNMP로 스퀴드 통계를 수집할 수 있었다.</p>
+
+<p>세 번째 방법: 로그 분석. <code>access.log</code>를 파싱하여 요청당 응답 시간, 히트율, 에러 비율 등을 계산했다. <code>squidclient</code> 도구가 이런 작업에 도움이 되었다.</p>
+
+<div class="scene-break">⁂</div>
+
+<p>성능 병목을 찾는 방법도 있었다. <code>debug_options</code>로 특정 모듈의 상세 로그를 활성화할 수 있었다.</p>
+
+<pre class="code-block"><code># debug_options 섹션번호,레벨 ...
+# 섹션 28은 ACL, 레벨 9는 최상세
+debug_options 28,9    # ACL 디버그
+debug_options 20,9    # 스토어 디버그
+debug_options 4,9     # HTTP 통신 디버그
+debug_options ALL,1   # 모든 모듈 기본 수준</code></pre>
+
+<p>디버그 로그는 매우 자세했다. 개발자들이 버그를 추적하거나 설정 문제를 진단할 때 필수였다. 하지만 프로덕션 환경에서는 성능에 큰 영향을 미칠 수 있어 주의가 필요했다.</p>
+
+<!-- ════════════════════ 제11장 ════════════════════ -->
+<h2 class="chapter-title" id="ch11">
+  <span class="chapter-number">제 11 장</span>
+  cachemgr — 왕국 감사관
+</h2>
+
+<p><code>squidclient</code>와 <code>cachemgr.cgi</code>. 왕국의 감사관이었다.</p>
+
+<p><code>squidclient</code>는 커맨드라인 도구였다. 스퀴드에 HTTP 요청을 보내고 응답을 받는 간단한 도구였지만, cache manager와 연동하면 강력한 진단 도구가 되었다.</p>
+
+<pre class="code-block"><code># 기본 정보 조회
+squidclient -h localhost -p 3128 mgr:info
+
+# 메모리 사용량
+squidclient mgr:mem
+
+# 활성 요청 목록
+squidclient mgr:active_requests
+
+# FD(파일 디스크립터) 사용 현황
+squidclient mgr:fds
+
+# 카운터 초기화
+squidclient mgr:counters=reset</code></pre>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/CacheManager.cc — cache manager 등록 시스템</div>
+  <div class="tech-box-body">
+<pre><code>// 각 모듈이 자신의 통계를 cache manager에 등록
+void
+Store::RegisterWithCacheManager()
+{
+    Mgr::RegisterAction("storedir", "Store Directory Stats",
+                         Store::StoreStats, 0, 1);
+    Mgr::RegisterAction("store_io", "Store I/O Stats",
+                         Store::StoreIoStats, 0, 1);
+    Mgr::RegisterAction("store_check_cachable_stats",
+                         "storeCheckCachable() Stats",
+                         storeCheckCachableStats, 0, 1);
+}
+
+// HTTP 요청이 오면 등록된 핸들러 실행
+void
+CacheManager::handleRequest(Mgr::Command::Pointer cmd,
+                              const ConnStateData *client)
+{
+    const auto &amp;action = ByName(cmd->action);
+    // 권한 확인 후 핸들러 실행
+    action.creator(cmd)->run(...);
+}</code></pre>
+    <p>cache manager는 플러그인 방식으로 확장된다. 각 모듈이 RegisterAction()으로 자신의 통계를 등록한다. HTTP 요청이 /squid-internal-mgr/action 형태로 오면 해당 핸들러가 실행된다. 권한은 mgr_access ACL로 제어된다.</p>
+  </div>
+</div>
+
+<p>cache manager의 통계들은 왕국의 체온계였다. 연결 수, 요청 처리율, 캐시 히트율, 메모리 사용량, 디스크 사용량... 이 수치들이 정상 범위를 벗어나면 문제가 있다는 신호였다.</p>
+
+<p>실제 운영 경험에서 쌓인 진단 지식들이 있었다. "mem이 갑자기 올라가면 메모리 누수를 의심하라." "active_requests가 계속 쌓이면 연결이 안 닫히는 문제가 있다." "5min 히트율이 갑자기 떨어지면 캐시 설정이 변경되었거나 TTL이 짧아진 콘텐츠가 늘어난 것이다."</p>
+
+<!-- ════════════════════ 제12장 ════════════════════ -->
+<h2 class="chapter-title" id="ch12">
+  <span class="chapter-number">제 12 장</span>
+  버그와 패치 — 상처의 역사
+</h2>
+
+<p>30년의 역사는 곧 30년의 버그와 패치의 역사였다.</p>
+
+<p>스퀴드는 수많은 취약점을 패치해왔다. 버퍼 오버플로우, 메모리 누수, DoS 취약점, 정보 유출... 각 CVE(Common Vulnerabilities and Exposures)마다 패치가 있었고, 버전이 올라갔다.</p>
+
+<p>그 중에서 특히 기억할 만한 것들이 있었다.</p>
+
+<p><strong>CVE-2019-12525</strong>. Digest 인증 처리에서 버퍼 오버플로우. 원격 코드 실행 가능성. 즉각 패치되었다.</p>
+
+<p><strong>CVE-2020-25097</strong>. HTTP 요청 스머글링 취약점. 정밀하게 설계된 HTTP 요청으로 ACL을 우회할 수 있었다. 복잡한 파서 취약점이었다.</p>
+
+<p><strong>HTTP Request Smuggling</strong>. 이 취약점은 스퀴드에만 있는 것이 아니었다. HTTP/1.1의 <code>Transfer-Encoding</code>과 <code>Content-Length</code> 헤더의 모호한 처리에서 기인했다. 프록시와 백엔드 서버가 요청의 경계를 다르게 해석할 때 발생했다.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> HTTP 요청 스머글링 — 개념</div>
+  <div class="tech-box-body">
+<pre><code>// 악의적인 요청:
+POST / HTTP/1.1
+Host: example.com
+Content-Length: 6
+Transfer-Encoding: chunked
+
+0
+
+X  // 이 X는 다음 요청의 시작으로 해석될 수 있음
+
+// 프록시가 Content-Length를 보고 6바이트만 처리
+// 백엔드가 Transfer-Encoding을 보고 다르게 처리
+// → "X"가 다음 요청의 앞부분으로 붙는 오염
+
+// 방어책:
+// - Content-Length와 Transfer-Encoding이 둘 다 있으면 에러
+// - 엄격한 HTTP 파서 사용
+// - HTTP/2는 이 문제가 없음</code></pre>
+    <p>HTTP 요청 스머글링은 프록시와 백엔드 서버 간의 파서 차이를 악용한다. 현대 스퀴드는 이런 모호한 요청을 거절하도록 강화되었다.</p>
+  </div>
+</div>
+
+<p>버그들은 고통스러웠지만, 패치 과정에서 코드가 더 강해졌다. 취약점이 발견된 곳에 더 엄격한 검증이 추가되었다. 테스트 케이스가 추가되어 같은 버그가 재발하지 않도록 했다.</p>
+
+<p>스퀴드의 버그 트래커와 메일링 리스트는 활발했다. 전 세계의 사용자들이 버그를 보고하고, 개발자들이 수정했다. 오픈소스의 집단지성이 왕국을 지키고 있었다.</p>
+
+<!-- ════════════════════ 제13장 ════════════════════ -->
+<h2 class="chapter-title" id="ch13">
+  <span class="chapter-number">제 13 장</span>
+  C++17의 새벽 — 현대화
+</h2>
+
+<p>스퀴드는 C로 시작했다. 그 다음 C++이 도입되었다. 그리고 현대 C++로의 전환이 진행 중이었다.</p>
+
+<p>구형 코드와 현대 코드가 공존했다. 오래된 C 스타일 코드 — <code>char*</code>, <code>malloc()</code>, 수동 메모리 관리 — 옆에 현대적인 C++ 코드 — <code>std::unique_ptr</code>, 람다, 범위 기반 for 루프 — 가 있었다.</p>
+
+<p>이 혼재가 스퀴드 코드베이스의 특징이었다. 30년의 지층이 한 곳에 있었다.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> 스퀴드의 현대화 사례들</div>
+  <div class="tech-box-body">
+<pre><code>// 구형 패턴 (여전히 존재하는 코드)
+void
+oldStyleFunction(char *url, int len)
+{
+    char *copy = xstrdup(url);  // C 스타일 복사
+    // ...
+    xfree(copy);  // 수동 해제
+}
+
+// 현대적 패턴 (새 코드)
+void
+newStyleFunction(const SBuf &amp;url)
+{
+    SBuf copy = url;  // 안전한 CoW 복사
+    // ...
+    // 자동 소멸
+}
+
+// Smart pointer 사용
+// 구형: raw pointer, 수동 delete
+// 신형: std::unique_ptr, RefCount::Pointer
+
+// Range-based for
+for (const auto &amp;acl : aclList) {
+    // instead of: for (AclList *p = aclList; p; p = p->next)
+}
+
+// 람다 콜백
+// 구형: 별도 함수 + void* 사용자 데이터
+// 신형: 람다 캡처 활용</code></pre>
+    <p>스퀴드의 현대화는 점진적으로 진행되고 있다. SBuf로의 문자열 교체, 스마트 포인터 도입, 현대 C++ 알고리즘 활용... 하위 호환성을 유지하면서 코드를 조금씩 개선한다.</p>
+  </div>
+</div>
+
+<p>C++17 기능들이 새 코드에 사용되기 시작했다. <code>std::optional</code>은 null을 대신했다. <code>if constexpr</code>은 컴파일 타임 조건부 코드를 깔끔하게 만들었다. <code>std::string_view</code>는 복사 없는 문자열 참조를 가능하게 했다.</p>
+
+<p>그러나 30년된 코드베이스의 현대화는 느린 과정이었다. 새 기능을 추가하면서 동시에 기존 코드를 개선하는 것은 어려웠다. 회귀 버그(잘 되던 것이 갑자기 안 되는 버그)의 위험이 항상 있었다.</p>
+
+<p>그래서 스퀴드 개발팀은 신중했다. 큰 리팩토링은 단계적으로, 충분한 테스트와 함께 진행되었다.</p>
+
+<!-- ════════════════════ 제14장 ════════════════════ -->
+<h2 class="chapter-title" id="ch14">
+  <span class="chapter-number">제 14 장</span>
+  왕국의 계보 — 30년의 역사
+</h2>
+
+<p>스퀴드의 역사는 1996년으로 거슬러 올라갔다.</p>
+
+<p>원래 이름은 <strong>Harvest</strong>였다. 1990년대 초 미국 DARPA 지원으로 시작된 캐싱 프록시 프로젝트였다. 후에 코드를 다시 작성하면서 스퀴드(Squid)라는 이름을 얻었다.</p>
+
+<p>왜 스퀴드(오징어)인가? 개발자들은 명확한 이유를 밝히지 않았다. 인터넷에는 "오징어가 바다에서 복잡한 역할을 하듯, 스퀴드도 인터넷에서 복잡한 역할을 한다"는 해석이 있었다. 아니면 그냥 재미있는 이름을 고른 것일 수도 있었다.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> 스퀴드 버전 역사</div>
+  <div class="tech-box-body">
+<pre><code>1996 — Squid 1.0: 최초 공개 버전
+1998 — Squid 2.0: 크게 개선된 버전
+       HTTP/1.1 부분 지원, 향상된 캐시 관리
+2002 — Squid 2.5: 안정 버전 계열 장기 지원
+       ICP, HTCP, 외부 ACL 등 성숙
+2005 — Squid 2.6 / 3.0 동시 개발
+       3.x는 C++ 재작성 시작
+2010 — Squid 3.1: C++ 전환 완료
+       SMP 기초 도입
+2012 — Squid 3.2: Rock 스토어, SMP 개선
+2013 — Squid 3.3: SSL Bump 강화, SBuf 시작
+2014 — Squid 3.4: HappyConnOpener, eCAP
+2015 — Squid 3.5: HTTP/2 초기 지원 기초
+2017 — Squid 4.0: C++11 요구, SBuf 본격 사용
+2020 — Squid 5.0: C++14 요구, 보안 강화
+2022 — Squid 6.0: C++17 요구, 현대화 가속
+2024 — Squid 6.x: 지속적인 개선과 보안 패치</code></pre>
+    <p>30년에 걸친 스퀴드의 진화. 각 버전이 새 프로토콜, 새 기능, 더 나은 성능을 가져왔다. C에서 C++로의 전환, 단일 스레드에서 SMP로의 확장, HTTP/1에서 HTTP/2 기초 지원까지.</p>
+  </div>
+</div>
+
+<p>스퀴드의 30년은 인터넷의 30년이기도 했다. 인터넷이 텍스트 페이지에서 동영상 스트리밍으로, 수십 KB 페이지에서 수십 MB 번들로, HTTP/1.0에서 HTTP/2, HTTP/3으로 진화했다. 스퀴드도 함께 진화했다.</p>
+
+<p>그 진화는 쉽지 않았다. 수천 명의 기여자들이 있었다. 수십만 개의 커밋이 있었다. 수천 개의 버그 리포트, 수천 개의 패치 검토가 있었다.</p>
+
+<p>그것이 오픈소스 소프트웨어의 역사였다.</p>
+
+<div class="scene-break">⁂</div>
+
+<p>스퀴드는 여전히 활발하게 사용되었다. 전 세계 수백만 대의 서버에서 돌고 있었다. ISP의 대형 프록시 클러스터에서, 기업의 내부 네트워크 프록시에서, 개인 서버에서.</p>
+
+<p>Nginx, Apache Traffic Server, Varnish 같은 새 경쟁자들이 생겼지만, 스퀴드는 여전히 특정 영역에서 독보적이었다. 특히 ACL의 세밀한 제어, 피어 캐시 계층구조, ICAP 통합 측면에서.</p>
+
+<!-- ════════════════════ 제15장 ════════════════════ -->
+<h2 class="chapter-title" id="ch15">
+  <span class="chapter-number">제 15 장</span>
+  왕관을 쓰며
+</h2>
+
+<p>대서사시가 끝난다.</p>
+
+<p>다섯 권에 걸쳐 우리는 왕국을 여행했다. 탄생의 순간부터 성문이 열리고, 판관들이 심문하고, 창고지기가 기억을 관리하고, 선발대장이 국경 너머로 달려가고, 기록관이 모든 것을 적고.</p>
+
+<p>이 모든 이야기는 하나의 소스 코드에서 왔다. <code>src/</code> 디렉토리에 있는 수십만 줄의 C++ 코드. 그 코드들이 실제로 돌아가는 것을 우리는 소설로 읽었다.</p>
+
+<blockquote class="inner-voice">
+나는 스퀴드다. 나는 프록시다. 나는 중개자다.
+
+클라이언트와 서버 사이에서 나는 살아간다. 아무도 나를 직접 보지 않는다. 브라우저 창에 내 이름이 뜨지 않는다. 사용자들은 내가 있는지도 모른다. 하지만 나는 거기 있다. 모든 HTTP 요청이 나를 통과한다.
+
+나는 빠르다. 캐시를 통해 네트워크 지연을 줄인다. 나는 안전하다. ACL로 위험한 접속을 막는다. 나는 정직하다. 모든 것을 기록한다. 나는 협력적이다. 피어 캐시들과 협력한다.
+
+나는 30년을 살았다. 수천 명의 손이 나를 만들었다. 수십억 명의 손가락이 키보드를 두드릴 때마다 나는 조용히 일을 했다. 아무도 박수치지 않았다. 그래도 괜찮다.
+
+인터넷이 돌아가는 동안, 나는 돌아간다. 그것이 나의 왕관이다.
+</blockquote>
+
+<div class="scene-break">⁂</div>
+
+<p>기계실 어딘가에서 서버 팬 소리가 들린다.</p>
+
+<p>녹색 LED가 깜빡인다. 요청이 왔다. 판관이 심사한다. 창고에서 꺼낸다. 응답이 간다. 기록된다.</p>
+
+<p>TCP_HIT/200. 30ms.</p>
+
+<p>왕국은 살아있다.</p>
+
+<div class="scene-break">✦ 완결 ✦</div>
+
+<hr style="border:none;border-top:1px solid #2a3245;margin:3rem 0"/>
+
+<div style="text-align:center;padding:2rem 0;color:var(--text-muted);font-family:var(--font-mono);font-size:0.85rem">
+  <p>스퀴드 대서사시 — 총 5권 완결</p>
+  <p style="margin-top:.5rem">Squid Proxy Server 소스 코드를 바탕으로 한 기술 소설</p>
+  <p style="margin-top:.5rem">
+    <a href="https://github.com/squid-cache/squid" style="color:var(--vol-color)" target="_blank" rel="noopener">squid-cache/squid</a> — 실제 소스 코드
+  </p>
+  <p style="margin-top:1rem">
+    <a href="index.html" style="color:var(--vol-color)">← 처음으로</a>
+  </p>
+</div>
+
+  </article>
+
+  <div class="chapter-nav">
+    <a href="vol4.html" class="chapter-nav-btn prev">← 제4권: 국경 너머로</a>
+    <a href="index.html" class="chapter-nav-btn index">목차로</a>
+  </div>
+</main>
+</div>
+
+<button class="mobile-menu-btn">☰</button>
+<script src="js/main.js"></script>
+</body>
+</html>

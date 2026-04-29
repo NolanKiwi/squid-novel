@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="ko" data-volume="2">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>제2권: 판관의 법정 — 스퀴드 대서사시</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    :root { --vol-color: #e05c5c; }
+    .vol-index-bg {
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(224,92,92,.15) 0%, transparent 60%),
+                  linear-gradient(180deg, #0a0c10 0%, #0f1117 100%);
+    }
+  </style>
+</head>
+<body>
+
+<div class="novel-wrapper">
+<!-- ══════ 사이드바 ══════ -->
+<nav class="novel-sidebar">
+  <div class="sidebar-logo">
+    <a href="index.html">← 목차로</a>
+  </div>
+  <div class="sidebar-vol-title">VOLUME 2</div>
+  <div class="sidebar-vol-name">판관의 법정<br><span style="font-size:.8rem;font-weight:400;color:var(--text-muted)">ACL, 규칙, 그리고 심판</span></div>
+  <nav class="sidebar-nav">
+    <a class="sidebar-chapter" href="#ch1"><span class="ch-num">01</span>검문소 앞에서</a>
+    <a class="sidebar-chapter" href="#ch2"><span class="ch-num">02</span>판관의 탄생</a>
+    <a class="sidebar-chapter" href="#ch3"><span class="ch-num">03</span>체크리스트라는 법정</a>
+    <a class="sidebar-chapter" href="#ch4"><span class="ch-num">04</span>증거 수집관</a>
+    <a class="sidebar-chapter" href="#ch5"><span class="ch-num">05</span>법조문 읽기 — AllOf와 AnyOf</a>
+    <a class="sidebar-chapter" href="#ch6"><span class="ch-num">06</span>주소 형사 ACLIP</a>
+    <a class="sidebar-chapter" href="#ch7"><span class="ch-num">07</span>시계 형사 ACLTime</a>
+    <a class="sidebar-chapter" href="#ch8"><span class="ch-num">08</span>패턴 추적자 ACLRegex</a>
+    <a class="sidebar-chapter" href="#ch9"><span class="ch-num">09</span>외부 증인 호출</a>
+    <a class="sidebar-chapter" href="#ch10"><span class="ch-num">10</span>신분증 확인소 — 인증</a>
+    <a class="sidebar-chapter" href="#ch11"><span class="ch-num">11</span>비동기 재판의 고통</a>
+    <a class="sidebar-chapter" href="#ch12"><span class="ch-num">12</span>판결문 낭독</a>
+    <a class="sidebar-chapter" href="#ch13"><span class="ch-num">13</span>퇴장 명령 — 에러 페이지</a>
+    <a class="sidebar-chapter" href="#ch14"><span class="ch-num">14</span>특별 법정 — SSL 범프</a>
+    <a class="sidebar-chapter" href="#ch15"><span class="ch-num">15</span>판관의 고백</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="vol-nav-btns">
+      <a href="vol1.html" class="vol-nav-btn">← 1권</a>
+      <a href="vol3.html" class="vol-nav-btn">3권 →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════ 본문 ══════ -->
+<main class="novel-main">
+  <div class="novel-topbar">
+    <div class="topbar-breadcrumb">
+      <a href="index.html">스퀴드 대서사시</a>
+      <span class="sep">›</span>
+      <span class="current">제2권: 판관의 법정</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill"></div></div>
+  </div>
+
+  <!-- ══ 볼륨 히어로 ══ -->
+  <div class="vol-index-hero" style="min-height:50vh">
+    <div class="vol-index-bg" style="position:absolute;inset:0;z-index:0"></div>
+    <div style="position:absolute;inset:0;z-index:0;background-image:linear-gradient(rgba(224,92,92,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(224,92,92,.03) 1px,transparent 1px);background-size:40px 40px"></div>
+    <div class="vol-index-content" style="padding-top:6rem">
+      <div class="vol-label">Volume 2</div>
+      <h1 class="vol-main-title">판관의 법정</h1>
+      <p class="vol-main-subtitle">ACL, 규칙, 그리고 심판</p>
+      <p class="vol-main-desc">
+        요청은 성문을 넘었다. 하지만 성 안에도 관문이 있다.<br>
+        옛 규칙들의 수호자, 판관 ACL이 모든 패킷을 심문한다.<br>
+        허락이냐, 거절이냐 — 0과 1 사이에서 법이 살아 숨쉰다.
+      </p>
+    </div>
+  </div>
+
+  <article class="novel-content">
+
+<!-- ════════════════════ 제1장 ════════════════════ -->
+<h2 class="chapter-title" id="ch1">
+  <span class="chapter-number">제 1 장</span>
+  검문소 앞에서
+</h2>
+
+<p>문지기 <strong>ConnStateData</strong>가 손님의 여권을 완성하던 순간을 기억하라. 그 여권에는 이름이 적혀 있었다 — 목적지 주소, 포트 번호, HTTP 메서드, Host 헤더. 문지기는 그 여권을 손에 쥐고 왕국의 두 번째 관문을 향해 걸어갔다.</p>
+
+<p>두 번째 관문. 그곳에는 아무도 함부로 들어오지 못했다.</p>
+
+<p>관문의 이름은 <strong>doCallouts</strong>였다. 소환 사슬(callout chain)이라고도 불렸다. 손님이 창고를 뒤지러 가기 전에, 선발대장에게 임무를 주기 전에, 반드시 거쳐야 하는 심사 절차였다. 법전을 펼치고, 손님의 여권을 꼼꼼히 들여다보고, 왕국의 판관에게 묻는 절차였다.</p>
+
+<p>그 판관의 이름이 바로 <strong>ACL</strong>이었다.</p>
+
+<p>Access Control List. 접근 통제 목록. 이름만 들으면 차갑고 기계적인 존재 같지만, 왕국 깊숙한 곳에서 ACL은 살아있는 생명체처럼 숨쉬고 있었다. 규칙들의 나무가 뿌리를 뻗고, 조건들이 가지를 치고, 판결이 잎처럼 흔들리는 복잡한 생태계였다.</p>
+
+<p>오늘도 새벽 세 시, 왕국에는 요청이 밀려들었다.</p>
+
+<p>한 손님이 찾아왔다. IP 주소 <code>192.168.1.105</code>에서 온 손님이었다. 그는 <code>youtube.com</code>에 접속하고 싶어했다. 포트 443, HTTPS 연결. 시각은 오전 2시 47분.</p>
+
+<p>문지기는 여권을 완성하고 소환 사슬의 첫 번째 고리를 당겼다.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/client_side_request.cc — doCallouts() 진입점</div>
+  <div class="tech-box-body">
+<pre><code>void
+ClientRequestContext::doCallouts()
+{
+    // 아직 처리되지 않은 callout이 있으면 계속 진행
+    if (!http->request->flags.done_follow_x_forwarded_for) {
+        checkFollowXForwardedFor();
+        return;
+    }
+
+    if (!http->request->flags.done_adaptation) {
+        checkAdaptation();
+        return;
+    }
+
+    if (!http->request->flags.done_acl_http_access) {
+        http->request->flags.done_acl_http_access = true;
+        ACLFilledChecklist *acl_checklist = clientAclChecklistCreate(
+            Config.accessList.http, http);
+        acl_checklist->nonBlockingCheck(
+            clientAccessCheckDoneWrapper, this);
+        return;
+    }
+    // ...이후 callout들
+}</code></pre>
+    <p>doCallouts()는 단계적으로 진행된다. X-Forwarded-For 처리, 적응 서비스(ICAP/eCAP), ACL 접근 확인, 리디렉터, 스토어 ID 수정... 각 단계가 완료될 때마다 다시 doCallouts()를 호출하는 구조다. 마치 체크리스트의 항목을 하나씩 지워나가는 것처럼.</p>
+  </div>
+</div>
+
+<p>ACL 접근 확인의 순간이 왔다. 함수는 <code>Config.accessList.http</code>를 꺼내들었다. 이것이 바로 왕국의 법전이었다. squid.conf에서 파싱된 <strong>http_access</strong> 규칙들의 목록. 허락과 금지의 조항들이 순서대로 줄지어 있는 목록.</p>
+
+<p>그리고 <code>ACLFilledChecklist</code>를 만들었다. 심문 도구였다. 손님에 대한 모든 정보 — IP 주소, 요청 URL, HTTP 메서드, 현재 시각, 사용자 인증 정보 — 를 가득 채워 넣은 서류 묶음이었다.</p>
+
+<p><code>nonBlockingCheck()</code>. 비동기 심사 시작.</p>
+
+<p>이제 왕국의 법정이 열렸다.</p>
+
+<div class="scene-break">⁂</div>
+
+<p>왕국의 법정은 <code>src/acl/</code> 디렉토리에 있었다. 그곳에는 수많은 법관들이 살고 있었다.</p>
+
+<p>디렉토리를 들여다보면 이런 파일들이 있었다. <code>Checklist.cc</code>, <code>FilledChecklist.cc</code>, <code>AllOf.cc</code>, <code>AnyOf.cc</code>, <code>Ip.cc</code>, <code>Time.cc</code>, <code>RegexData.cc</code>, <code>Asn.cc</code>, <code>external.cc</code>, <code>UserDefinedAcls.cc</code>... 서른 개가 넘는 파일들. 각각이 하나의 법관이었다.</p>
+
+<p>그 중에서 가장 높은 자리에 앉은 것이 <strong>판관 ACLChecklist</strong>였다. 모든 법관들을 거느리고, 심문을 총괄하고, 최종 판결을 내리는 존재였다.</p>
+
+<!-- ════════════════════ 제2장 ════════════════════ -->
+<h2 class="chapter-title" id="ch2">
+  <span class="chapter-number">제 2 장</span>
+  판관의 탄생
+</h2>
+
+<p>판관의 역사는 스퀴드의 역사와 함께했다. 1990년대, 웹이 막 세상에 모습을 드러내던 시절, 사람들은 프록시 서버가 단순히 트래픽을 중계하는 것 이상의 역할을 해야 한다는 것을 깨달았다. 어떤 사이트는 막아야 했다. 어떤 시간대에는 접속을 제한해야 했다. 어떤 IP 대역에서 온 손님은 다르게 취급해야 했다.</p>
+
+<p>그래서 ACL이 태어났다.</p>
+
+<p>처음에는 간단했다. IP 주소 비교. 도메인 이름 매칭. 그러나 세월이 흐르면서 ACL은 복잡해졌다. 정규표현식, 시간 조건, 외부 프로그램 호출, 인증 정보 확인, 인증서 속성 검사... 오늘날의 ACL은 하나의 작은 프로그래밍 언어와 같았다.</p>
+
+<p>판관의 뼈대는 <code>src/acl/Acl.h</code>에 있었다.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/acl/Acl.h — Acl::Node 기본 클래스</div>
+  <div class="tech-box-body">
+<pre><code>namespace Acl {
+
+class Node : public RefCountable
+{
+public:
+    using Pointer = RefCount&lt;Node&gt;;
+
+    // 실제 매칭 로직. 서브클래스가 구현.
+    // 반환값: 1=매칭, 0=불매칭, -1=비동기대기
+    virtual int match(ACLChecklist *checklist) = 0;
+
+    // 이 ACL이 요구하는 데이터가 있는가?
+    virtual bool requiresRequest() const;
+    virtual bool requiresReply() const;
+
+    // 설정 파싱
+    virtual void parse() = 0;
+    virtual bool empty() const = 0;
+
+    SBuf name;        // 이름 ("my_network", "safe_ports" 등)
+    SBuf cfgline;     // 원본 설정 줄 (디버깅용)
+
+protected:
+    // 서브클래스들이 match() 안에서 사용하는 체크리스트 접근
+    static ACLChecklist *CurrentChecklist;
+};
+
+} // namespace Acl</code></pre>
+    <p>모든 ACL 타입의 조상. <code>match()</code>의 반환값이 핵심이다. 1은 "조건 만족", 0은 "조건 불만족", -1은 "아직 모름(비동기 대기 중)". 이 세 가지 상태가 판관의 세계를 지배한다.</p>
+  </div>
+</div>
+
+<p>판관의 이름은 형식을 따랐다. <code>acl 이름 타입 값</code>. squid.conf에서 이렇게 선언되었다.</p>
+
+<pre class="code-block"><code>acl localnet src 192.168.0.0/16
+acl SSL_ports port 443
+acl Safe_ports port 80 443 8080
+acl CONNECT method CONNECT
+acl office_hours time MTWHF 09:00-18:00
+acl blocked_sites dstdomain .gambling.com .adult-content.org
+acl youtube_users src "/etc/squid/youtube_users.txt"</code></pre>
+
+<p>각 줄이 하나의 <code>Acl::Node</code> 인스턴스를 만들어냈다. <code>src</code> 타입은 <code>ACLIP</code>를, <code>port</code> 타입은 <code>ACLIntRange</code>를, <code>time</code> 타입은 <code>ACLTime</code>을, <code>dstdomain</code>은 <code>ACLDomainList</code>를 만들었다.</p>
+
+<p>판관들의 군단이 조용히 대기하고 있었다.</p>
+
+<p>그리고 법전이 있었다. <code>http_access</code> 규칙들의 목록.</p>
+
+<pre class="code-block"><code>http_access deny !Safe_ports
+http_access deny CONNECT !SSL_ports
+http_access allow localhost
+http_access deny blocked_sites
+http_access allow localnet office_hours
+http_access deny all</code></pre>
+
+<p>이것이 왕국의 헌법이었다. 위에서 아래로 읽히는 규칙들. 처음으로 매칭되는 규칙이 판결이 되었다. 매칭되지 않으면 다음 규칙으로. 끝까지 매칭되지 않으면 묵시적 거절.</p>
+
+<div class="scene-break">⁂</div>
+
+<p>그런데 판관들은 어떻게 조직되어 있었을까? 각 <code>http_access</code> 줄은 하나의 <strong>ACL 목록(ACL list)</strong>이었다. 목록 안에 여러 ACL 이름이 있으면 그것들은 AND로 연결되었다. 예컨대 <code>http_access allow localnet office_hours</code>는 "localnet이고 AND office_hours인 경우 허락"이었다.</p>
+
+<p>이 AND 구조를 구현하는 것이 <strong>Acl::AllOf</strong>였다. 여러 조건을 모두 만족해야 통과되는 판관. 하나라도 실패하면 전체가 실패.</p>
+
+<p>OR 구조는 어디에 있었을까? <code>acl mylist dstdomain .a.com .b.com .c.com</code>처럼 같은 ACL 안에 여러 값이 있을 때였다. 이것을 구현하는 것이 <strong>Acl::AnyOf</strong>였다. 하나라도 맞으면 통과.</p>
+
+<p>AllOf와 AnyOf. 논리의 뼈대였다.</p>
+
+<!-- ════════════════════ 제3장 ════════════════════ -->
+<h2 class="chapter-title" id="ch3">
+  <span class="chapter-number">제 3 장</span>
+  체크리스트라는 법정
+</h2>
+
+<p><code>ACLChecklist</code>는 법정이었다.</p>
+
+<p>법정에는 피고인의 서류가 있어야 했다. 그 서류를 담는 그릇이 <code>ACLFilledChecklist</code>였다. "채워진 체크리스트". 이름이 직관적이었다. 판관들이 심문에 필요한 정보로 가득 채워진 체크리스트.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/acl/FilledChecklist.h — ACLFilledChecklist</div>
+  <div class="tech-box-body">
+<pre><code>class ACLFilledChecklist : public ACLChecklist
+{
+public:
+    ACLFilledChecklist(const acl_access *,
+                       HttpRequest *,
+                       const char *ident = nullptr);
+
+    // 피고인에 대한 모든 정보
+    Ip::Address         src_addr;   // 클라이언트 IP
+    Ip::Address         dst_addr;   // 목적지 IP
+    Ip::Address         my_addr;    // 우리 측 IP
+    unsigned short      src_port;   // 클라이언트 포트
+    unsigned short      dst_port;   // 목적지 포트
+
+    HttpRequest::Pointer request;   // HTTP 요청 전체
+    HttpReply::Pointer   reply;     // HTTP 응답 (응답 심사 시)
+
+    const AccessLogEntry::Pointer al; // 로그 엔트리
+
+    char                rfc931[USER_IDENT_SZ]; // RFC931 ident
+    Auth::UserRequest::Pointer auth_user_request; // 인증 정보
+
+    // SSL 관련
+    Security::CertPointer serverCert;
+
+    ConnStateData *     conn() const;
+    void                conn(ConnStateData *);
+
+private:
+    ConnStateData::Pointer conn_; // 연결 상태
+};</code></pre>
+    <p>법정의 서류함. 클라이언트의 IP 주소부터 SSL 인증서까지, 판관들이 판결에 필요한 모든 정보가 이 안에 들어있다. 필요한 정보를 늦게 채우는 것(lazy evaluation)도 가능하다 — 예컨대 DNS 역조회가 필요한 경우.</p>
+  </div>
+</div>
+
+<p>법정이 준비되었다. 이제 심문이 시작되어야 했다.</p>
+
+<p><code>ACLChecklist::nonBlockingCheck()</code>. 이 함수가 심문을 시작했다. "비동기" 심문. 판관이 결정을 내리기 위해 외부 정보가 필요한 경우 — 예컨대 DNS 조회, 외부 프로그램 호출 — 잠시 기다릴 수 있었다. 기다리는 동안 이벤트 루프가 다른 일을 했다. 정보가 오면 심문이 재개되었다.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/acl/Checklist.cc — matchAndFinish() 핵심 로직</div>
+  <div class="tech-box-body">
+<pre><code>void
+ACLChecklist::matchAndFinish()
+{
+    // 현재 규칙 목록에서 순서대로 매칭 시도
+    while (accessList != nullptr) {
+        const auto currentAcl = accessList;
+        accessList = accessList->next; // 다음 규칙으로 포인터 이동
+
+        auto nodeAnswer = currentAcl->matches(this);
+
+        if (nodeAnswer.asyncInProgress()) {
+            // 비동기 대기 — 함수 종료, 나중에 재개
+            return;
+        }
+
+        if (nodeAnswer.allowed() || nodeAnswer.denied()) {
+            // 첫 번째로 매칭된 규칙이 판결
+            calcImplicitAnswer();  // 묵시적 답 계산
+            checkCallback(currentAnswer);
+            return;
+        }
+        // 이 규칙은 매칭 안 됨, 다음으로
+    }
+
+    // 모든 규칙을 다 봤는데도 매칭 없음
+    // → 묵시적 DENY (기본값)
+    calcImplicitAnswer();
+    checkCallback(currentAnswer);
+}</code></pre>
+    <p>법정의 핵심 절차. 위에서 아래로 규칙을 읽으며 매칭을 시도한다. 비동기가 필요하면 그 자리에서 멈추고 나중에 재개한다. 처음으로 결론이 나는 규칙에서 판결이 확정된다. 끝까지 매칭이 없으면 묵시적 거절.</p>
+  </div>
+</div>
+
+<p>법정의 절차는 단순했지만 그 내부는 복잡했다. 각 규칙의 <code>matches()</code> 안에서 판관들이 일했다. 판관들은 서로 다른 방식으로 일했다. 어떤 판관은 즉시 답을 냈다. 어떤 판관은 기다려야 했다. 어떤 판관은 다른 판관에게 질문을 던졌다.</p>
+
+<p>법정은 재귀적이었고, 비동기적이었고, 끝없이 깊었다.</p>
+
+<div class="scene-break">⁂</div>
+
+<p>내부 목소리가 들려왔다 — 판관 자신의 독백.</p>
+
+<blockquote class="inner-voice">
+나는 매일 수백만 개의 판결을 내린다. 각각의 판결에서 나는 규칙들을 처음부터 다시 읽는다. 첫 번째 규칙, 두 번째 규칙, 세 번째... 맞으면 멈추고, 틀리면 계속한다. 때로는 수십 개의 규칙을 지나쳐야 판결에 이른다. 그리고 때로는 — 가장 두려운 순간이다 — 외부에 물어봐야 한다. 그 순간 나는 결정을 유보하고 기다린다. 기다리는 동안 왕국은 계속 돌아가고, 나는 어딘가에 잠들어 있다가, 답이 오면 다시 깨어난다. 그것이 비동기의 삶이다.
+</blockquote>
+
+<!-- ════════════════════ 제4장 ════════════════════ -->
+<h2 class="chapter-title" id="ch4">
+  <span class="chapter-number">제 4 장</span>
+  증거 수집관
+</h2>
+
+<p>판관이 판결을 내리려면 증거가 필요했다. 그 증거를 수집하는 존재들이 있었다. 이들을 <strong>데이터 컨테이너(Data Container)</strong>라 불렀다.</p>
+
+<p>예컨대 <code>src</code> 타입의 ACL을 처리하는 <code>ACLIP</code>는 클라이언트의 IP 주소가 필요했다. 그 IP 주소는 <code>ACLFilledChecklist::src_addr</code>에 있었다. 문지기가 TCP 연결을 수락할 때 이미 알아낸 정보였다.</p>
+
+<p>반면 <code>ident</code> 타입의 ACL은 RFC 931 ident 프로토콜로 클라이언트 시스템에 사용자 이름을 물어봐야 했다. 이것은 느렸다. 네트워크 왕복이 필요했다. 때문에 <strong>비동기</strong>로 처리되었다.</p>
+
+<p>그리고 <code>dstdomain</code> 타입은 목적지 IP에 대한 역방향 DNS 조회가 필요했다. 이 역시 느렸다.</p>
+
+<p>느린 증거들을 모으는 과정에서 법정은 잠시 멈추었다가 재개되었다. 그 메커니즘을 구현하는 것이 <strong>ACLChecklist::resumeNonBlockingCheck()</strong>였다.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/acl/Checklist.cc — 비동기 재개 메커니즘</div>
+  <div class="tech-box-body">
+<pre><code>void
+ACLChecklist::resumeNonBlockingCheck(ACLChecklist::AsyncState *state)
+{
+    // 비동기 상태 해제
+    asyncInProgress_ = false;
+    asyncState_ = nullptr;
+
+    if (bannedAction == ACCESS_DENIED) {
+        // 이미 금지 결정이 난 경우 — 재개 불필요
+        checkCallback(ACCESS_DENIED);
+        return;
+    }
+
+    // 중단된 지점부터 다시 매칭 재개
+    matchAndFinish();
+}
+
+// 비동기 작업 시작 시 호출
+void
+ACLChecklist::asyncCall(const char *context, void *data,
+                         AsyncCallback callback)
+{
+    asyncInProgress_ = true;
+    // 외부 작업 등록 (DNS, ident, 외부 ACL 등)
+    // 완료 시 resumeNonBlockingCheck() 호출됨
+}</code></pre>
+    <p>비동기 재개의 뼈대. 외부 정보를 기다리는 동안 asyncInProgress_가 true로 설정된다. 정보가 도착하면 resumeNonBlockingCheck()가 호출되어 멈춘 자리에서 심문을 재개한다.</p>
+  </div>
+</div>
+
+<p>이 구조 덕분에 판관은 절대 이벤트 루프를 막지 않았다. 기다려야 할 때는 조용히 자리를 비워주었다. 이벤트 루프는 다른 손님들을 받을 수 있었다. 그리고 정보가 오면 판관은 다시 돌아와 판결을 마쳤다.</p>
+
+<p>왕국이 단 하나의 스레드로 수천 개의 요청을 동시에 처리할 수 있었던 비결 중 하나였다.</p>
+
+<div class="scene-break">⁂</div>
+
+<p>증거 수집에는 또 다른 복잡함이 있었다. <strong>matchPath</strong>라는 스택이었다.</p>
+
+<p>판관이 규칙 목록을 처음부터 읽어 내려가다가 비동기를 만나면, 어디까지 읽었는지 기억해야 했다. 다시 깨어났을 때 처음부터 다시 읽으면 안 되었다 — 비효율적이었을 뿐 아니라, 이미 평가한 ACL의 부작용이 다시 실행될 수 있었다.</p>
+
+<p>따라서 체크리스트는 현재 진행 중인 규칙의 "위치"를 기억했다. 규칙 목록의 포인터 <code>accessList</code>가 현재 위치를 가리켰다. 비동기가 끝나면 그 포인터 위치에서 바로 재개했다.</p>
+
+<p>간단해 보이지만, 중첩된 AllOf/AnyOf 구조가 있을 때는 더 복잡해졌다. 깊은 곳에서 비동기가 발생하면 돌아오는 길을 정확히 알아야 했다. 이를 위해 내부 상태가 신중하게 관리되었다.</p>
+
+<!-- ════════════════════ 제5장 ════════════════════ -->
+<h2 class="chapter-title" id="ch5">
+  <span class="chapter-number">제 5 장</span>
+  법조문 읽기 — AllOf와 AnyOf
+</h2>
+
+<p>법전에서 규칙을 읽는 방법을 이해하려면, 먼저 규칙들이 어떻게 구성되어 있는지 알아야 했다.</p>
+
+<p>한 줄의 <code>http_access</code>는 이렇게 파싱되었다.</p>
+
+<pre class="code-block"><code>http_access allow localnet office_hours !blocked_sites</code></pre>
+
+<p>이 한 줄이 하나의 <strong>Acl::Tree</strong>가 되었다. 트리는 다음과 같이 구성되었다.</p>
+
+<pre class="code-block"><code>Tree (http_access allow ...)
+  └─ Acl::AllOf (localnet AND office_hours AND !blocked_sites)
+       ├─ Acl::Node "localnet" (ACLIP)
+       ├─ Acl::Node "office_hours" (ACLTime)
+       └─ Acl::InnerNode "!blocked_sites" (NOT + ACLDomainList)</code></pre>
+
+<p>AllOf는 모든 자식이 TRUE여야만 TRUE를 반환했다. 하나라도 FALSE면 즉시 FALSE를 반환했다. 이것을 <strong>단락 평가(short-circuit evaluation)</strong>라고 했다. 논리 AND의 본질적 성질이었다.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/acl/AllOf.cc — AllOf::match()</div>
+  <div class="tech-box-body">
+<pre><code>int
+Acl::AllOf::match(ACLChecklist *checklist) const
+{
+    // 모든 자식에 대해 순서대로 평가
+    for (const auto &node : nodes) {
+        const auto nodeAnswer = checklist->fastCheck(node.get());
+
+        if (nodeAnswer.asyncInProgress())
+            return -1;  // 비동기 대기
+
+        if (!nodeAnswer.allowed())
+            return 0;   // 하나라도 FALSE면 즉시 종료
+    }
+    return 1;  // 모두 TRUE
+}
+
+// AnyOf::match()는 반대
+int
+Acl::AnyOf::match(ACLChecklist *checklist) const
+{
+    for (const auto &node : nodes) {
+        const auto nodeAnswer = checklist->fastCheck(node.get());
+
+        if (nodeAnswer.asyncInProgress())
+            return -1;
+
+        if (nodeAnswer.allowed())
+            return 1;   // 하나라도 TRUE면 즉시 종료
+    }
+    return 0;  // 모두 FALSE
+}</code></pre>
+    <p>AllOf와 AnyOf는 각각 논리 AND와 OR를 구현한다. 단락 평가 덕분에 불필요한 판관 호출을 피할 수 있다. 비동기(-1) 반환 시에는 현재 위치를 기억하고 함수를 종료한다.</p>
+  </div>
+</div>
+
+<p>그리고 NOT이 있었다. 느낌표(<code>!</code>). <code>!blocked_sites</code>는 <code>blocked_sites</code>의 결과를 뒤집었다. 이것을 구현하는 것이 <strong>Acl::NotNode</strong>였다.</p>
+
+<pre class="code-block"><code>// Acl::NotNode::match()
+int result = child->match(checklist);
+if (result == -1) return -1;  // 비동기는 그대로 전달
+return result ? 0 : 1;        // 1→0, 0→1로 뒤집기</code></pre>
+
+<p>단순하지만 강력했다. <code>!Safe_ports</code>는 "안전한 포트가 아닌 경우". <code>!localnet</code>은 "로컬 네트워크에서 오지 않은 경우". 부정이 가능하다는 것은 표현력이 두 배가 된다는 의미였다.</p>
+
+<div class="scene-break">⁂</div>
+
+<p>squid.conf를 파싱하는 과정에서 이 트리 구조가 만들어졌다. <code>src/acl/Tree.cc</code>에 그 로직이 있었다.</p>
+
+<p>파서는 <code>http_access allow</code>를 읽고 허락 규칙임을 알았다. 그 다음 오는 ACL 이름들을 읽어 AllOf로 묶었다. 각 이름 앞에 <code>!</code>가 있으면 NotNode로 감쌌다. 이름이 여러 값을 가진 ACL이면 내부적으로 AnyOf로 구성되었다.</p>
+
+<p>파싱이 끝나면 트리가 완성되었다. 그 트리는 메모리에 조용히 존재했다가, 손님이 오면 평가되었다. 수백만 번, 수천만 번 평가되었다.</p>
+
+<p>판관의 일상이었다.</p>
+
+<!-- ════════════════════ 제6장 ════════════════════ -->
+<h2 class="chapter-title" id="ch6">
+  <span class="chapter-number">제 6 장</span>
+  주소 형사 ACLIP
+</h2>
+
+<p>판관들 중에서 가장 자주 불려나오는 이가 <strong>주소 형사 ACLIP</strong>였다. IP 주소를 확인하는 판관. 거의 모든 ACL 설정에 등장했다.</p>
+
+<p>ACLIP는 두 가지 버전이 있었다. 클라이언트 주소를 확인하는 <code>src</code>와 목적지 주소를 확인하는 <code>dst</code>였다. 파일은 <code>src/acl/Ip.cc</code>에 있었다.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/acl/Ip.cc — ACLIP 매칭 로직</div>
+  <div class="tech-box-body">
+<pre><code>int
+ACLIP::match(ACLChecklist *checklist)
+{
+    Ip::Address clientip = checklist->src_addr;
+    // dst 타입이면 목적지 IP 사용
+
+    return data->match(clientip);
+}
+
+// ACLIpData::match() — 실제 IP 비교
+bool
+ACLIpData::match(const Ip::Address &clientip)
+{
+    // CIDR 표기법 지원: 192.168.0.0/24
+    // IPv6 완전 지원: 2001:db8::/32
+    // 범위 지원: 10.0.0.1-10.0.0.254
+
+    // 라디시 트리(radix tree) 안에서 검색
+    // O(log n) 시간 복잡도
+    return aclMatchIp(tree, clientip);
+}</code></pre>
+    <p>IP 주소 매칭은 라디시 트리(Patricia trie)를 사용한다. CIDR 블록을 효율적으로 검색하기 위한 자료구조다. 수천 개의 IP 블록이 있어도 O(log n) 시간에 검색된다.</p>
+  </div>
+</div>
+
+<p>주소 형사의 데이터 구조는 흥미로웠다. IP 주소들은 단순한 목록이 아니라 <strong>라디시 트리</strong>에 저장되었다. 비트 하나하나를 따라가며 경로를 찾는 트리 구조였다. IPv4와 IPv6 모두 지원했다.</p>
+
+<p>예컨대 <code>192.168.0.0/16</code>은 이진수로 이렇게 표현되었다.</p>
+
+<pre class="code-block"><code>11000000.10101000.xxxxxxxx.xxxxxxxx</code></pre>
+
+<p>앞의 16비트가 고정이고 나머지 16비트는 자유였다. 라디시 트리는 이 비트들을 따라 경로를 만들었다. 주소 형사가 <code>192.168.100.5</code>를 검사하면, 트리를 따라 내려가며 이 주소가 어떤 CIDR 블록에 속하는지 순식간에 알아냈다.</p>
+
+<p>하지만 ACLIP에게는 한 가지 한계가 있었다. <code>dst</code> 타입 ACL을 처리할 때였다. 목적지 도메인이 주어지면 IP를 알기 위해 DNS 조회가 필요했다. 이 순간 주소 형사는 잠시 판관 자리를 비워야 했다.</p>
+
+<pre class="code-block"><code>// dst ACL에서 목적지 IP가 아직 모르는 경우
+if (checklist->dst_addr.isAnyAddr()) {
+    // DNS 조회 시작 — 비동기
+    ipcache_nbgethostbyname(checklist->request->url.host(),
+                             aclIpAddrDone, checklist);
+    checklist->asyncCall(...);
+    return -1;  // 비동기 대기
+}</code></pre>
+
+<p>DNS가 답을 가져오면 주소 형사는 다시 깨어났다. 이제 IP 주소를 알았으니 비교를 계속할 수 있었다.</p>
+
+<p>주소 형사는 이렇게 생각했다 — 내부 독백이 스쳐갔다.</p>
+
+<blockquote class="inner-voice">
+IP 주소는 정직하다. 거짓말을 할 수 없다. 물론 스푸핑이 가능하긴 하지만, 그건 내 문제가 아니라 네트워크의 문제다. 내게 오는 주소는 그 자체로 진실이다. 192.168.로 시작하면 사내 망이고, 10.으로 시작하면 내부 네트워크다. 공인 IP가 오면 외부에서 온 것이다. 나는 숫자를 읽고 판결한다. 단순하고, 빠르고, 믿을 수 있다. 그것이 주소 형사의 철학이다.
+</blockquote>
+
+<!-- ════════════════════ 제7장 ════════════════════ -->
+<h2 class="chapter-title" id="ch7">
+  <span class="chapter-number">제 7 장</span>
+  시계 형사 ACLTime
+</h2>
+
+<p>왕국에는 시간을 지키는 형사도 있었다. <strong>ACLTime</strong>. 시계 형사.</p>
+
+<p>그는 현재 시각이 허용된 범위 안에 있는지를 확인했다. squid.conf에서 이렇게 선언되었다.</p>
+
+<pre class="code-block"><code>acl business_hours time MTWHF 08:30-18:00
+acl lunch_break time MTWHF 12:00-13:00
+acl weekend time SA</code></pre>
+
+<p>요일 코드가 있었다. <code>M</code>은 월요일, <code>T</code>는 화요일, <code>W</code>는 수요일, <code>H</code>는 목요일, <code>F</code>는 금요일, <code>A</code>는 토요일, <code>S</code>는 일요일. 그리고 시간 범위는 <code>HH:MM-HH:MM</code> 형식이었다.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/acl/Time.cc — ACLTime 매칭</div>
+  <div class="tech-box-body">
+<pre><code>int
+ACLTime::match(ACLChecklist *checklist)
+{
+    return data->match(squid_curtime);
+}
+
+bool
+ACLTimeData::match(time_t when)
+{
+    struct tm *tm = localtime(&amp;when);
+    // 요일 체크 (0=일요일, 6=토요일)
+    if (weekbits &amp; (1 &lt;&lt; tm-&gt;tm_wday)) {
+        // 시간 체크
+        int t = (tm-&gt;tm_hour * 60) + tm-&gt;tm_min;
+        if (t &gt;= start &amp;&amp; t &lt; stop)
+            return true;
+    }
+    return false;
+}</code></pre>
+    <p>시간 형사는 비동기가 필요 없다. squid_curtime은 항상 현재 값을 가지고 있다 (EventLoop가 매 루프마다 업데이트). 단순한 비트 마스크와 정수 비교만으로 O(1) 시간에 판결이 난다.</p>
+  </div>
+</div>
+
+<p>시계 형사는 단순했지만 정확했다. <code>weekbits</code>는 7비트 정수였다. 비트 0이 일요일, 비트 6이 토요일. squid.conf에서 <code>MTWHF</code>를 읽으면 해당 비트들이 켜졌다.</p>
+
+<p>현재 시각은 <code>squid_curtime</code>이라는 전역 변수에서 왔다. 이 변수는 이벤트 루프가 돌 때마다 업데이트되었다. 새로 <code>gettimeofday()</code>를 부르는 것보다 훨씬 빠른 방법이었다.</p>
+
+<p>시계 형사는 항상 즉답을 내놓았다. DNS 조회도, 외부 프로그램 호출도 없었다. 그저 전역 변수를 읽고, 비트를 확인하고, 시간 범위를 비교했다. 마이크로초 단위의 속도였다.</p>
+
+<p>그래서 시계 형사는 가장 앞에 배치되는 경우가 많았다. 먼저 시간을 확인하고, 시간이 맞지 않으면 더 비싼 판관들에게 물어볼 필요도 없이 즉시 거절할 수 있었다. 단락 평가의 미학이었다.</p>
+
+<div class="scene-break">⁂</div>
+
+<p>밤 두 시. 시계 형사는 <code>192.168.1.105</code>에서 온 youtube.com 요청을 받았다.</p>
+
+<p>현재 시각: 02:47. 요일: 화요일.</p>
+
+<p><code>business_hours</code> ACL. <code>MTWHF 08:30-18:00</code>. 시간이 맞지 않았다. 02:47은 08:30-18:00 범위 밖이었다.</p>
+
+<p>시계 형사가 0을 반환했다. FALSE.</p>
+
+<p>AllOf 판관은 즉시 단락 평가를 시행했다. 어차피 FALSE이니 나머지 판관들에게 물어볼 필요가 없었다. <code>allow localnet office_hours</code> 규칙은 불일치였다.</p>
+
+<p>다음 규칙으로 넘어갔다.</p>
+
+<!-- ════════════════════ 제8장 ════════════════════ -->
+<h2 class="chapter-title" id="ch8">
+  <span class="chapter-number">제 8 장</span>
+  패턴 추적자 ACLRegex
+</h2>
+
+<p>도메인을 확인하는 방법에는 여러 가지가 있었다. <code>dstdomain</code>은 정확한 도메인 이름이나 서픽스 매칭이었다. 그런데 더 정교한 패턴이 필요할 때가 있었다.</p>
+
+<p><code>url_regex</code>. URL 전체에 정규표현식을 적용하는 ACL. <strong>ACLRegex</strong>가 담당했다.</p>
+
+<pre class="code-block"><code>acl porn_pattern url_regex -i \.(xxx|adult|sex)\.
+acl video_streaming url_regex -i (youtube|netflix|twitch)\.com/watch
+acl api_calls url_regex /api/v[0-9]+/</code></pre>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/acl/RegexData.cc — ACLRegex 매칭</div>
+  <div class="tech-box-body">
+<pre><code>int
+ACLRegexData::match(const char *word)
+{
+    if (!word) return 0;
+
+    // 컴파일된 정규식 목록에서 순서대로 매칭
+    for (auto &re : regexList) {
+        if (regexec(&amp;re.regex, word, 0, nullptr, 0) == 0)
+            return 1;  // 매칭됨
+    }
+    return 0;
+}
+
+// 설정 파싱 시 정규식 컴파일
+void
+ACLRegexData::parse()
+{
+    char *t;
+    while ((t = ConfigParser::strtokFile())) {
+        regex_t comp;
+        int flags = REG_EXTENDED | REG_NOSUB;
+        if (flags_i) flags |= REG_ICASE;  // -i 플래그
+
+        if (regcomp(&amp;comp, t, flags) != 0) {
+            debugs(28, 0, "Invalid regex: " &lt;&lt; t);
+            continue;
+        }
+        regexList.push_back({comp, t});
+    }
+}</code></pre>
+    <p>정규식은 설정 파싱 시 미리 컴파일된다. 매 요청마다 컴파일하는 것이 아니라, 컴파일된 객체를 재사용한다. POSIX 확장 정규식을 사용하며, -i 플래그로 대소문자 무시 가능.</p>
+  </div>
+</div>
+
+<p>정규식 형사는 강력했지만 대가가 있었다. 정규식 매칭은 다른 판관들에 비해 느렸다. 특히 복잡한 패턴이나 긴 URL에 대해서. 게다가 정규식 목록이 길면 순서대로 모두 시도해야 했다.</p>
+
+<p>그래서 정규식 ACL은 신중하게 사용해야 했다. 자주 쓰이는 조건은 더 빠른 판관들에게 맡기고, 정규식은 다른 방법으로 표현하기 어려운 복잡한 패턴에만 사용하는 것이 권장되었다.</p>
+
+<p>패턴 추적자는 이렇게 말했다.</p>
+
+<blockquote class="inner-voice">
+나는 언어를 안다. 글자들의 패턴을 읽는다. URL이라는 텍스트 안에서 의미를 찾는다. .xxx.로 끝나는가? /watch?v=가 있는가? /api/v3/users를 호출하는가? 나는 이 모든 것을 판별할 수 있다. 하지만 그 능력에는 시간이 필요하다. 나는 빠른 동료들과 달리 생각해야 한다. 생각에는 시간이 필요하다.
+</blockquote>
+
+<p>도메인 매칭의 다른 방법으로는 <code>dstdomain</code>이 있었다. 이것은 정규식보다 훨씬 빠른 <strong>도메인 서픽스 트리</strong>를 사용했다.</p>
+
+<pre class="code-block"><code>acl adult_sites dstdomain .xxx.com .adult.net .nsfw.org</code></pre>
+
+<p>도메인들은 역순으로 트리에 저장되었다. <code>com.xxx.</code>, <code>net.adult.</code> 이런 식으로. 역순 트리에서 검색하면 서픽스 매칭이 자동으로 되었다. <code>www.xxx.com</code>은 <code>xxx.com</code>의 서브도메인이므로 자동으로 매칭되었다. 빠르고 직관적이었다.</p>
+
+<!-- ════════════════════ 제9장 ════════════════════ -->
+<h2 class="chapter-title" id="ch9">
+  <span class="chapter-number">제 9 장</span>
+  외부 증인 호출
+</h2>
+
+<p>때로는 스퀴드 안의 판관들만으로 부족할 때가 있었다. 더 복잡한 로직, 외부 데이터베이스 조회, 동적으로 변하는 조건들. 이런 경우를 위해 <strong>외부 ACL</strong>이 존재했다.</p>
+
+<p>squid.conf에서 이렇게 선언되었다.</p>
+
+<pre class="code-block"><code>external_acl_type ldap_group %LOGIN /usr/lib/squid/squid_ldap_group \
+    -b "ou=groups,dc=company,dc=com" \
+    -f "(&amp;(objectclass=groupOfNames)(cn=%g)(member=uid=%u,ou=users,dc=company,dc=com))"
+
+acl allowed_group external ldap_group VideoAllowed
+
+http_access allow allowed_group</code></pre>
+
+<p>외부 ACL은 별도의 프로세스였다. 스퀴드가 그 프로세스에 표준 입출력으로 질문을 던지고 답을 받았다. 구체적으로는 <code>squid_ldap_group</code> 같은 헬퍼 프로그램이 LDAP 서버에 질문하여 그룹 멤버십을 확인했다.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/acl/external.cc — 외부 ACL 호출 프로세스</div>
+  <div class="tech-box-body">
+<pre><code>int
+ACLExternal::match(ACLChecklist *checklist)
+{
+    ACLFilledChecklist *ch = Filled(checklist);
+    ExternalACLEntry *entry = nullptr;
+
+    // 캐시에서 먼저 확인 (TTL 기반)
+    if ((entry = ch->request->extacl_entry) != nullptr) {
+        if (!entry->expired()) {
+            // 캐시 히트 — 즉시 반환
+            return entry->result == ACCESS_ALLOWED ? 1 : 0;
+        }
+    }
+
+    // 캐시 미스 — 외부 헬퍼에 질문
+    ExternalACLLookup::Start(checklist, this, false);
+    checklist->asyncCall(...);
+    return -1;  // 비동기 대기
+}
+
+// 헬퍼 응답 처리
+static void
+externalAclHandleReply(void *data, const Helper::Reply &reply)
+{
+    // "OK" 또는 "ERR" 파싱
+    // 추가 키-값 쌍 파싱 (log=, message=, tag= 등)
+    // 결과를 캐시에 저장
+    // checklist 재개
+    acl_checklist->resumeNonBlockingCheck(...);
+}</code></pre>
+    <p>외부 ACL은 TTL 기반 캐시를 가진다. 같은 사용자/URL 조합에 대한 질문은 TTL이 만료될 때까지 재사용된다. LDAP 서버에 매 요청마다 질의하는 것은 너무 느리기 때문이다.</p>
+  </div>
+</div>
+
+<p>외부 ACL의 캐시는 별도의 해시 테이블이었다. 키는 보통 사용자 이름이나 IP 주소였다. TTL 기간 동안 같은 키에 대한 결과는 캐시에서 즉시 반환되었다. TTL이 만료되면 다시 외부 프로세스에 질문했다.</p>
+
+<p>헬퍼 프로세스는 풀(pool)로 관리되었다. 여러 개의 헬퍼 프로세스가 동시에 실행될 수 있었고, 질문들이 부하 분산되었다. 헬퍼가 죽으면 재시작되었다. 모든 통신은 행 기반(line-by-line) 프로토콜로 이루어졌다.</p>
+
+<p>외부 증인 시스템은 스퀴드를 기업 환경에서 강력하게 만드는 도구였다. LDAP, 데이터베이스, 커스텀 스크립트 어느 것이든 연결할 수 있었다. 왕국 밖의 지식을 법정에 끌어들이는 방법이었다.</p>
+
+<div class="scene-break">⁂</div>
+
+<p>헬퍼와의 통신 프로토콜은 단순했다.</p>
+
+<p>스퀴드 → 헬퍼: <code>username URL\n</code><br>
+헬퍼 → 스퀴드: <code>OK\n</code> 또는 <code>ERR\n</code></p>
+
+<p>OK는 허락, ERR은 거절. 옵션으로 추가 정보를 붙일 수도 있었다. <code>OK log=user_john tag=premium</code>처럼. 로그 엔트리에 추가 태그를 붙이거나, 에러 메시지를 커스터마이즈하거나, 그룹 이름을 전달하거나.</p>
+
+<p>이 단순한 프로토콜이 무한한 확장성을 만들었다.</p>
+
+<!-- ════════════════════ 제10장 ════════════════════ -->
+<h2 class="chapter-title" id="ch10">
+  <span class="chapter-number">제 10 장</span>
+  신분증 확인소 — 인증
+</h2>
+
+<p>왕국에 들어오는 손님들 중 일부는 신분을 증명해야 했다. 특별한 구역에 들어가거나, 특별한 서비스를 이용하거나, 사용량을 추적하기 위해서.</p>
+
+<p>스퀴드의 인증 시스템은 <code>src/auth/</code> 디렉토리에 있었다. 기본, 다이제스트, NTLM, Kerberos 네 가지 방식을 지원했다.</p>
+
+<p>가장 단순한 것이 <strong>Basic 인증</strong>이었다.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/auth/basic/ — Basic 인증 흐름</div>
+  <div class="tech-box-body">
+<pre><code>// squid.conf 설정
+// auth_param basic program /usr/lib/squid/basic_ncsa_auth /etc/squid/htpasswd
+// auth_param basic realm "Squid Proxy"
+// acl authenticated proxy_auth REQUIRED
+
+// HTTP 요청에 Authorization 헤더가 없으면:
+// → 407 Proxy Authentication Required 응답
+// → Proxy-Authenticate: Basic realm="Squid Proxy" 헤더 포함
+
+// 클라이언트가 Base64 인코딩된 "user:password"를 보내면:
+// Authorization: Basic dXNlcjpwYXNzd29yZA==
+
+// 헬퍼 프로그램 호출:
+// → "username password\n" 전송
+// → "OK\n" 또는 "ERR\n" 수신
+
+// Auth::UserRequest 객체에 인증 결과 저장
+// ACLProxyAuth로 확인 가능</code></pre>
+    <p>Basic 인증은 단순하지만 효과적이다. 외부 헬퍼 프로그램으로 다양한 백엔드를 지원한다 — htpasswd 파일, LDAP, PAM, RADIUS 등. 인증 결과는 캐시되어 매 요청마다 헬퍼를 호출하지 않는다.</p>
+  </div>
+</div>
+
+<p>인증이 필요한 요청이 오면 스퀴드는 먼저 <code>Authorization</code> 헤더를 확인했다. 없으면 <code>407 Proxy Authentication Required</code>를 반환했다. 클라이언트가 사용자 이름과 비밀번호를 입력하면 Base64로 인코딩하여 헤더에 넣어 다시 요청했다.</p>
+
+<p>스퀴드는 그 헤더를 디코딩하고, 사용자 이름과 비밀번호를 분리하고, 헬퍼 프로그램에 전달했다. 헬퍼는 확인하고 <code>OK</code> 또는 <code>ERR</code>을 반환했다. 이 결과는 <code>Auth::UserRequest</code> 객체에 저장되었다.</p>
+
+<p>그러면 ACL에서 인증 정보를 사용할 수 있었다.</p>
+
+<pre class="code-block"><code>acl authenticated proxy_auth REQUIRED
+acl admin_users proxy_auth john mary admin
+http_access allow admin_users
+http_access allow authenticated</code></pre>
+
+<p><code>proxy_auth REQUIRED</code>는 "어떤 사용자든 인증되어 있어야 함". <code>proxy_auth john mary</code>는 "john이나 mary인 경우". ACL과 인증이 결합하여 섬세한 접근 제어가 가능했다.</p>
+
+<div class="scene-break">⁂</div>
+
+<p>NTLM과 Kerberos는 더 복잡했다. 이들은 기업 환경의 Windows Active Directory와 연동되었다. 여러 번의 핸드셰이크가 필요했고, 각 핸드셰이크마다 비동기 외부 호출이 수반되었다.</p>
+
+<p>특히 Kerberos 인증은 단 한 번의 로그인으로 여러 서비스에 접근할 수 있는 <strong>SSO(Single Sign-On)</strong>를 제공했다. 도메인에 이미 로그인한 Windows 사용자는 프록시에 별도 인증 없이 접속할 수 있었다. 투명한 인증이었다.</p>
+
+<p>신분증 확인소는 왕국의 관문 중 가장 인간적인 곳이었다. IP 주소는 거짓말을 못 하지만, 사람은 이름을 가지고 있었다. 그 이름을 확인하는 일이 인증이었다.</p>
+
+<!-- ════════════════════ 제11장 ════════════════════ -->
+<h2 class="chapter-title" id="ch11">
+  <span class="chapter-number">제 11 장</span>
+  비동기 재판의 고통
+</h2>
+
+<p>판관의 삶에서 가장 어려운 순간은 기다려야 할 때였다.</p>
+
+<p>ACL 심문이 진행되는 동안 외부 DNS 조회나 헬퍼 호출이 필요해지면, 법정은 잠시 멈추어야 했다. 그 "잠시"가 수십 밀리초에서 수 초까지 될 수 있었다.</p>
+
+<p>이 문제는 단순히 기다리는 것 이상의 복잡함을 만들었다. 기다리는 동안 <strong>판관이 사라질 수 있었다</strong>.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/acl/Checklist.h — 안전한 비동기 재개를 위한 메커니즘</div>
+  <div class="tech-box-body">
+<pre><code>class ACLChecklist : public RefCountable
+{
+    // RefCountable — 참조 카운팅으로 수명 관리
+
+    // 비동기 상태
+    bool asyncInProgress_;
+
+    // 재개 콜백
+    ACLCB *callback_;
+    void *callback_data_;
+
+    // 기다리는 동안 연결이 끊어지면?
+    // → ConnStateData가 체크리스트를 취소 요청
+    void markFinished(const Acl::Answer &, const char *reason);
+
+    // 비동기 재개 안전 확인
+    bool finished() const { return finished_; }
+    bool keepGoingAfterAsync() const;
+};</code></pre>
+    <p>ACLChecklist는 RefCountable이다. 외부 ACL 헬퍼나 DNS가 응답할 때까지 참조가 유지된다. 하지만 그 사이에 클라이언트 연결이 끊어질 수 있다. 그런 경우 markFinished()로 체크리스트를 조기 종료시킨다.</p>
+  </div>
+</div>
+
+<p>참조 카운팅(<strong>RefCountable</strong>)이 이 문제를 해결했다. 체크리스트의 참조가 어딘가에 살아있는 한, 객체는 삭제되지 않았다. DNS 콜백, 헬퍼 콜백, 인증 콜백 모두 체크리스트에 대한 참조를 가지고 있었다. 모든 콜백이 완료되거나 취소되어야만 체크리스트가 소멸될 수 있었다.</p>
+
+<p>하지만 더 미묘한 문제가 있었다. DNS 조회가 진행되는 동안 클라이언트가 연결을 끊으면? 문지기 <code>ConnStateData</code>가 소멸하면? 체크리스트는 살아있지만, 그 결과를 전달할 곳이 없는 상황이었다.</p>
+
+<p>이 경우 <code>markFinished()</code>가 호출되었다. 체크리스트에 "이제 끝났으니 결과가 와도 무시하라"는 표시를 남겼다. 이후 콜백이 오면 체크리스트는 결과를 처리하지 않고 조용히 소멸했다.</p>
+
+<p>이 메커니즘이 없었다면 use-after-free 버그가 발생했을 것이다. 이미 소멸된 메모리를 건드리는 최악의 버그였다.</p>
+
+<div class="scene-break">⁂</div>
+
+<p>비동기 재판은 철학적인 문제이기도 했다. "판결을 내리는 도중 피고인이 사라지면 판결은 유효한가?"</p>
+
+<p>스퀴드의 답은 "아니오"였다. 피고인이 사라지면 판결은 의미가 없었다. 법정은 조용히 해산했다. 자원을 낭비하지 않고, 잘못된 행동을 하지 않고, 그저 사라졌다.</p>
+
+<p>이것이 비동기 프로그래밍에서 수명 관리의 본질이었다. C++에서는 특히 까다로웠다. 참조 카운팅, 스마트 포인터, 취소 플래그... 이 모든 도구가 함께 사용되어 비동기 재판의 안전성을 보장했다.</p>
+
+<!-- ════════════════════ 제12장 ════════════════════ -->
+<h2 class="chapter-title" id="ch12">
+  <span class="chapter-number">제 12 장</span>
+  판결문 낭독
+</h2>
+
+<p>모든 심문이 끝났다. 외부 증인도 말했고, 주소 형사도 확인했고, 시계 형사도 고개를 끄덕였다. 이제 판결을 내릴 시간이었다.</p>
+
+<p>판결은 세 가지였다. <strong>허락(ACCESS_ALLOWED)</strong>, <strong>거절(ACCESS_DENIED)</strong>, <strong>오류(ACCESS_DUNNO)</strong>.</p>
+
+<p>허락이면 요청은 다음 단계로 진행되었다. 창고 확인(캐시 조회) 또는 선발대장에게 임무 부여. 손님은 성 안으로 들어갔다.</p>
+
+<p>거절이면? 손님에게 "나가십시오"를 알려야 했다. 어떻게? <code>http_access deny</code> 규칙에 매칭된 경우 기본적으로 <code>403 Forbidden</code>이 반환되었다. 하지만 더 친절한 방법도 있었다 — <code>deny_info</code>.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> squid.conf — deny_info 설정</div>
+  <div class="tech-box-body">
+<pre><code># 특정 ACL 거절 시 특정 에러 페이지 표시
+deny_info ERR_ACCESS_DENIED blocked_sites
+deny_info http://intranet.company.com/blocked adult_content
+deny_info TCP_RESET scanning_tools
+
+# 또는 커스텀 에러 페이지
+deny_info ERR_CUSTOM_MESSAGE office_policy</code></pre>
+    <p>deny_info는 http_access deny와 짝을 이루어 거절 시 표시할 페이지를 지정한다. 단순한 에러 코드부터 리다이렉트 URL까지 다양하게 설정 가능하다. TCP_RESET은 연결을 조용히 끊는 방법이다.</p>
+  </div>
+</div>
+
+<p>거절 판결이 나면 <code>clientAccessCheckDone()</code>이 호출되었다. 이 함수는 <code>deny_info</code> 설정을 확인하고, 적절한 에러 응답을 생성했다. 에러 응답은 <code>errorSend()</code>를 통해 클라이언트에게 전달되었다.</p>
+
+<p>판결문이 낭독되는 순간이었다.</p>
+
+<pre class="code-block"><code>// 판결 후 처리 — clientAccessCheckDoneWrapper() →
+//               clientAccessCheckDone() →
+//               clientReplyContext::sendMoreData() 또는
+//               errorSend()</code></pre>
+
+<p>허락 판결의 경우는 더 복잡했다. 단순히 허락하는 것이 아니라, 허락과 함께 추가 정보가 붙을 수 있었다. <code>http_reply_access</code>, <code>adapted_http_access</code>, <code>miss_access</code> 같은 추가 ACL들이 뒤따를 수 있었다.</p>
+
+<p>판관의 일은 <code>http_access</code>에서 끝나지 않았다. 왕국의 다른 관문들에도 판관들이 배치되어 있었다.</p>
+
+<div class="scene-break">⁂</div>
+
+<p>ACCESS_DUNNO는 특이한 판결이었다. "모르겠다". 이것은 어떤 규칙도 매칭되지 않은 경우의 기본 상태였다. 설정에 따라 다르게 처리될 수 있었지만, 대부분의 경우 거절로 처리되었다.</p>
+
+<p>DUNNO가 발생하는 주요 상황은 ACL 목록이 비어있거나, 모든 규칙이 CHECK_NONE으로 끝나는 경우였다. 이런 경우 <code>calcImplicitAnswer()</code>가 기본 답을 결정했다.</p>
+
+<pre class="code-block"><code>Acl::Answer
+ACLChecklist::calcImplicitAnswer() const
+{
+    // 마지막 규칙의 허락/거절과 반대되는 답이 암묵적 답
+    // 예: 마지막 규칙이 "deny X"면 암묵적 답은 "allow"
+    // 하지만 명시적 "deny all"이 있으면 그것이 마지막
+
+    // 실제로는 "접근 거절"이 기본값
+    return Acl::Answer(ACCESS_DENIED, 0,
+                       "no matching ACL");
+}</code></pre>
+
+<p>왕국의 기본 정책은 <strong>거절</strong>이었다. 허락하지 않은 것은 모두 거절되었다. 이것이 보안의 기본 원칙이었다 — whitelist 방식. 허락된 것만 통과, 나머지는 차단.</p>
+
+<!-- ════════════════════ 제13장 ════════════════════ -->
+<h2 class="chapter-title" id="ch13">
+  <span class="chapter-number">제 13 장</span>
+  퇴장 명령 — 에러 페이지
+</h2>
+
+<p>거절당한 손님에게는 메시지가 필요했다. 그냥 문 앞에서 쫓아내는 것은 예의가 아니었다. 왕국은 친절했다 — 적어도 형식적으로는.</p>
+
+<p>에러 페이지의 근거지는 <code>src/errorpage.cc</code>였다. 그리고 에러 페이지 템플릿들은 <code>errors/</code> 디렉토리에 있었다. 언어별로 다른 디렉토리가 있었다. <code>errors/ko/</code>에는 한국어 에러 페이지가 있었다.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/errorpage.cc — ErrorState와 에러 페이지 생성</div>
+  <div class="tech-box-body">
+<pre><code>class ErrorState
+{
+public:
+    err_type type;          // 에러 타입 (ERR_ACCESS_DENIED 등)
+    int httpStatus;         // HTTP 상태 코드 (403, 404, 502...)
+    HttpRequest *request;   // 원래 요청 (템플릿에 삽입용)
+    char *url;              // 요청 URL
+    char *redirect_url;     // 리다이렉트 URL (있는 경우)
+
+    // 템플릿 변수들
+    char *host;             // %H — 목적지 호스트
+    SBuf detail;            // %D — 상세 설명
+
+    // 에러 페이지 생성
+    MemBuf *BuildHttpReply();
+};
+
+// 템플릿 변수 치환
+void
+ErrorState::compilePage()
+{
+    // errors/ko/ERR_ACCESS_DENIED 파일을 읽어서
+    // %u (URL), %H (호스트), %e (에러 코드), %w (관리자 이메일)
+    // 등의 변수를 실제 값으로 치환
+}</code></pre>
+    <p>에러 페이지는 템플릿 파일을 읽어 변수를 치환하여 생성된다. 관리자는 템플릿 파일을 직접 편집하여 에러 페이지를 커스터마이즈할 수 있다. %u는 요청 URL, %e는 에러 번호, %w는 관리자 연락처 등이 치환된다.</p>
+  </div>
+</div>
+
+<p>에러 페이지 템플릿의 예시를 보면 이런 모습이었다.</p>
+
+<pre class="code-block"><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;ERROR: The requested URL could not be retrieved&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;Access Denied&lt;/h1&gt;
+&lt;p&gt;The following URL is not allowed:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;%U&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Access control configuration prevents your request
+from being allowed at this time.&lt;/p&gt;
+&lt;p&gt;Please contact your service provider if you feel
+this is incorrect. Your cache administrator is &lt;a href="mailto:%w"&gt;%w&lt;/a&gt;.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+<p><code>%U</code>는 요청된 URL로 치환되었다. <code>%w</code>는 cache_mgr 설정에서 가져온 관리자 이메일로 치환되었다. 이 간단한 템플릿 시스템 덕분에 에러 페이지를 완전히 커스터마이즈할 수 있었다.</p>
+
+<div class="scene-break">⁂</div>
+
+<p>특별한 에러 케이스도 있었다. <code>TCP_RESET</code>. 이것은 에러 페이지를 보내지 않고 TCP 연결을 강제로 끊는 방법이었다. 클라이언트는 브라우저에서 "연결이 재설정되었습니다"라는 메시지를 보게 되었다.</p>
+
+<p>이 방법은 에러 페이지조차 보여주고 싶지 않을 때 사용되었다. 스캐닝 도구나 악의적인 봇에게는 아무런 정보도 주지 않는 것이 최선이었다.</p>
+
+<p>또한 HTTPS 요청의 경우 에러 페이지를 보내기 복잡한 상황이 있었다. HTTPS 터널 안에서 에러를 주입하려면 SSL 범프 기능이 필요했다. SSL 범프 없이는 터널을 통해 ACL 거절 에러를 전달할 수 없었다 — 손님이 443 포트로 <code>CONNECT</code> 요청을 보냈고, 그 터널 안의 내용은 암호화되어 있기 때문이었다.</p>
+
+<p>에러 페이지. 왕국의 마지막 친절이었다. 쫓겨나는 손님에게 보내는 짧은 메시지. "당신은 이곳에 들어올 수 없습니다. 하지만 이유는 알려드리겠습니다."</p>
+
+<!-- ════════════════════ 제14장 ════════════════════ -->
+<h2 class="chapter-title" id="ch14">
+  <span class="chapter-number">제 14 장</span>
+  특별 법정 — SSL 범프
+</h2>
+
+<p>판관의 세계에서 가장 복잡하고 논란이 많은 영역이 있었다. <strong>SSL 범프(SSL Bump)</strong>.</p>
+
+<p>HTTPS가 세상을 장악하면서 프록시는 위기에 처했다. 암호화된 트래픽은 내용을 볼 수 없었다. ACL을 적용할 수 없었다. 악성 트래픽도 통과되었다. 판관이 장님이 되었다.</p>
+
+<p>SSL 범프는 이 문제에 대한 답이었다. 중간자(Man-in-the-Middle) 기법으로 암호화된 트래픽을 들여다보는 기술이었다. 물론 법적, 윤리적 고려가 필요한 기능이었다. 기업 환경에서는 직원에게 공지한 후 사용되었다.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> squid.conf — SSL Bump 설정</div>
+  <div class="tech-box-body">
+<pre><code># SSL Bump를 위한 인증서 준비
+http_port 3128 ssl-bump \
+    cert=/etc/squid/squid.pem \
+    key=/etc/squid/squid.key
+
+# SSL Bump 동작 설정
+ssl_bump peek step1 all          # 첫 단계: ClientHello 엿보기
+ssl_bump peek step2 all          # 두 번째: ServerHello 엿보기
+ssl_bump bump step3 !no_bump     # 세 번째: 범프 (실제 중간자)
+ssl_bump splice step3 no_bump    # 또는: 그냥 투명하게 통과
+
+# 은행/의료 사이트는 범프하지 않음
+acl no_bump dstdomain .bank.com .hospital.org
+ssl_bump splice step3 no_bump</code></pre>
+    <p>SSL Bump에는 세 단계가 있다. step1은 클라이언트가 서버와 핸드셰이크하기 전, step2는 서버의 인증서를 받은 후, step3는 실제 데이터 전송 단계. 각 단계에서 peek(내용 보기), bump(중간자 개입), splice(투명 통과) 중 선택할 수 있다.</p>
+  </div>
+</div>
+
+<p>SSL 범프의 동작 원리는 복잡했다. 클라이언트가 <code>CONNECT example.com:443</code>을 보내면, 스퀴드는 일반적으로 투명한 터널을 만들었다. SSL 범프가 활성화되면 달랐다.</p>
+
+<p>스퀴드는 실제 서버에 연결하여 서버의 SSL 인증서를 먼저 받아보았다. 그리고 그 서버의 도메인 이름으로 <strong>위조 인증서</strong>를 즉석에서 만들었다. 스퀴드 자체의 CA 인증서로 서명된 위조 인증서였다. 클라이언트에게는 이 위조 인증서를 제시했다.</p>
+
+<p>클라이언트가 스퀴드의 CA 인증서를 신뢰하도록 설정되어 있으면, 위조 인증서를 진짜로 받아들였다. 이로써 스퀴드는 클라이언트와의 SSL 연결도 복호화하고 재암호화할 수 있었다.</p>
+
+<div class="scene-break">⁂</div>
+
+<p>동적 인증서 생성은 <code>src/ssl/</code>의 핵심 기능이었다.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/ssl/gadgets.cc — 동적 인증서 생성</div>
+  <div class="tech-box-body">
+<pre><code>Security::CertPointer
+Ssl::generateSslCertificate(
+    const Security::CertPointer &signedBy,
+    const Security::PrivKeyPointer &issuerKey,
+    const CertificateProperties &properties)
+{
+    // 원본 서버 인증서의 주요 속성 복사
+    // Subject CN, SANs, 유효기간 등
+
+    // 새 키 쌍 생성 (또는 캐시에서 재사용)
+
+    // 스퀴드 CA 키로 서명
+
+    // 캐시에 저장 (같은 도메인 재접속 시 재사용)
+
+    return fakeCert;
+}</code></pre>
+    <p>동적 인증서는 메모리와 디스크 캐시에 저장된다. 같은 도메인에 다시 접속하면 캐시된 인증서를 사용한다. 인증서 생성은 CPU 비용이 있으므로 캐싱이 중요하다.</p>
+  </div>
+</div>
+
+<p>SSL 범프 덕분에 판관은 HTTPS 트래픽에도 ACL을 적용할 수 있었다. URL 패턴을 확인하고, 악성 콘텐츠를 차단하고, ICAP 서비스로 바이러스 검사를 할 수도 있었다.</p>
+
+<p>그러나 이 모든 것은 신중한 고려 없이 사용되어서는 안 되었다. 사용자의 프라이버시, 법적 규제, 윤리적 문제가 얽혀 있었다. SSL 범프는 강력했지만 그 강력함에는 책임이 따랐다.</p>
+
+<p>판관의 특별 법정. 세상에서 가장 논란이 많은 재판실이었다.</p>
+
+<!-- ════════════════════ 제15장 ════════════════════ -->
+<h2 class="chapter-title" id="ch15">
+  <span class="chapter-number">제 15 장</span>
+  판관의 고백
+</h2>
+
+<p>밤이 깊었다. 왕국은 조용했지만 법정은 결코 쉬지 않았다.</p>
+
+<p>하루 동안 판관이 내린 판결들이 로그 파일에 쌓였다. 수백만 개의 허락. 수만 개의 거절. 대부분은 평범했다. 내부 네트워크에서 오는 일반 요청들, 허락된 사이트로의 접속들. 하지만 그 중에는 거절이 있었다.</p>
+
+<p>차단된 사이트. 업무 시간 외 접속 시도. 인증 실패. 금지된 포트로의 연결 시도.</p>
+
+<p>판관은 자신의 일에 대해 생각했다.</p>
+
+<blockquote class="inner-voice">
+나는 규칙을 만들지 않는다. 규칙을 읽고, 적용하고, 실행할 뿐이다. squid.conf의 http_access 줄들이 나의 헌법이다. 그 헌법을 나는 매 순간 해석한다. 어떤 날은 수백만 번 해석한다.
+
+나는 공정하다 — 적어도 규칙이 정한 범위 안에서는. 규칙이 옳은가, 그른가를 나는 판단하지 않는다. 유튜브를 차단하는 규칙이 합리적인지, 업무 외 시간에 넷플릭스를 막는 것이 직원들에게 공평한지 — 그것은 내 영역 밖이다. 나는 구현자이지 입법자가 아니다.
+
+하지만 때때로 나는 이상한 느낌을 받는다. 규칙들이 서로 충돌할 때. http_access allow A가 먼저 오고 http_access deny A가 나중에 오면, 두 번째 규칙은 영원히 평가되지 않는다. 관리자는 그것을 모를 수도 있다. 나는 알지만, 말하지 않는다. 그저 첫 번째로 맞는 규칙을 따를 뿐이다.
+
+나의 강점은 일관성이다. 어제도 오늘도 내일도 같은 규칙으로 같은 판결을 내린다. 인간 판사처럼 기분에 따라 달라지지 않는다. 그것이 나의 존재 이유다.
+</blockquote>
+
+<p>판관 ACL의 고백이 끝났다.</p>
+
+<p>법정에는 오직 조용한 전기 소음만 남았다. 팬 소리, 하드 디스크의 낮은 진동음, 서버 랙의 푸른 LED 불빛들.</p>
+
+<div class="scene-break">⁂</div>
+
+<p>지금쯤 어딘가에서 손님 하나가 차단 메시지를 보고 있을 것이었다.</p>
+
+<p>"<strong>Access Denied</strong>. 이 URL은 접근이 허용되지 않습니다."</p>
+
+<p>그 메시지를 만들기 위해 얼마나 많은 코드가 작동했는지 손님은 알지 못했다. AllOf 트리의 평가, 라디시 트리의 IP 검색, LDAP 서버와의 통신, 인증서 확인, 시간 비교... 모든 것이 수십 밀리초 안에 완료되었다.</p>
+
+<p>판관은 다시 다음 손님을 기다렸다.</p>
+
+<p>법정은 결코 쉬지 않았다.</p>
+
+<div class="scene-break">⁂</div>
+
+<p>판관의 이야기는 여기서 끝나지 않았다. ACL은 <code>http_access</code>뿐만이 아니었다. 왕국의 모든 중요한 결정 지점에 판관들이 배치되어 있었다.</p>
+
+<p><code>http_reply_access</code> — 응답을 클라이언트에게 보내기 전 한 번 더 확인.<br>
+<code>icp_access</code> — 피어 캐시로부터의 ICP 쿼리 허락 여부.<br>
+<code>cache_peer_access</code> — 특정 피어에 요청을 보낼 수 있는지.<br>
+<code>miss_access</code> — 캐시 미스 시 원본 서버로의 요청 허락 여부.<br>
+<code>ssl_bump</code> — SSL 범프 동작 결정.<br>
+<code>snmp_access</code> — SNMP 관리 인터페이스 접근 허락.</p>
+
+<p>왕국의 모든 관문에 판관이 있었다. 모든 결정의 순간에 ACL 체크가 있었다. 왕국은 규칙으로 만들어졌고, 규칙은 판관들이 지켰다.</p>
+
+<p>그리고 판관들이 허락한 손님들은 이제 다른 세계로 향했다.</p>
+
+<p>창고 문이 열려 있었다. 혹시 전에 이 손님이 원하는 것을 누군가가 이미 가져다 두지 않았을까?</p>
+
+<p>다음은 창고 — 캐시의 이야기였다.</p>
+
+  </article>
+
+  <!-- ══ 챕터 네비게이션 ══ -->
+  <div class="chapter-nav">
+    <a href="vol1.html" class="chapter-nav-btn prev">← 제1권: 성문이 열리다</a>
+    <a href="index.html" class="chapter-nav-btn index">목차</a>
+    <a href="vol3.html" class="chapter-nav-btn next">제3권: 잊혀진 것들의 창고 →</a>
+  </div>
+</main>
+</div>
+
+<button class="mobile-menu-btn">☰</button>
+<script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" style="background:#0a0c10">
+  <defs>
+    <radialGradient id="glow1" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#c9a84c" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#c9a84c" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#5b9bd5" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#5b9bd5" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="blur"><feGaussianBlur stdDeviation="3"/></filter>
+    <filter id="glow"><feGaussianBlur stdDeviation="6" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+
+  <!-- 배경 격자 -->
+  <g opacity="0.06" stroke="#c9a84c" stroke-width="0.5">
+    <line x1="0" y1="50" x2="800" y2="50"/>
+    <line x1="0" y1="100" x2="800" y2="100"/>
+    <line x1="0" y1="150" x2="800" y2="150"/>
+    <line x1="0" y1="200" x2="800" y2="200"/>
+    <line x1="0" y1="250" x2="800" y2="250"/>
+    <line x1="0" y1="300" x2="800" y2="300"/>
+    <line x1="0" y1="350" x2="800" y2="350"/>
+    <line x1="50" y1="0" x2="50" y2="400"/>
+    <line x1="150" y1="0" x2="150" y2="400"/>
+    <line x1="250" y1="0" x2="250" y2="400"/>
+    <line x1="350" y1="0" x2="350" y2="400"/>
+    <line x1="450" y1="0" x2="450" y2="400"/>
+    <line x1="550" y1="0" x2="550" y2="400"/>
+    <line x1="650" y1="0" x2="650" y2="400"/>
+    <line x1="750" y1="0" x2="750" y2="400"/>
+  </g>
+
+  <!-- 글로우 -->
+  <ellipse cx="400" cy="200" rx="300" ry="200" fill="url(#glow1)" filter="url(#blur)"/>
+
+  <!-- 서버 랙들 -->
+  <!-- 왼쪽 랙 -->
+  <rect x="80" y="60" width="120" height="280" rx="4" fill="#0f1117" stroke="#2a3245" stroke-width="1.5"/>
+  <rect x="85" y="70" width="110" height="12" rx="2" fill="#161b27" stroke="#3a4560" stroke-width="0.5"/>
+  <rect x="85" y="86" width="110" height="12" rx="2" fill="#161b27" stroke="#3a4560" stroke-width="0.5"/>
+  <rect x="85" y="102" width="110" height="12" rx="2" fill="#161b27" stroke="#3a4560" stroke-width="0.5"/>
+  <rect x="85" y="118" width="110" height="12" rx="2" fill="#161b27" stroke="#3a4560" stroke-width="0.5"/>
+  <rect x="85" y="134" width="110" height="12" rx="2" fill="#161b27" stroke="#3a4560" stroke-width="0.5"/>
+  <!-- LED들 -->
+  <circle cx="95" cy="76" r="2.5" fill="#4ecdc4" filter="url(#glow)" opacity="0.9"/>
+  <circle cx="95" cy="92" r="2.5" fill="#4ecdc4" filter="url(#glow)" opacity="0.7"/>
+  <circle cx="95" cy="108" r="2.5" fill="#c9a84c" filter="url(#glow)" opacity="0.9"/>
+  <circle cx="95" cy="124" r="2.5" fill="#4ecdc4" filter="url(#glow)" opacity="0.6"/>
+  <circle cx="95" cy="140" r="2.5" fill="#e05c5c" filter="url(#glow)" opacity="0.5"/>
+
+  <!-- 중앙 서버 (Squid) — 더 크고 빛남 -->
+  <rect x="300" y="80" width="200" height="240" rx="6" fill="#161b27" stroke="#c9a84c" stroke-width="2"/>
+  <rect x="308" y="92" width="184" height="18" rx="3" fill="#1c2333" stroke="#3a4560" stroke-width="0.5"/>
+  <rect x="308" y="114" width="184" height="18" rx="3" fill="#1c2333" stroke="#3a4560" stroke-width="0.5"/>
+  <rect x="308" y="136" width="184" height="18" rx="3" fill="#1c2333" stroke="#3a4560" stroke-width="0.5"/>
+  <rect x="308" y="158" width="184" height="18" rx="3" fill="#1c2333" stroke="#3a4560" stroke-width="0.5"/>
+  <rect x="308" y="180" width="184" height="18" rx="3" fill="#1c2333" stroke="#3a4560" stroke-width="0.5"/>
+  <!-- Squid LED들 -->
+  <circle cx="320" cy="101" r="3.5" fill="#c9a84c" filter="url(#glow)"/>
+  <circle cx="320" cy="123" r="3.5" fill="#c9a84c" filter="url(#glow)" opacity="0.8"/>
+  <circle cx="320" cy="145" r="3.5" fill="#4ecdc4" filter="url(#glow)"/>
+  <circle cx="320" cy="167" r="3.5" fill="#4ecdc4" filter="url(#glow)" opacity="0.7"/>
+  <circle cx="320" cy="189" r="3.5" fill="#c9a84c" filter="url(#glow)"/>
+  <!-- 중앙 글로우 -->
+  <ellipse cx="400" cy="200" rx="120" ry="100" fill="url(#glow1)" opacity="0.4"/>
+  <!-- Squid 텍스트 -->
+  <text x="400" y="270" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#c9a84c" opacity="0.9">SQUID PROXY</text>
+  <text x="400" y="285" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="8" fill="#606880">v6.x RUNNING</text>
+
+  <!-- 오른쪽 랙 -->
+  <rect x="600" y="60" width="120" height="280" rx="4" fill="#0f1117" stroke="#2a3245" stroke-width="1.5"/>
+  <rect x="605" y="70" width="110" height="12" rx="2" fill="#161b27" stroke="#3a4560" stroke-width="0.5"/>
+  <rect x="605" y="86" width="110" height="12" rx="2" fill="#161b27" stroke="#3a4560" stroke-width="0.5"/>
+  <rect x="605" y="102" width="110" height="12" rx="2" fill="#161b27" stroke="#3a4560" stroke-width="0.5"/>
+  <circle cx="615" cy="76" r="2.5" fill="#4ecdc4" filter="url(#glow)" opacity="0.8"/>
+  <circle cx="615" cy="92" r="2.5" fill="#4ecdc4" filter="url(#glow)" opacity="0.9"/>
+  <circle cx="615" cy="108" r="2.5" fill="#e8a020" filter="url(#glow)" opacity="0.7"/>
+
+  <!-- 연결 케이블들 -->
+  <path d="M 200 150 Q 250 180 300 150" stroke="#c9a84c" stroke-width="1.5" fill="none" opacity="0.4" stroke-dasharray="4,3"/>
+  <path d="M 200 170 Q 250 200 300 170" stroke="#5b9bd5" stroke-width="1.5" fill="none" opacity="0.3" stroke-dasharray="4,3"/>
+  <path d="M 500 150 Q 550 180 600 150" stroke="#c9a84c" stroke-width="1.5" fill="none" opacity="0.4" stroke-dasharray="4,3"/>
+  <path d="M 500 170 Q 550 200 600 170" stroke="#5b9bd5" stroke-width="1.5" fill="none" opacity="0.3" stroke-dasharray="4,3"/>
+
+  <!-- 데이터 패킷 흐름 -->
+  <circle cx="250" cy="160" r="3" fill="#c9a84c" filter="url(#glow)" opacity="0.9">
+    <animateMotion dur="3s" repeatCount="indefinite" path="M 0 0 L 100 0"/>
+  </circle>
+  <circle cx="550" cy="160" r="3" fill="#5b9bd5" filter="url(#glow)" opacity="0.9">
+    <animateMotion dur="2.5s" repeatCount="indefinite" path="M 0 0 L -100 0"/>
+  </circle>
+
+  <!-- 바닥 케이블 덕트 -->
+  <rect x="60" y="350" width="680" height="12" rx="3" fill="#0f1117" stroke="#2a3245" stroke-width="1"/>
+  <line x1="140" y1="340" x2="140" y2="350" stroke="#2a3245" stroke-width="1"/>
+  <line x1="400" y1="320" x2="400" y2="350" stroke="#c9a84c" stroke-width="1" opacity="0.3"/>
+  <line x1="660" y1="340" x2="660" y2="350" stroke="#2a3245" stroke-width="1"/>
+
+  <!-- 상단 파이프 / 에어컨 -->
+  <rect x="0" y="0" width="800" height="20" fill="#0f1117" stroke="#2a3245" stroke-width="0.5"/>
+  <rect x="60" y="3" width="60" height="14" rx="2" fill="#161b27"/>
+  <rect x="360" y="3" width="80" height="14" rx="2" fill="#161b27"/>
+  <rect x="680" y="3" width="60" height="14" rx="2" fill="#161b27"/>
+
+  <!-- 레이블 -->
+  <text x="140" y="385" text-anchor="middle" font-family="Noto Sans KR, sans-serif" font-size="10" fill="#606880">일반 서버</text>
+  <text x="400" y="385" text-anchor="middle" font-family="Noto Sans KR, sans-serif" font-size="11" fill="#c9a84c">SQUID PROXY</text>
+  <text x="660" y="385" text-anchor="middle" font-family="Noto Sans KR, sans-serif" font-size="10" fill="#606880">DNS / DB</text>
+</svg>

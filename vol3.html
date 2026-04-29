@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="ko" data-volume="3">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>제3권: 잊혀진 것들의 창고 — 스퀴드 대서사시</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    :root { --vol-color: #4ecdc4; }
+    .vol-index-bg {
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(78,205,196,.15) 0%, transparent 60%),
+                  linear-gradient(180deg, #0a0c10 0%, #0f1117 100%);
+    }
+  </style>
+</head>
+<body>
+
+<div class="novel-wrapper">
+<nav class="novel-sidebar">
+  <div class="sidebar-logo">
+    <a href="index.html">← 목차로</a>
+  </div>
+  <div class="sidebar-vol-title">VOLUME 3</div>
+  <div class="sidebar-vol-name">잊혀진 것들의 창고<br><span style="font-size:.8rem;font-weight:400;color:var(--text-muted)">캐시, 기억, 그리고 망각</span></div>
+  <nav class="sidebar-nav">
+    <a class="sidebar-chapter" href="#ch1"><span class="ch-num">01</span>창고지기의 하루</a>
+    <a class="sidebar-chapter" href="#ch2"><span class="ch-num">02</span>물건의 생애 — StoreEntry</a>
+    <a class="sidebar-chapter" href="#ch3"><span class="ch-num">03</span>열쇠와 자물쇠 — 캐시 키</a>
+    <a class="sidebar-chapter" href="#ch4"><span class="ch-num">04</span>삼층 창고 구조</a>
+    <a class="sidebar-chapter" href="#ch5"><span class="ch-num">05</span>기억 연못 — Memory Cache</a>
+    <a class="sidebar-chapter" href="#ch6"><span class="ch-num">06</span>돌 창고 — Disk Cache</a>
+    <a class="sidebar-chapter" href="#ch7"><span class="ch-num">07</span>UFS의 미로</a>
+    <a class="sidebar-chapter" href="#ch8"><span class="ch-num">08</span>신선도 점쟁이</a>
+    <a class="sidebar-chapter" href="#ch9"><span class="ch-num">09</span>만료와 재검증</a>
+    <a class="sidebar-chapter" href="#ch10"><span class="ch-num">10</span>교체 정책의 철학</a>
+    <a class="sidebar-chapter" href="#ch11"><span class="ch-num">11</span>LRU — 오래된 것을 버려라</a>
+    <a class="sidebar-chapter" href="#ch12"><span class="ch-num">12</span>LFUDA — 자주 쓰이는 것을 남겨라</a>
+    <a class="sidebar-chapter" href="#ch13"><span class="ch-num">13</span>스워핑 — 디스크로의 여행</a>
+    <a class="sidebar-chapter" href="#ch14"><span class="ch-num">14</span>붕괴 방지 — 동시 요청 처리</a>
+    <a class="sidebar-chapter" href="#ch15"><span class="ch-num">15</span>창고지기의 꿈</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="vol-nav-btns">
+      <a href="vol2.html" class="vol-nav-btn">← 2권</a>
+      <a href="vol4.html" class="vol-nav-btn">4권 →</a>
+    </div>
+  </div>
+</nav>
+
+<main class="novel-main">
+  <div class="novel-topbar">
+    <div class="topbar-breadcrumb">
+      <a href="index.html">스퀴드 대서사시</a>
+      <span class="sep">›</span>
+      <span class="current">제3권: 잊혀진 것들의 창고</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill"></div></div>
+  </div>
+
+  <div class="vol-index-hero" style="min-height:50vh">
+    <div class="vol-index-bg" style="position:absolute;inset:0;z-index:0"></div>
+    <div style="position:absolute;inset:0;z-index:0;background-image:linear-gradient(rgba(78,205,196,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(78,205,196,.03) 1px,transparent 1px);background-size:40px 40px"></div>
+    <div class="vol-index-content" style="padding-top:6rem">
+      <div class="vol-label">Volume 3</div>
+      <h1 class="vol-main-title">잊혀진 것들의 창고</h1>
+      <p class="vol-main-subtitle">캐시, 기억, 그리고 망각</p>
+      <p class="vol-main-desc">
+        모든 것은 두 번째 방문부터 다르다.<br>
+        창고지기는 이미 가져온 것들을 기억하고, 다시 가져오지 않는다.<br>
+        기억하는 것이 왕국의 힘이고, 망각하는 것이 왕국의 지혜다.
+      </p>
+    </div>
+  </div>
+
+  <article class="novel-content">
+
+<!-- ════════════════════ 제1장 ════════════════════ -->
+<h2 class="chapter-title" id="ch1">
+  <span class="chapter-number">제 1 장</span>
+  창고지기의 하루
+</h2>
+
+<p>창고지기 <strong>Store::Controller</strong>는 아주 오래된 존재였다.</p>
+
+<p>그는 왕국이 시작된 날부터 이 자리에 있었다. 왕국이 처음으로 어떤 웹 페이지를 가져왔을 때, 창고지기는 그것을 받아 정성스럽게 선반에 올려두었다. 혹시 나중에 또 누군가가 같은 것을 찾으러 올지 모르니까. 그리고 실제로 찾아왔다. 두 번째 손님은 훨씬 빠르게 원하는 것을 받아갔다.</p>
+
+<p>그것이 캐시의 시작이었다. 기억하는 것.</p>
+
+<p>창고지기의 하루는 바빴다. 손님들이 끊임없이 찾아와 물었다. "이 URL의 내용 있어요?" 창고지기는 즉시 답해야 했다. 있으면 꺼내주고, 없으면 솔직하게 "없어요"라고 해서 선발대장이 직접 가져오도록 했다.</p>
+
+<p>창고지기의 핵심 메서드는 두 가지였다.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/store/Controller.cc — 창고의 두 핵심 동작</div>
+  <div class="tech-box-body">
+<pre><code>// 조회 (있으면 꺼냄, 없으면 nullptr)
+StoreEntry *
+Store::Controller::find(const cache_key *key)
+{
+    // 1단계: 일시 창고(transients) 확인
+    if (transients) {
+        if (StoreEntry *e = transients->get(key))
+            return e;
+    }
+    // 2단계: 메모리 캐시 확인
+    if (memStore) {
+        if (StoreEntry *e = memStore->get(key))
+            return e;
+    }
+    // 3단계: 디스크 캐시 확인 (느림)
+    return swapDir->get(key);
+}
+
+// 생성 또는 조회 (없으면 새로 만들고 등록)
+StoreEntry *
+Store::Controller::getRequest(
+    HttpRequest *request, HttpStateFlags &flags)
+{
+    const cache_key *key = storeKeyPublicByRequest(request);
+
+    StoreEntry *e = find(key);
+    if (e != nullptr) {
+        // 캐시 히트
+        return e;
+    }
+
+    // 캐시 미스 — 새 엔트리 생성
+    e = new StoreEntry();
+    e->makePublic(key);
+    // 등록
+    addReading(e, key);
+    return e;
+}</code></pre>
+    <p>창고 조회는 3단계 계층 구조로 진행된다. 가장 빠른 일시 창고(진행 중인 요청)부터 시작하여 메모리, 디스크 순으로 확인한다. 캐시 미스 시 새 StoreEntry를 만들어 등록한다.</p>
+  </div>
+</div>
+
+<p>창고지기는 분주했다. 초당 수천 개의 조회 요청이 들어왔다. 각각에 대해 find()를 호출하고, 있으면 꺼내주고, 없으면 새로 만들었다.</p>
+
+<p>하지만 창고는 무한하지 않았다. 자리가 한정되어 있었다. 언제 무엇을 버릴지 결정하는 것이 창고지기의 가장 어려운 일이었다.</p>
+
+<div class="scene-break">⁂</div>
+
+<p>창고의 이야기를 이해하려면 먼저 기본 단위를 알아야 했다. 창고 안에 보관되는 각각의 물건, 즉 <strong>StoreEntry</strong>였다.</p>
+
+<!-- ════════════════════ 제2장 ════════════════════ -->
+<h2 class="chapter-title" id="ch2">
+  <span class="chapter-number">제 2 장</span>
+  물건의 생애 — StoreEntry
+</h2>
+
+<p><strong>StoreEntry</strong>. 창고의 기본 단위. 하나의 HTTP 응답을 나타내는 객체였다.</p>
+
+<p>StoreEntry는 탄생부터 소멸까지 긴 여정을 거쳤다. 그 여정에는 이름이 있었다.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/store.h — StoreEntry 상태 머신</div>
+  <div class="tech-box-body">
+<pre><code>// 저장 상태
+typedef enum {
+    STORE_OK,           // 완전히 저장됨, 사용 가능
+    STORE_PENDING       // 아직 데이터 수신 중
+} store_status_t;
+
+// 메모리 상태
+typedef enum {
+    IN_MEMORY,          // 메모리에 있음
+    SWAPOUT_NONE,       // 디스크에 없음 (메모리만)
+    SWAPOUT_WRITING,    // 디스크에 쓰는 중
+    SWAPOUT_DONE,       // 디스크 쓰기 완료
+    SWAPOUT_FAILED      // 디스크 쓰기 실패
+} mem_status_t;
+
+// 핀 상태 (잠금)
+typedef enum {
+    STORE_UNLOCKED,     // 잠금 없음 — 교체 가능
+    STORE_LOCKED        // 잠김 — 현재 사용 중
+} store_lock_status_t;
+
+class StoreEntry : public hash_link, public RefCountable
+{
+public:
+    // 응답 헤더와 본문
+    MemObject *mem_obj;
+
+    // 캐시 키 (MD5 해시)
+    cache_key key[SQUID_MD5_DIGEST_LENGTH];
+
+    // 타임스탬프들
+    time_t timestamp;      // 캐시된 시각
+    time_t lastref;        // 마지막 접근 시각
+    time_t expires;        // 만료 시각
+    time_t lastModified;   // Last-Modified 값
+
+    // 크기 정보
+    uint64_t swap_file_sz; // 디스크 파일 크기
+
+    // 참조 카운트 (몇 개의 클라이언트가 읽는 중인가)
+    uint16_t refcount;
+
+    // 플래그들
+    uint32_t flags;        // ENTRY_SPECIAL, ENTRY_REVALIDATE 등
+
+    // 교체 정책 데이터 (LRU, LFUDA용)
+    RemovalPolicyNode repl;
+};</code></pre>
+    <p>StoreEntry는 HTTP 응답을 나타내는 복합 객체다. 타임스탬프, 크기, 참조 카운트, 교체 정책 데이터 등 캐시 관리에 필요한 모든 정보를 포함한다. 실제 데이터는 MemObject에 있다.</p>
+  </div>
+</div>
+
+<p>StoreEntry의 탄생은 캐시 미스 순간이었다. 손님이 원하는 것이 창고에 없을 때, 창고지기는 새 StoreEntry를 만들었다. 처음에는 비어있었다 — <code>STORE_PENDING</code> 상태. 아직 데이터가 없었다.</p>
+
+<p>선발대장이 원본 서버로 달려가 데이터를 가져오기 시작했다. 데이터는 청크(chunk) 단위로 들어왔다. 들어오는 족족 StoreEntry의 <code>MemObject</code>에 추가되었다. 동시에 이미 이 데이터를 기다리고 있는 다른 클라이언트들에게도 전달되었다 — 이것이 "스트리밍"이었다.</p>
+
+<p>원본 서버로부터 마지막 바이트가 도착했다. StoreEntry는 <code>STORE_OK</code> 상태가 되었다. 이제 완전한 물건이었다.</p>
+
+<p>그리고 디스크에 저장될 차례가 되면 <code>SWAPOUT_WRITING</code> 상태가 되었다가, 쓰기가 완료되면 <code>SWAPOUT_DONE</code>이 되었다. 이후 메모리에서 제거되더라도 디스크에서 다시 불러올 수 있었다.</p>
+
+<div class="scene-break">⁂</div>
+
+<p>StoreEntry의 소멸도 단순하지 않았다. 단순히 delete 하는 것이 아니었다.</p>
+
+<p>먼저 <strong>잠금(lock)</strong> 상태를 확인해야 했다. <code>refcount</code>가 0이어야 했다 — 현재 아무도 읽고 있지 않아야 했다. 잠금이 걸려있으면 버릴 수 없었다.</p>
+
+<p>잠금이 없으면 교체 정책에 의해 선택될 수 있었다. LRU라면 가장 오래 접근되지 않은 것부터. LFUDA라면 접근 빈도와 크기를 고려하여.</p>
+
+<p>선택된 StoreEntry는 메모리에서 해제되었다. 디스크에 있으면 디스크 파일도 삭제되었다. 그리고 해시 테이블에서 제거되었다.</p>
+
+<p>물건의 생애가 끝났다.</p>
+
+<!-- ════════════════════ 제3장 ════════════════════ -->
+<h2 class="chapter-title" id="ch3">
+  <span class="chapter-number">제 3 장</span>
+  열쇠와 자물쇠 — 캐시 키
+</h2>
+
+<p>창고에서 물건을 찾으려면 열쇠가 필요했다. 창고지기는 URL로부터 열쇠를 만들었다. 그 열쇠의 이름이 <strong>캐시 키(cache key)</strong>였다.</p>
+
+<p>캐시 키는 MD5 해시값이었다. 128비트, 16바이트. URL을 입력으로 받아 고정 길이의 해시를 생성했다.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/store_key_md5.cc — 캐시 키 생성</div>
+  <div class="tech-box-body">
+<pre><code>const cache_key *
+storeKeyPublicByRequest(HttpRequest *request)
+{
+    return storeKeyPublicByRequestMethod(
+        request, request->method);
+}
+
+const cache_key *
+storeKeyPublicByRequestMethod(HttpRequest *request,
+                               const HttpRequestMethod &method)
+{
+    static cache_key digest[SQUID_MD5_DIGEST_LENGTH];
+    unsigned int keytype = 0;
+
+    // URL 정규화 — 쿼리 스트링, 포트, 프래그먼트 처리
+    const SBuf &url = request->effectiveRequestUri();
+
+    // 메서드도 키에 포함 (GET /foo != HEAD /foo)
+    const char *method_str = method.image().c_str();
+
+    // MD5 계산
+    SquidMD5Init(&M);
+    SquidMD5Update(&M, method_str, strlen(method_str));
+    SquidMD5Update(&M, url.rawContent(), url.length());
+    SquidMD5Final(digest, &M);
+
+    return digest;
+}
+
+// 특수 키: 내부 에러 페이지 등
+const cache_key *
+storeKeyPrivate(const char *url, const HttpRequestMethod &m,
+                int id)
+{
+    // private 키는 공유되지 않음
+    // 인증이 필요한 응답에 사용
+}</code></pre>
+    <p>캐시 키는 HTTP 메서드와 URL의 MD5 해시다. GET과 HEAD는 같은 URL이라도 다른 키를 가진다. Vary 헤더가 있으면 추가 정보가 키에 포함된다. Private 키는 해당 클라이언트에게만 반환된다.</p>
+  </div>
+</div>
+
+<p>MD5를 사용하는 이유는 명확했다. URL은 길이가 천차만별이었다 — 몇 바이트에서 수 킬로바이트까지. 해시 테이블의 키로 사용하기에는 적합하지 않았다. MD5는 어떤 길이의 URL이든 16바이트의 일정한 해시값으로 만들었다.</p>
+
+<p>해시 충돌의 가능성은? 이론적으로는 있었다. MD5의 충돌 가능성은 <code>2^64</code>분의 1 정도였다. 캐시에 저장되는 URL의 수가 수백만 개라도 충돌 확률은 무시할 수 있는 수준이었다.</p>
+
+<div class="scene-break">⁂</div>
+
+<p>하지만 같은 URL이라도 항상 같은 응답이 아닌 경우가 있었다. <strong>Vary 헤더</strong>가 그 원인이었다.</p>
+
+<p>서버가 <code>Vary: Accept-Language</code>라는 헤더를 보내면, 같은 URL이라도 클라이언트의 <code>Accept-Language</code> 헤더에 따라 다른 내용을 반환한다는 의미였다. 한국어 브라우저와 영어 브라우저가 같은 URL을 요청해도 다른 내용을 받을 수 있었다.</p>
+
+<p>이런 경우 스퀴드는 <code>Vary</code> 정보를 캐시 키에 포함시켰다. <code>Accept-Language: ko-KR</code>과 <code>Accept-Language: en-US</code>는 다른 키를 생성하여 다른 캐시 엔트리에 저장되었다.</p>
+
+<pre class="code-block"><code>// Vary 변형을 위한 키 생성
+// URL + Vary 관련 헤더들의 조합으로 MD5 계산
+const char *vary_key = httpMakeVaryMark(request, reply);</code></pre>
+
+<p>Vary 지원은 캐시를 더 복잡하게 만들었지만, 올바른 내용을 클라이언트에게 전달하는 데 필수였다.</p>
+
+<!-- ════════════════════ 제4장 ════════════════════ -->
+<h2 class="chapter-title" id="ch4">
+  <span class="chapter-number">제 4 장</span>
+  삼층 창고 구조
+</h2>
+
+<p>창고는 단순하지 않았다. 삼층 구조였다.</p>
+
+<p>첫 번째 층 — <strong>일시 창고(Transient Store)</strong>. 진행 중인 요청들의 임시 보관소였다. 여러 클라이언트가 동시에 같은 URL을 요청하면, 첫 번째 요청만 원본 서버로 가고 나머지는 여기서 스트리밍 데이터를 기다렸다. SMP 모드에서는 공유 메모리를 사용하여 여러 워커 프로세스가 함께 사용했다.</p>
+
+<p>두 번째 층 — <strong>메모리 캐시(Memory Cache)</strong>. 빠른 접근을 위해 RAM에 보관되는 캐시. 용량은 <code>cache_mem</code> 설정값으로 제한되었다. 기본값은 256MB였다.</p>
+
+<p>세 번째 층 — <strong>디스크 캐시(Disk Cache)</strong>. 대용량 저장소. HDD나 SSD에 파일들을 보관했다. 수GB에서 수TB까지 설정 가능했다. 느리지만 용량이 컸다.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/store/Controller.cc — 3계층 캐시 아키텍처</div>
+  <div class="tech-box-body">
+<pre><code>class Store::Controller : public Store
+{
+    Transients *transients;  // 1층: 진행 중인 요청
+    MemStore *memStore;       // 2층: 메모리 캐시 (rock/mem)
+    Disks *swapDir;           // 3층: 디스크 캐시
+
+    // squid.conf 설정
+    // cache_mem 256 MB          → memStore 크기
+    // cache_dir ufs /cache 10240 16 256  → swapDir 크기
+};
+
+// 저장 시 계층별 처리
+void
+Store::Controller::store(StoreEntry *e)
+{
+    // 모든 계층에 알림
+    if (transients)
+        transients->noteFreeMapSlice(e->attachedToCache);
+
+    // 캐시 가능한 응답이면 메모리에 유지
+    if (e->memoryCachable()) {
+        if (memStore)
+            memStore->write(e);
+    }
+
+    // 디스크에 쓸 수 있으면 스왑아웃
+    if (e->swappable())
+        swapOut(e);
+}</code></pre>
+    <p>3계층 아키텍처의 핵심. 같은 StoreEntry가 동시에 메모리와 디스크에 존재할 수 있다. 메모리에서 제거될 때 디스크에 이미 있으면 언제든 다시 불러올 수 있다.</p>
+  </div>
+</div>
+
+<p>세 층의 관계는 계층적이었다. 요청이 오면 1층부터 확인했다. 있으면 즉시 반환. 없으면 2층, 없으면 3층. 3층에도 없으면 캐시 미스였다.</p>
+
+<p>저장할 때는 반대였다. 원본 서버에서 데이터가 오면 먼저 1층(일시 창고)에 들어갔다. 응답이 완전히 완료되면 2층(메모리)으로 옮겨졌다. 그리고 적절한 시점에 3층(디스크)으로 스왑아웃되었다.</p>
+
+<p>다른 계층으로 옮겨질 때 원본은 삭제될 수 있었다. 메모리가 부족하면 1층 데이터를 2층으로, 2층 데이터를 3층으로 옮기고 상위 층의 내용을 비웠다.</p>
+
+<!-- ════════════════════ 제5장 ════════════════════ -->
+<h2 class="chapter-title" id="ch5">
+  <span class="chapter-number">제 5 장</span>
+  기억 연못 — Memory Cache
+</h2>
+
+<p><strong>기억 연못(MemStore)</strong>은 창고에서 가장 빠른 곳이었다. RAM에 있었기 때문이었다. 디스크보다 수백 배 빨랐다. 자주 접근되는 객체들은 여기에 머물렀다.</p>
+
+<p>기억 연못의 크기는 <code>cache_mem</code>으로 설정되었다. 제한은 소프트 리밋이었다. 응답을 스트리밍할 때 일시적으로 초과할 수 있었다.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/MemStore.cc — 메모리 캐시 관리</div>
+  <div class="tech-box-body">
+<pre><code>// squid.conf
+// cache_mem 512 MB
+// maximum_object_size_in_memory 512 KB
+
+StoreEntry *
+MemStore::get(const cache_key *key)
+{
+    // 메모리 해시 테이블 검색
+    StoreEntry *e = map->openForReading(key, index);
+    if (!e) return nullptr;
+
+    // 마지막 접근 시각 업데이트 (LRU를 위해)
+    e->lastref = squid_curtime;
+
+    return e;
+}
+
+void
+MemStore::write(StoreEntry &e)
+{
+    // 크기 제한 확인
+    if (e.objectLen() > Config.Store.maxInMemObjSize)
+        return;  // 너무 큰 객체는 메모리에 저장 안 함
+
+    // 공간 확보 (필요시 오래된 것 제거)
+    while (needToFreeMemory()) {
+        if (!purgeOne())
+            break;
+    }
+
+    // 메모리에 저장
+    map->openForWriting(e.key, e.swap_file_sz);
+}</code></pre>
+    <p>메모리 캐시는 maximum_object_size_in_memory 설정으로 너무 큰 객체가 메모리를 독점하는 것을 방지한다. 기본값은 512KB. 공간이 부족하면 가장 오래된 객체(LRU 기준)를 먼저 제거한다.</p>
+  </div>
+</div>
+
+<p>기억 연못에는 제한이 있었다. 너무 큰 응답은 저장되지 않았다. 예컨대 100MB짜리 동영상 파일을 메모리에 저장하면 연못이 금세 가득 찼다. <code>maximum_object_size_in_memory</code> 설정(기본 512KB)으로 메모리에 저장할 최대 객체 크기를 제한했다.</p>
+
+<p>연못이 가득 차면 어떻게 될까? 새 물건이 들어오려면 기존 물건을 버려야 했다. 누구를 버릴지는 교체 정책(replacement policy)이 결정했다. 기본은 LRU였다 — Least Recently Used. 가장 오래 전에 접근된 것을 버렸다.</p>
+
+<div class="scene-break">⁂</div>
+
+<p>기억 연못의 특별한 기능이 있었다. <strong>MemObject</strong>였다.</p>
+
+<p>StoreEntry가 창고의 선반이라면, MemObject는 그 선반 위의 실제 내용이었다. HTTP 응답 헤더와 본문이 여기에 저장되었다.</p>
+
+<pre class="code-block"><code>class MemObject
+{
+public:
+    HttpReply::Pointer reply;    // HTTP 응답 헤더
+    StoreIOBuffer data_hdr;      // 응답 본문 (연속 버퍼)
+
+    // 클라이언트들의 읽기 위치
+    store_client *clients;
+
+    int64_t inmem_lo;  // 버퍼에서 현재 유지하는 최소 오프셋
+    int64_t inmem_hi;  // 버퍼에서 현재 유지하는 최대 오프셋
+};</code></pre>
+
+<p>MemObject는 슬라이딩 윈도우 방식으로 동작했다. 대용량 파일을 처리할 때 전체를 메모리에 유지하지 않고, 현재 필요한 부분만 유지했다. 모든 클라이언트가 읽은 부분은 메모리에서 제거되었다.</p>
+
+<p>하지만 한 클라이언트가 느리게 읽고 있으면 버퍼가 계속 쌓일 수 있었다. 이것을 방지하기 위해 스퀴드는 클라이언트의 읽기 속도를 모니터링했다. 너무 느리면 연결을 끊거나 전송을 제한했다.</p>
+
+<!-- ════════════════════ 제6장 ════════════════════ -->
+<h2 class="chapter-title" id="ch6">
+  <span class="chapter-number">제 6 장</span>
+  돌 창고 — Disk Cache
+</h2>
+
+<p>디스크 캐시는 창고의 지하실이었다. 느렸지만 거대했다.</p>
+
+<p>squid.conf에서 이렇게 설정되었다.</p>
+
+<pre class="code-block"><code># cache_dir 타입 경로 크기(MB) 1단계폴더수 2단계폴더수
+cache_dir ufs /var/spool/squid 10240 16 256
+cache_dir ufs /var/spool/squid2 20480 16 256</code></pre>
+
+<p>여러 개의 <code>cache_dir</code>를 설정할 수 있었다. 여러 디스크에 분산 저장하여 I/O 병목을 줄일 수 있었다. 스퀴드는 라운드 로빈 방식으로 새 객체를 저장할 디스크를 선택했다.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/fs/ufs/ — UFS 디렉토리 구조</div>
+  <div class="tech-box-body">
+<pre><code>// /var/spool/squid/
+//   00/          ← 1단계 디렉토리 (16개: 00-0F)
+//     00/        ← 2단계 디렉토리 (256개: 00-FF)
+//       XXXXXXXX ← 실제 캐시 파일
+//     01/
+//     ...
+//     FF/
+//   01/
+//   ...
+//   0F/
+
+// 파일 경로 계산
+// swap_filen = 디스크 파일 번호 (32비트 정수)
+// 1단계: swap_filen >> 8 & 0x0F  (0-15)
+// 2단계: swap_filen & 0xFF        (0-255)
+
+void
+UFSSwapDir::pathById(sfileno filn, char *path) const
+{
+    int l1 = (filn >> 8) & 0x0F;
+    int l2 = filn & 0xFF;
+    snprintf(path, MAXPATHLEN,
+             "%s/%02X/%02X/%08X",
+             path, l1, l2, filn);
+}</code></pre>
+    <p>UFS는 파일 번호를 2단계 디렉토리 구조로 분산 저장한다. 16×256=4096개의 디렉토리에 파일이 분산되므로 각 디렉토리에 파일이 너무 많이 쌓이지 않는다. 파일 시스템 성능은 디렉토리당 파일 수에 민감하기 때문이다.</p>
+  </div>
+</div>
+
+<p>디스크 캐시의 형식은 여러 가지가 있었다. <code>ufs</code>가 기본이었다. 각 캐시 객체가 하나의 파일이었다. 간단하지만 많은 수의 작은 파일이 생기면 파일 시스템에 부담이 되었다.</p>
+
+<p><code>aufs</code>는 async ufs였다. 별도의 I/O 스레드를 사용하여 디스크 읽기/쓰기가 이벤트 루프를 막지 않도록 했다. 성능이 더 좋았다.</p>
+
+<p><code>diskd</code>는 별도의 프로세스로 디스크 I/O를 처리했다. IPC(Inter-Process Communication)로 통신했다.</p>
+
+<p><code>rock</code>은 가장 현대적인 형식이었다. 여러 캐시 객체를 하나의 큰 파일 안에 저장했다. 파일 시스템 부담을 크게 줄이고 SSD에 최적화되어 있었다.</p>
+
+<div class="scene-break">⁂</div>
+
+<p>디스크에서 읽어오는 것은 느렸다. HDD는 수 밀리초, SSD도 수십 마이크로초가 걸렸다. 이벤트 루프에서 동기적으로 기다리면 전체 왕국이 멈추었다.</p>
+
+<p>그래서 디스크 I/O는 항상 비동기였다. 읽기 요청을 던지고 콜백을 등록하고 이벤트 루프로 돌아갔다. 디스크 I/O가 완료되면 콜백이 호출되어 데이터를 처리했다.</p>
+
+<p><code>aufs</code>의 경우 별도의 I/O 스레드 풀이 있었다. 주 스레드가 읽기 요청을 큐에 넣으면, I/O 스레드가 실제 디스크 읽기를 수행하고 결과를 다시 주 스레드에 알렸다. 주 스레드는 그 동안 다른 요청들을 처리했다.</p>
+
+<!-- ════════════════════ 제7장 ════════════════════ -->
+<h2 class="chapter-title" id="ch7">
+  <span class="chapter-number">제 7 장</span>
+  UFS의 미로
+</h2>
+
+<p>UFS 창고의 내부는 미로 같았다. 파일들이 복잡한 디렉토리 구조에 흩어져 있었다. 하지만 그 미로에는 지도가 있었다. 바로 <strong>스왑 로그(swap.state)</strong>였다.</p>
+
+<p><code>swap.state</code> 파일은 각 cache_dir 디렉토리에 있었다. 캐시에 저장된 모든 파일의 메타데이터를 기록했다. URL, 캐시 키, 파일 크기, 타임스탬프들.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/StoreSwapLogData.h — swap.state 레코드 구조</div>
+  <div class="tech-box-body">
+<pre><code>class StoreSwapLogData
+{
+public:
+    char op;            // 'C'=create, 'D'=delete
+    sfileno swap_filen; // 파일 번호 (경로 계산에 사용)
+
+    time_t timestamp;   // 캐시된 시각
+    time_t lastref;     // 마지막 접근 시각
+    time_t expires;     // 만료 시각
+    time_t lastmod;     // Last-Modified
+
+    uint64_t swap_file_sz; // 디스크 파일 크기
+
+    uint16_t refcount;  // 참조 카운트 (항상 0으로 저장)
+    uint16_t flags;     // 캐시 플래그
+
+    cache_key key[SQUID_MD5_DIGEST_LENGTH]; // MD5 키
+};</code></pre>
+    <p>swap.state는 추가만 가능한(append-only) 로그 파일이다. 새 객체가 저장되면 'C' 레코드가 추가되고, 삭제되면 'D' 레코드가 추가된다. 스퀴드 재시작 시 이 로그를 읽어 인덱스를 재구성한다.</p>
+  </div>
+</div>
+
+<p>스퀴드가 재시작될 때 swap.state를 읽어 모든 캐시 파일의 인덱스를 메모리에 재구성했다. 이것을 <strong>재건(rebuild)</strong>이라고 했다. 캐시 디렉토리의 파일들을 스캔하고 메타데이터를 읽어오는 과정이었다.</p>
+
+<p>큰 캐시는 재건에 오랜 시간이 걸렸다. 수십 GB의 캐시라면 수 분이 걸릴 수도 있었다. 재건이 완료되기 전에도 스퀴드는 요청을 처리했지만, 아직 인덱싱되지 않은 캐시 파일들은 사용할 수 없었다.</p>
+
+<div class="scene-break">⁂</div>
+
+<p>창고지기는 때로 청소를 해야 했다. <strong>storeMaintain()</strong>이 그 청소 함수였다.</p>
+
+<p>이 함수는 이벤트 루프의 타이머에 의해 주기적으로 호출되었다. 만료된 객체들을 찾아 제거하고, 용량을 초과한 경우 교체 정책에 따라 객체들을 제거했다.</p>
+
+<pre class="code-block"><code>void
+storeMaintain(void *unused)
+{
+    // 교체 정책 실행 (용량 초과 시)
+    // LRU 또는 LFUDA에 따라 오래된/저빈도 객체 제거
+
+    Store::Root().maintain();
+
+    // 다음 청소 예약
+    eventAdd("storeMaintain", storeMaintain,
+             nullptr, 1.0, 1);
+}</code></pre>
+
+<p>청소는 증분적(incremental)으로 진행되었다. 한 번에 너무 많이 삭제하면 CPU를 독점할 수 있었다. 대신 조금씩 지속적으로 청소했다. 1초마다 조금씩.</p>
+
+<!-- ════════════════════ 제8장 ════════════════════ -->
+<h2 class="chapter-title" id="ch8">
+  <span class="chapter-number">제 8 장</span>
+  신선도 점쟁이
+</h2>
+
+<p>창고에 물건이 있다고 해서 무조건 꺼내줄 수 있는 것은 아니었다. 물건이 신선한지 확인해야 했다. 상한 음식처럼, 오래된 캐시 데이터는 손님에게 잘못된 정보를 줄 수 있었다.</p>
+
+<p>신선도를 판단하는 존재가 <strong>신선도 점쟁이 refresh.cc</strong>였다.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/refresh.cc — refreshCheck() 핵심 로직</div>
+  <div class="tech-box-body">
+<pre><code>// 반환값: FRESH(신선), STALE(오래됨), CHECK(재검증 필요)
+stale_flags
+refreshCheck(const StoreEntry *entry,
+             HttpRequest *request,
+             int delta)
+{
+    time_t age = squid_curtime - entry->timestamp;
+    time_t check_time = squid_curtime + delta;
+
+    // 1. Expires 헤더 확인
+    if (entry->expires > -1) {
+        if (check_time > entry->expires) {
+            return STALE_EXPIRES;
+        }
+    }
+
+    // 2. max-age 확인 (Cache-Control 헤더)
+    if (entry->hasFreshestMaxAge()) {
+        int maxage = entry->maxAge();
+        if (age > maxage) {
+            return STALE_MAX_AGE;
+        }
+    }
+
+    // 3. Last-Modified 기반 추정 (휴리스틱)
+    // RFC 7234 §4.2.2: 나이 = (현재 - Last-Modified) * 계수
+    if (entry->lastModified() > -1) {
+        time_t lm_age = entry->timestamp - entry->lastModified();
+        time_t heuristic_freshness = lm_age * Config.refresh_factor;
+        if (age > heuristic_freshness) {
+            return STALE_LMFACTOR_RULE;
+        }
+    }
+
+    // 4. refresh_pattern 규칙 적용
+    // squid.conf의 refresh_pattern 줄들 순서대로 확인
+
+    return FRESH_REQUEST_MAX_STALE_ALL;
+}</code></pre>
+    <p>신선도는 여러 단계로 판단된다. Expires가 있으면 그것을 우선 사용. 없으면 max-age. 없으면 Last-Modified 기반 휴리스틱. 없으면 refresh_pattern 규칙. 이 순서가 RFC 7234의 권장 순서다.</p>
+  </div>
+</div>
+
+<p>신선도 점쟁이는 복잡했다. HTTP 표준(RFC 7234)이 복잡했기 때문이었다. 서버들마다 다른 방식으로 캐시 제어 헤더를 보냈다. 어떤 서버는 <code>Expires</code>를 사용했다. 어떤 서버는 <code>Cache-Control: max-age=3600</code>을 사용했다. 어떤 서버는 아무 헤더도 없었다.</p>
+
+<p>아무 헤더도 없을 때 스퀴드는 <strong>휴리스틱 신선도</strong>를 사용했다. Last-Modified 시각으로부터 얼마나 오래 되었는지 계산했다. 오래된 문서는 자주 바뀌지 않을 것이라는 경험적 추정이었다.</p>
+
+<p>구체적으로는 <code>(현재 - Last-Modified) × factor</code>였다. <code>factor</code>는 <code>refresh_min_percent</code> 설정값이었다. 기본값 0.1이면, Last-Modified가 10시간 전이라면 최대 1시간 동안은 신선하다고 간주했다.</p>
+
+<div class="scene-break">⁂</div>
+
+<p>관리자는 <code>refresh_pattern</code>으로 신선도 규칙을 세밀하게 제어할 수 있었다.</p>
+
+<pre class="code-block"><code># refresh_pattern 정규식 최소TTL(분) %% 최대TTL(분) [옵션]
+refresh_pattern ^ftp:           1440    20% 10080
+refresh_pattern ^gopher:        1440    0%  1440
+refresh_pattern -i \.jpg$       60      50% 1440  override-expire
+refresh_pattern -i \.(gif|png)$ 60      50% 1440
+refresh_pattern .               0       20% 4320</code></pre>
+
+<p>각 줄의 의미:</p>
+<ul>
+  <li>최소 TTL: 이 시간 이전에는 FRESH로 간주 (서버에 묻지 않음)</li>
+  <li>퍼센트: Last-Modified 기반 휴리스틱에서 사용하는 비율</li>
+  <li>최대 TTL: 이 시간 이후에는 반드시 STALE로 간주</li>
+</ul>
+
+<p>JPG 이미지는 자주 바뀌지 않으니 60분 미만이면 무조건 신선, 50%의 비율로 최대 1440분(24시간)까지 신선하게 취급했다.</p>
+
+<p>마지막 줄 <code>.</code>은 모든 URL에 적용되는 기본 규칙이었다. 최소 0분(항상 재확인 가능), 20% 휴리스틱, 최대 4320분(3일)이었다.</p>
+
+<!-- ════════════════════ 제9장 ════════════════════ -->
+<h2 class="chapter-title" id="ch9">
+  <span class="chapter-number">제 9 장</span>
+  만료와 재검증
+</h2>
+
+<p>STALE. 신선도 점쟁이가 STALE이라는 판결을 내렸다. 이 물건은 오래되었다. 하지만 그렇다고 바로 버리는 것은 아니었다.</p>
+
+<p><strong>재검증(Revalidation)</strong>이 있었다. 서버에게 물어보는 것이었다. "아직도 같은 내용이에요? 아니면 바뀌었어요?"</p>
+
+<p>재검증 요청에는 특별한 헤더가 붙었다.</p>
+
+<pre class="code-block"><code>GET /image.jpg HTTP/1.1
+Host: example.com
+If-Modified-Since: Wed, 21 Oct 2015 07:28:00 GMT
+If-None-Match: "33a64df551425fcc55e4d42a148795d9f25f89d4"</code></pre>
+
+<p><code>If-Modified-Since</code>는 "이 시각 이후 변경되었으면 새 내용을 주고, 아니면 304 Not Modified를 주세요"였다. <code>If-None-Match</code>는 ETag 기반의 같은 요청이었다.</p>
+
+<p>서버가 <code>304 Not Modified</code>를 반환하면? 캐시된 내용이 여전히 유효했다. 스퀴드는 캐시 엔트리의 타임스탬프를 업데이트하고 저장된 내용을 그대로 클라이언트에게 전달했다. 대역폭 절약이었다 — 헤더만 왕복했을 뿐, 본문 데이터는 네트워크를 타지 않았다.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/client_side_reply.cc — 재검증 처리</div>
+  <div class="tech-box-body">
+<pre><code>// 304 Not Modified 수신 시
+void
+clientReplyContext::handleIMSReply(StoreIOBuffer result)
+{
+    StoreEntry *entry = http->storeEntry();
+
+    if (entry->mem().reply->sline.status() == Http::scNotModified) {
+        // 캐시가 유효함
+        // 타임스탬프 갱신
+        entry->timestamp = squid_curtime;
+        entry->expires = calculateNewExpires(entry);
+
+        // 클라이언트에게 캐시된 내용 전달
+        // TCP_REFRESH_HIT 로그 태그
+        sendBodyToClient();
+    } else {
+        // 서버가 새 내용을 반환함
+        // 캐시 업데이트 후 클라이언트에게 전달
+        // TCP_REFRESH_MISS 로그 태그
+        updateCacheAndSend();
+    }
+}</code></pre>
+    <p>재검증 결과는 두 가지다. 304면 캐시 히트 갱신(TCP_REFRESH_HIT), 200이면 캐시 교체(TCP_REFRESH_MISS). 어느 경우든 클라이언트는 최신 내용을 받는다.</p>
+  </div>
+</div>
+
+<p>재검증의 장점은 명확했다. 작은 헤더만 주고받아도 캐시의 유효성을 확인할 수 있었다. 서버 응답 본문이 수 MB라도 304면 그것을 다시 받을 필요가 없었다.</p>
+
+<p>서버가 <code>200 OK</code>로 새 내용을 보내면? 스퀴드는 기존 캐시 엔트리를 새 내용으로 교체하고 클라이언트에게 전달했다. TCP_REFRESH_MISS 로그 태그가 찍혔다.</p>
+
+<div class="scene-break">⁂</div>
+
+<p>특수한 경우들도 있었다.</p>
+
+<p><code>no-cache</code> 지시어. 클라이언트가 <code>Cache-Control: no-cache</code>를 보내면 스퀴드는 반드시 서버에 재검증을 해야 했다. 캐시가 신선해도 서버에 물어봐야 했다. "항상 최신 내용을 원합니다"는 요청이었다.</p>
+
+<p><code>no-store</code> 지시어. 서버가 <code>Cache-Control: no-store</code>를 보내면 스퀴드는 이 응답을 저장하지 않았다. 은행 거래 내역, 개인 의료 정보 같은 민감한 데이터에 서버들이 사용했다.</p>
+
+<p><code>private</code> 지시어. <code>Cache-Control: private</code>은 "이 응답은 이 클라이언트만을 위한 것"이라는 의미였다. 공유 프록시 캐시에 저장하면 안 되었다.</p>
+
+<p>신선도 점쟁이는 이 모든 지시어들을 이해하고 올바르게 처리했다. HTTP 표준의 복잡한 캐시 제어 체계를 완전히 구현했다.</p>
+
+<!-- ════════════════════ 제10장 ════════════════════ -->
+<h2 class="chapter-title" id="ch10">
+  <span class="chapter-number">제 10 장</span>
+  교체 정책의 철학
+</h2>
+
+<p>창고는 유한했다. 언젠가는 가득 찼다. 새 물건을 넣으려면 기존 물건을 버려야 했다.</p>
+
+<p>무엇을 버릴 것인가. 이것이 <strong>교체 정책(Replacement Policy)</strong>의 핵심 질문이었다.</p>
+
+<p>이상적인 정책은 미래를 알 수 있다면 간단했다 — 앞으로 가장 오랫동안 사용되지 않을 것을 버리면 되었다. 이것을 <strong>OPT(Optimal Policy)</strong>라 했다. 그러나 미래는 알 수 없었다.</p>
+
+<p>그래서 과거의 패턴으로 미래를 예측했다. "과거에 자주 사용된 것은 미래에도 자주 사용될 것이다." "최근에 사용된 것은 곧 다시 사용될 것이다."</p>
+
+<p>스퀴드는 두 가지 주요 교체 정책을 제공했다. <strong>LRU</strong>와 <strong>LFUDA</strong>.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/repl/ — 교체 정책 인터페이스</div>
+  <div class="tech-box-body">
+<pre><code>// squid.conf
+// cache_replacement_policy lru    (기본값)
+// cache_replacement_policy heap LFUDA
+
+// 교체 정책 추상 인터페이스
+typedef struct _RemovalPolicy RemovalPolicy;
+struct _RemovalPolicy {
+    // 새 항목 추가 시 호출
+    void (*Add)(RemovalPolicy *, StoreEntry *, RemovalPolicyNode *);
+
+    // 항목 접근 시 호출 (순서 갱신)
+    void (*Referenced)(RemovalPolicy *, const StoreEntry *,
+                       RemovalPolicyNode *);
+
+    // 항목 제거 시 호출
+    void (*Dereferenced)(RemovalPolicy *, const StoreEntry *,
+                          RemovalPolicyNode *);
+
+    // 다음 제거 대상 반환
+    StoreEntry *(*WalkNext)(RemovalPolicyWalker *);
+
+    // 제거 대상 선택 후 실행
+    StoreEntry *(*Remove)(RemovalPolicy *, RemovalPolicyNode *);
+};</code></pre>
+    <p>교체 정책은 플러그인 방식으로 구현된다. 추상 인터페이스를 통해 LRU, LFUDA 등 다양한 정책을 플러그인처럼 교체할 수 있다. StoreEntry 안의 RemovalPolicyNode가 정책별 메타데이터를 저장한다.</p>
+  </div>
+</div>
+
+<p>교체 정책은 플러그인 구조였다. <code>RemovalPolicy</code>라는 추상 인터페이스를 통해 어떤 정책이든 끼워 넣을 수 있었다. 이는 스퀴드의 설계 원칙 중 하나였다 — 교체 가능한 컴포넌트.</p>
+
+<p>정책들은 <code>src/repl/lru/</code>와 <code>src/repl/heap/</code> 디렉토리에 있었다.</p>
+
+<!-- ════════════════════ 제11장 ════════════════════ -->
+<h2 class="chapter-title" id="ch11">
+  <span class="chapter-number">제 11 장</span>
+  LRU — 오래된 것을 버려라
+</h2>
+
+<p><strong>LRU(Least Recently Used)</strong>. 가장 오래 전에 접근된 것을 버리는 정책.</p>
+
+<p>구현은 이중 연결 리스트였다. 접근될 때마다 해당 항목을 리스트의 앞으로 옮겼다. 항상 맨 앞이 가장 최근에 접근된 것, 맨 뒤가 가장 오래된 것이었다. 제거할 때는 맨 뒤에서 꺼냈다.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/repl/lru/store_repl_lru.cc — LRU 구현</div>
+  <div class="tech-box-body">
+<pre><code>// LRU는 이중 연결 리스트로 구현
+struct LruNode {
+    dlink_node node;  // 이전/다음 포인터
+};
+
+struct LruPolicyData {
+    dlink_list list;  // LRU 리스트 (앞=최신, 뒤=오래됨)
+    int count;
+};
+
+// 접근 시 리스트 앞으로 이동
+static void
+lruReferenced(RemovalPolicy *policy,
+               const StoreEntry *entry,
+               RemovalPolicyNode *node)
+{
+    LruPolicyData *lru = (LruPolicyData *)policy->_data;
+    LruNode *lnode = (LruNode *)node->data;
+
+    if (lnode->node.next == nullptr)
+        return;  // 이미 리스트에 없음
+
+    // 현재 위치에서 제거 후 앞에 삽입
+    dlinkDelete(&lnode->node, &lru->list);
+    dlinkAdd(lnode, &lnode->node, &lru->list);
+}
+
+// 가장 오래된 것 제거
+static StoreEntry *
+lruRemove(RemovalPolicy *policy, RemovalPolicyNode *node)
+{
+    LruPolicyData *lru = (LruPolicyData *)policy->_data;
+    // 리스트 맨 뒤
+    LruNode *lnode = (LruNode *)lru->list.tail->data;
+    return /* StoreEntry from lnode */;
+}</code></pre>
+    <p>LRU의 핵심은 O(1) 시간의 접근 갱신이다. 이중 연결 리스트에서 노드를 삭제하고 앞에 삽입하는 것은 포인터 몇 개만 바꾸면 되므로 항상 상수 시간이다.</p>
+  </div>
+</div>
+
+<p>LRU의 장점은 단순함이었다. 구현이 간단하고, O(1) 시간으로 접근 갱신이 가능하고, 직관적이었다. "최근에 사용된 것은 다시 사용될 것"이라는 <strong>시간적 지역성(temporal locality)</strong>을 잘 활용했다.</p>
+
+<p>단점도 있었다. 크기를 고려하지 않았다. 작은 파일(100바이트)과 큰 파일(10MB)을 동등하게 취급했다. 큰 파일 하나를 저장하고 작은 파일 수천 개를 버리는 비효율이 발생할 수 있었다.</p>
+
+<p>또한 <strong>캐시 오염(cache pollution)</strong>에 취약했다. 한 번만 접근되는 큰 파일(예: 소프트웨어 다운로드)이 자주 접근되는 작은 파일들을 밀어낼 수 있었다.</p>
+
+<!-- ════════════════════ 제12장 ════════════════════ -->
+<h2 class="chapter-title" id="ch12">
+  <span class="chapter-number">제 12 장</span>
+  LFUDA — 자주 쓰이는 것을 남겨라
+</h2>
+
+<p><strong>LFUDA(Least Frequently Used with Dynamic Aging)</strong>. 접근 빈도가 낮은 것을 버리되, 크기도 고려하는 정책.</p>
+
+<p>LFUDA는 LRU보다 복잡했다. 각 객체에 <strong>키값(key)</strong>을 유지했다.</p>
+
+<pre class="code-block"><code>키값 = 접근 횟수 / 객체 크기</code></pre>
+
+<p>접근이 많을수록 키값이 높아졌다. 크기가 클수록 키값이 낮아졌다. 즉, "자주 접근되는 작은 파일"이 높은 키값을 가졌다. 교체 시 키값이 가장 낮은 것을 버렸다.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/repl/heap/store_repl_heap.cc — LFUDA 힙 구현</div>
+  <div class="tech-box-body">
+<pre><code>// LFUDA는 최소 힙(min-heap)으로 구현
+// 항상 루트가 가장 낮은 키값 (제거 대상)
+
+// 키값 계산
+static heap_key
+LFUDA_heap_key(const StoreEntry *entry, double age)
+{
+    // 나이(age)는 동적 노화를 위한 값
+    // 오래된 히트 기록의 영향을 줄임
+    return (double)(entry->refcount) / entry->objectLen() + age;
+}
+
+// 접근 시 키값 갱신 (힙 재정렬)
+static void
+heap_referenced(RemovalPolicy *policy,
+                 const StoreEntry *entry,
+                 RemovalPolicyNode *node)
+{
+    HeapPolicyData *heap = ...;
+    // refcount 증가 → 키값 증가 → 힙에서 올라감
+    heap_update(heap->theHeap, node->data,
+                LFUDA_heap_key(entry, heap->age));
+}
+
+// 가장 낮은 키값 제거 (힙 루트)
+static StoreEntry *
+heap_remove(RemovalPolicy *policy, RemovalPolicyNode *node)
+{
+    HeapPolicyData *heap = ...;
+    return (StoreEntry *)heap_extractmin(heap->theHeap);
+}</code></pre>
+    <p>LFUDA는 최소 힙을 사용한다. O(log n) 시간으로 키값 갱신과 최솟값 추출이 가능하다. "Dynamic Aging"은 오래된 접근 기록이 현재 가치에 미치는 영향을 점점 줄이는 메커니즘이다.</p>
+  </div>
+</div>
+
+<p>LFUDA의 "Dynamic Aging"이 핵심이었다. 과거에 매우 자주 접근되었지만 지금은 전혀 접근되지 않는 객체를 계속 보유하는 것은 비효율이었다. 그래서 <strong>노화(aging)</strong> 메커니즘이 있었다.</p>
+
+<p>시간이 지남에 따라 모든 객체의 키값 기준이 올라갔다. 오래된 접근 기록의 가치가 상대적으로 줄어들었다. 최근에 자주 접근되는 것이 오래 전에 접근된 것보다 높은 키값을 유지했다.</p>
+
+<p>LFUDA는 LRU보다 캐시 히트율이 높았다 — 특히 Zipf 분포를 따르는 실제 웹 트래픽(소수의 인기 객체가 대부분의 요청을 차지)에서. 그러나 구현이 복잡하고 CPU를 더 많이 사용했다.</p>
+
+<blockquote class="inner-voice">
+나는 자주 방문받는 작은 물건을 소중히 여긴다. 그 물건들이 창고의 진짜 가치다. 거대하지만 한 번만 찾아온 물건은 아무리 귀해 보여도 내쫓아야 한다. 공간이 한정되어 있으니. 내 원칙은 수학이다. 접근 횟수를 크기로 나눈 값. 그 값이 낮은 것부터 버린다. 감정이 없는 계산. 하지만 그 계산이 전체 왕국을 빠르게 만든다.
+</blockquote>
+
+<!-- ════════════════════ 제13장 ════════════════════ -->
+<h2 class="chapter-title" id="ch13">
+  <span class="chapter-number">제 13 장</span>
+  스워핑 — 디스크로의 여행
+</h2>
+
+<p>메모리에서 디스크로 이동하는 과정이 <strong>스왑아웃(Swap Out)</strong>이었다. 역방향은 <strong>스왑인(Swap In)</strong>이었다.</p>
+
+<p>스왑아웃은 언제 일어났을까? 두 가지 경우였다.</p>
+
+<p>첫째, 응답이 완전히 수신되었을 때 (<code>STORE_OK</code> 상태가 되었을 때). 캐시 가능한 응답이면 자동으로 디스크에 저장되었다.</p>
+
+<p>둘째, 메모리 압박이 있을 때. 메모리가 부족해지면 오래된 것들을 디스크로 내보냈다.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/store_swapout.cc — 스왑아웃 프로세스</div>
+  <div class="tech-box-body">
+<pre><code>void
+storeSwapOutStart(StoreEntry *e)
+{
+    // 디스크 캐시가 없으면 불필요
+    if (!Store::Root().hasDisk())
+        return;
+
+    // 스왑아웃 불가 조건들
+    if (EBIT_TEST(e->flags, ENTRY_PRIVATE))
+        return;  // private 응답은 저장 불가
+    if (EBIT_TEST(e->flags, RELEASE_REQUEST))
+        return;  // 명시적 저장 거부
+
+    // 디스크 캐시에 파일 생성
+    SwapDir *SD = dynamic_cast&lt;SwapDir *&gt;(
+        INDEXSD(e->swap_dirn));
+
+    // StoreIOState 생성 — 비동기 파일 쓰기 시작
+    e->swap_filen = SD->mapBitAllocate();
+    StoreIOState::Pointer sio = storeCreate(e, ...);
+
+    // 메모리의 내용을 청크 단위로 디스크에 쓰기
+    // 완료 시 swapOutFileFinal() 콜백
+}
+
+static void
+swapOutFileFinal(StoreEntry *e, StoreIOState::Pointer sio)
+{
+    e->swap_status = SWAPOUT_DONE;
+
+    // swap.state 로그에 기록
+    storeDirSwapLog(e, SWAP_LOG_ADD);
+
+    // 성공 — 이후 메모리에서 해제 가능
+    e->storeWriterDone();
+}</code></pre>
+    <p>스왑아웃은 비동기로 진행된다. 데이터를 청크 단위로 디스크에 쓰고, 완료 시 콜백이 호출된다. swap.state 로그에 메타데이터가 기록되어 재시작 후에도 찾을 수 있다.</p>
+  </div>
+</div>
+
+<p>스왑아웃이 진행되는 동안 StoreEntry는 계속 사용 가능했다. 클라이언트들이 데이터를 읽는 것과 디스크 쓰기가 동시에 진행되었다. 메모리에 있는 데이터를 읽어주면서 동시에 그것을 디스크에도 쓰는 것이었다.</p>
+
+<p>스왑인은 반대였다. 메모리에서 해제된 StoreEntry의 데이터를 다시 필요로 할 때, 디스크에서 읽어왔다. <code>storeRead()</code>가 이 역할을 했다. 비동기 디스크 I/O로 데이터를 읽어와 클라이언트에게 전달했다.</p>
+
+<!-- ════════════════════ 제14장 ════════════════════ -->
+<h2 class="chapter-title" id="ch14">
+  <span class="chapter-number">제 14 장</span>
+  붕괴 방지 — 동시 요청 처리
+</h2>
+
+<p>왕국의 창고에는 흥미로운 문제가 있었다. 같은 URL에 대해 동시에 수백 개의 요청이 들어오면 어떻게 될까? 모두가 캐시 미스를 경험하고 모두가 원본 서버로 달려가면?</p>
+
+<p>이것을 <strong>Thundering Herd(천둥 떼) 문제</strong>라고 했다. 프록시 서버가 다운된 후 재시작될 때, 모든 캐시가 비어있고 모든 클라이언트가 동시에 같은 요청을 보내는 상황이었다.</p>
+
+<p>스퀴드는 이것을 <strong>요청 병합(Request Collapsing)</strong>으로 해결했다.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/client_side_reply.cc — 요청 병합 메커니즘</div>
+  <div class="tech-box-body">
+<pre><code>// 진행 중인 요청에 새 요청 합류
+void
+clientReplyContext::processExpired()
+{
+    const char *url = http->uri;
+    StoreEntry *entry = http->storeEntry();
+
+    // 이미 같은 URL에 대한 StoreEntry가 STORE_PENDING 상태?
+    if (entry && STORE_PENDING == entry->store_status) {
+        // 새 클라이언트를 이 엔트리의 독자로 등록
+        // 이미 들어온 데이터는 즉시 받고
+        // 아직 안 온 데이터는 기다림
+        store_client *sc = storeClientListAdd(entry, this);
+        storeClientCopy(sc, entry, ...);
+        return;  // 원본 서버에 새 요청 보내지 않음
+    }
+
+    // 새 요청 시작 (진짜 캐시 미스)
+    startNew();
+}</code></pre>
+    <p>요청 병합의 핵심: 같은 URL에 대한 StoreEntry가 이미 STORE_PENDING 상태라면 새 요청을 보내지 않고 기존 엔트리의 독자로 합류한다. 하나의 원본 서버 요청이 수백 명의 클라이언트를 동시에 서비스한다.</p>
+  </div>
+</div>
+
+<p>요청 병합의 동작은 이러했다. 첫 번째 클라이언트가 캐시 미스를 경험하면 선발대장이 원본 서버로 출발했다. StoreEntry는 <code>STORE_PENDING</code> 상태로 만들어졌다.</p>
+
+<p>두 번째 클라이언트가 같은 URL을 요청했다. 창고지기가 find()를 했더니 <code>STORE_PENDING</code> 상태의 StoreEntry가 있었다. 아직 완성되지 않은 물건이지만 이미 들어오고 있었다.</p>
+
+<p>두 번째 클라이언트는 이 엔트리의 독자로 등록되었다. <code>store_client</code> 객체가 만들어졌다. 이미 도착한 데이터는 즉시 받아갔고, 아직 안 온 데이터는 스트리밍으로 기다렸다.</p>
+
+<p>세 번째, 네 번째, 수백 번째 클라이언트도 마찬가지였다. 원본 서버에 요청은 딱 한 번만 갔다. 그 하나의 응답이 수백 클라이언트에게 동시에 스트리밍되었다.</p>
+
+<div class="scene-break">⁂</div>
+
+<p>SMP 모드에서는 이 문제가 더 복잡해졌다. 여러 워커 프로세스가 각각 독립된 메모리를 가지고 있었다. 워커 1이 <code>STORE_PENDING</code> 상태의 엔트리를 가지고 있어도, 워커 2는 그것을 모를 수 있었다.</p>
+
+<p>이를 해결하기 위해 <strong>CollapsedForwarding</strong>이 도입되었다. <code>src/ipc/FdNotes.h</code>와 <code>src/CollapsedForwarding.cc</code>에 있었다.</p>
+
+<p>새 요청이 들어오면 공유 메모리에 있는 Transients 창고를 먼저 확인했다. 어떤 워커가 이미 같은 URL을 처리 중이라면 Transients 창고에 진행 중이라는 표시가 있었다. 다른 워커들은 그것을 보고 원본 서버 요청을 보내지 않고 대기했다. 처리 중인 워커가 데이터를 가져오면 공유 메모리로 전파되었다.</p>
+
+<p>왕국은 여러 왕자들이 있었지만, 같은 심부름을 중복으로 보내지 않았다.</p>
+
+<!-- ════════════════════ 제15장 ════════════════════ -->
+<h2 class="chapter-title" id="ch15">
+  <span class="chapter-number">제 15 장</span>
+  창고지기의 꿈
+</h2>
+
+<p>창고지기는 가끔 꿈을 꾸었다.</p>
+
+<p>무한한 용량의 창고를 꿈꾸었다. 모든 것을 저장하고, 아무것도 버리지 않아도 되는 창고. 한번 가져온 모든 것이 영원히 남아 언제든 꺼내줄 수 있는 그런 창고.</p>
+
+<p>그러나 현실에서 그런 창고는 없었다.</p>
+
+<p>메모리는 256MB에서 수 GB. 디스크는 10GB에서 수 TB. 한계가 있었다. 한계가 있으면 선택이 필요했다. 선택은 고통이었다. 무엇을 남기고 무엇을 버릴지.</p>
+
+<blockquote class="inner-voice">
+나는 기억과 망각 사이에서 산다. 무엇을 기억할지, 무엇을 잊을지가 나의 일이다. 완벽한 기억은 불가능하다. 하지만 최선의 망각은 가능하다. 조금 전에 자주 찾은 것, 작고 소중한 것, 이것들을 남겨라. 거대하고 한 번만 온 것은 보내라. 나의 캐시 히트율이 왕국의 속도다. 내가 잘 기억할수록 손님들은 빠르게 답을 받는다.
+
+나는 가끔 이런 통계를 들여다본다. 캐시 히트율 87%. 1000개의 요청 중 870개는 내 창고에서 바로 답이 나왔다. 130개만 원본 서버까지 갔다. 그 870개의 요청들이 원본 서버를 쉬게 했다. 대역폭을 아꼈다. 손님들을 빠르게 했다. 그것이 나의 존재 이유다.
+
+하지만 그 87%에 도달하기까지 얼마나 많은 버림이 있었는지 손님들은 모른다. 수백만 개의 객체가 내 창고를 거쳐갔다. 저장되었다가, 자리를 내주고, 사라졌다. 창고의 삶이란 그런 것이다. 만남과 이별의 연속.
+</blockquote>
+
+<p>창고지기는 다시 일상으로 돌아갔다.</p>
+
+<p>새벽 세 시의 창고. 요청들이 계속 들어왔다. 히트, 미스, 히트, 히트, 미스, 히트... 리듬이 있었다. 규칙적이지 않았지만 패턴은 있었다. 오후에는 뉴스와 소셜 미디어가 많았다. 밤에는 스트리밍과 다운로드가 많았다. 아침에는 이메일과 업무 도구들.</p>
+
+<p>창고지기는 이 패턴을 알고 있었다. 오후에는 뉴스 사이트들을 메모리에 오래 유지했다. 밤에는 큰 파일들을 빠르게 통과시키고 메모리를 자주 비웠다.</p>
+
+<p>그것이 창고지기의 지혜였다. 알고리즘이 아니라 경험이었다. 그러나 그 경험도 결국 수학으로 표현되었다 — LRU 리스트, LFUDA 힙, 신선도 계산식들.</p>
+
+<div class="scene-break">⁂</div>
+
+<p>창고 이야기를 마치며, 창고지기는 먼 곳을 바라보았다.</p>
+
+<p>창고에서 아무것도 없다는 답이 나오면 — 캐시 미스 — 선발대장이 나섰다. 그 이야기가 다음 권이었다. 국경 너머로 나가는 이야기. FwdState, Happy Eyeballs, DNS, 피어 캐시, SSL, 터널...</p>
+
+<p>창고지기는 잠시 문을 닫았다가 다시 열었다. 새 손님이 왔다.</p>
+
+<p>"이 URL 있나요?"</p>
+
+<p>"잠깐만요. 확인해볼게요."</p>
+
+  </article>
+
+  <div class="chapter-nav">
+    <a href="vol2.html" class="chapter-nav-btn prev">← 제2권: 판관의 법정</a>
+    <a href="index.html" class="chapter-nav-btn index">목차</a>
+    <a href="vol4.html" class="chapter-nav-btn next">제4권: 국경 너머로 →</a>
+  </div>
+</main>
+</div>
+
+<button class="mobile-menu-btn">☰</button>
+<script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<svg viewBox="0 0 900 580" xmlns="http://www.w3.org/2000/svg" style="background:#0f1117">
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#c9a84c" opacity="0.7"/>
+    </marker>
+    <marker id="arrow-blue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5b9bd5" opacity="0.7"/>
+    </marker>
+    <marker id="arrow-teal" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#4ecdc4" opacity="0.7"/>
+    </marker>
+    <filter id="glow2"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+
+  <!-- 제목 -->
+  <text x="450" y="30" text-anchor="middle" font-family="Noto Sans KR,sans-serif" font-size="14" fill="#c9a84c" font-weight="bold">Squid Proxy — 전체 아키텍처</text>
+
+  <!-- ─── 클라이언트 영역 ─── -->
+  <rect x="20" y="50" width="140" height="80" rx="8" fill="#161b27" stroke="#5b9bd5" stroke-width="1.5"/>
+  <text x="90" y="84" text-anchor="middle" font-family="Noto Sans KR,sans-serif" font-size="11" fill="#5b9bd5">클라이언트</text>
+  <text x="90" y="99" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#606880">Browser / App</text>
+  <text x="90" y="118" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#3a4560">HTTP / HTTPS</text>
+
+  <!-- ─── Squid 코어 박스 ─── -->
+  <rect x="200" y="40" width="500" height="500" rx="12" fill="#0a0c10" stroke="#c9a84c" stroke-width="1.5" opacity="0.8"/>
+  <text x="450" y="62" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="10" fill="#c9a84c" opacity="0.6">SQUID PROXY CORE</text>
+
+  <!-- EventLoop -->
+  <rect x="350" y="75" width="200" height="44" rx="8" fill="#161b27" stroke="#c9a84c" stroke-width="2"/>
+  <text x="450" y="95" text-anchor="middle" font-family="Noto Sans KR,sans-serif" font-size="11" fill="#c9a84c" font-weight="bold">EventLoop</text>
+  <text x="450" y="110" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#606880">src/EventLoop.cc</text>
+
+  <!-- client_side -->
+  <rect x="220" y="150" width="160" height="50" rx="6" fill="#161b27" stroke="#5b9bd5" stroke-width="1.5"/>
+  <text x="300" y="172" text-anchor="middle" font-family="Noto Sans KR,sans-serif" font-size="10" fill="#5b9bd5">문지기</text>
+  <text x="300" y="187" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#606880">client_side.cc</text>
+
+  <!-- ACL -->
+  <rect x="220" y="230" width="160" height="50" rx="6" fill="#161b27" stroke="#e05c5c" stroke-width="1.5"/>
+  <text x="300" y="252" text-anchor="middle" font-family="Noto Sans KR,sans-serif" font-size="10" fill="#e05c5c">판관 ACL</text>
+  <text x="300" y="267" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#606880">acl/Checklist.cc</text>
+
+  <!-- Store / Cache -->
+  <rect x="420" y="150" width="260" height="50" rx="6" fill="#161b27" stroke="#4ecdc4" stroke-width="1.5"/>
+  <text x="550" y="172" text-anchor="middle" font-family="Noto Sans KR,sans-serif" font-size="10" fill="#4ecdc4">창고 (Cache Store)</text>
+  <text x="550" y="187" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#606880">store/Controller.cc | store.cc</text>
+
+  <!-- Memory Cache -->
+  <rect x="420" y="220" width="120" height="44" rx="5" fill="#161b27" stroke="#4ecdc4" stroke-width="1" opacity="0.7"/>
+  <text x="480" y="238" text-anchor="middle" font-family="Noto Sans KR,sans-serif" font-size="9" fill="#4ecdc4">기억 연못</text>
+  <text x="480" y="252" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7.5" fill="#606880">Memory Cache</text>
+
+  <!-- Disk Cache -->
+  <rect x="556" y="220" width="120" height="44" rx="5" fill="#161b27" stroke="#4ecdc4" stroke-width="1" opacity="0.7"/>
+  <text x="616" y="238" text-anchor="middle" font-family="Noto Sans KR,sans-serif" font-size="9" fill="#4ecdc4">돌 창고</text>
+  <text x="616" y="252" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7.5" fill="#606880">Disk Cache / UFS</text>
+
+  <!-- refresh.cc -->
+  <rect x="420" y="280" width="256" height="36" rx="5" fill="#161b27" stroke="#3a4560" stroke-width="1"/>
+  <text x="548" y="295" text-anchor="middle" font-family="Noto Sans KR,sans-serif" font-size="9" fill="#a0a8b8">신선도 점쟁이 (refresh.cc)</text>
+  <text x="548" y="309" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7.5" fill="#606880">refreshCheck() → FRESH / STALE</text>
+
+  <!-- FwdState -->
+  <rect x="220" y="330" width="160" height="50" rx="6" fill="#161b27" stroke="#e8a020" stroke-width="1.5"/>
+  <text x="300" y="352" text-anchor="middle" font-family="Noto Sans KR,sans-serif" font-size="10" fill="#e8a020">선발대장</text>
+  <text x="300" y="367" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#606880">FwdState.cc</text>
+
+  <!-- DNS -->
+  <rect x="220" y="410" width="160" height="50" rx="6" fill="#161b27" stroke="#9b72cf" stroke-width="1.5"/>
+  <text x="300" y="432" text-anchor="middle" font-family="Noto Sans KR,sans-serif" font-size="10" fill="#9b72cf">DNS 점쟁이</text>
+  <text x="300" y="447" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#606880">ipcache.cc</text>
+
+  <!-- HappyConnOpener -->
+  <rect x="420" y="340" width="256" height="44" rx="5" fill="#161b27" stroke="#e8a020" stroke-width="1"/>
+  <text x="548" y="358" text-anchor="middle" font-family="Noto Sans KR,sans-serif" font-size="9" fill="#e8a020">행복한 연결술사</text>
+  <text x="548" y="372" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7.5" fill="#606880">HappyConnOpener.cc (RFC 8305)</text>
+
+  <!-- SSL/TLS -->
+  <rect x="420" y="400" width="120" height="44" rx="5" fill="#161b27" stroke="#9b72cf" stroke-width="1"/>
+  <text x="480" y="418" text-anchor="middle" font-family="Noto Sans KR,sans-serif" font-size="9" fill="#9b72cf">변장술사</text>
+  <text x="480" y="432" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7.5" fill="#606880">ssl/ + security/</text>
+
+  <!-- Tunnel -->
+  <rect x="556" y="400" width="120" height="44" rx="5" fill="#161b27" stroke="#9b72cf" stroke-width="1"/>
+  <text x="616" y="418" text-anchor="middle" font-family="Noto Sans KR,sans-serif" font-size="9" fill="#9b72cf">비밀 땅굴</text>
+  <text x="616" y="432" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7.5" fill="#606880">tunnel.cc</text>
+
+  <!-- 기록관 -->
+  <rect x="220" y="480" width="456" height="40" rx="6" fill="#161b27" stroke="#606880" stroke-width="1"/>
+  <text x="448" y="496" text-anchor="middle" font-family="Noto Sans KR,sans-serif" font-size="9" fill="#a0a8b8">기록관 (AccessLogEntry + log/access_log.cc)</text>
+  <text x="448" y="510" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7.5" fill="#606880">TCP_HIT / TCP_MISS / TCP_TUNNEL ...</text>
+
+  <!-- ─── 오리진 서버 ─── -->
+  <rect x="740" y="50" width="140" height="80" rx="8" fill="#161b27" stroke="#e8a020" stroke-width="1.5"/>
+  <text x="810" y="84" text-anchor="middle" font-family="Noto Sans KR,sans-serif" font-size="11" fill="#e8a020">오리진 서버</text>
+  <text x="810" y="99" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="9" fill="#606880">Origin Server</text>
+  <text x="810" y="118" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#3a4560">Internet</text>
+
+  <!-- ─── 피어 캐시 ─── -->
+  <rect x="740" y="160" width="140" height="60" rx="8" fill="#161b27" stroke="#e05c5c" stroke-width="1"/>
+  <text x="810" y="184" text-anchor="middle" font-family="Noto Sans KR,sans-serif" font-size="10" fill="#e05c5c">피어 캐시</text>
+  <text x="810" y="199" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="#606880">neighbors.cc</text>
+  <text x="810" y="213" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#3a4560">ICP / HTCP</text>
+
+  <!-- ─── 화살표들 ─── -->
+  <!-- 클라이언트 → client_side -->
+  <line x1="160" y1="90" x2="220" y2="175" stroke="#5b9bd5" stroke-width="1.5" marker-end="url(#arrow-blue)" opacity="0.7"/>
+
+  <!-- client_side → EventLoop (위쪽) -->
+  <line x1="300" y1="150" x2="400" y2="119" stroke="#c9a84c" stroke-width="1" marker-end="url(#arrow)" opacity="0.5" stroke-dasharray="3,2"/>
+
+  <!-- client_side → ACL -->
+  <line x1="300" y1="200" x2="300" y2="230" stroke="#e05c5c" stroke-width="1.5" marker-end="url(#arrow)" opacity="0.7"/>
+
+  <!-- ACL → FwdState -->
+  <line x1="300" y1="280" x2="300" y2="330" stroke="#e8a020" stroke-width="1.5" marker-end="url(#arrow)" opacity="0.7"/>
+
+  <!-- FwdState → DNS -->
+  <line x1="300" y1="380" x2="300" y2="410" stroke="#9b72cf" stroke-width="1.5" marker-end="url(#arrow)" opacity="0.7"/>
+
+  <!-- EventLoop → Store -->
+  <line x1="500" y1="119" x2="500" y2="150" stroke="#4ecdc4" stroke-width="1.5" marker-end="url(#arrow-teal)" opacity="0.7"/>
+
+  <!-- FwdState → HappyConn -->
+  <line x1="380" y1="355" x2="420" y2="362" stroke="#e8a020" stroke-width="1.5" marker-end="url(#arrow)" opacity="0.7"/>
+
+  <!-- HappyConn → SSL -->
+  <line x1="480" y1="384" x2="480" y2="400" stroke="#9b72cf" stroke-width="1.5" marker-end="url(#arrow)" opacity="0.5"/>
+
+  <!-- SSL → 오리진 -->
+  <line x1="676" y1="422" x2="740" y2="90" stroke="#9b72cf" stroke-width="1.5" marker-end="url(#arrow)" opacity="0.5" stroke-dasharray="4,3"/>
+
+  <!-- FwdState → 피어 -->
+  <line x1="380" y1="340" x2="740" y2="190" stroke="#e05c5c" stroke-width="1" marker-end="url(#arrow)" opacity="0.4" stroke-dasharray="3,2"/>
+
+  <!-- 모든 → 기록관 -->
+  <line x1="300" y1="460" x2="300" y2="480" stroke="#606880" stroke-width="1" marker-end="url(#arrow)" opacity="0.4"/>
+  <line x1="548" y1="444" x2="548" y2="480" stroke="#606880" stroke-width="1" marker-end="url(#arrow)" opacity="0.4"/>
+</svg>

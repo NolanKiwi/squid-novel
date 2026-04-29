@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="ko" data-volume="1">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>제1권: 성문이 열리다 — 스퀴드 대서사시</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    :root { --vol-color: #c9a84c; }
+    .vol-index-bg {
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201,168,76,.15) 0%, transparent 60%),
+                  linear-gradient(180deg, #0a0c10 0%, #0f1117 100%);
+    }
+  </style>
+</head>
+<body>
+
+<div class="novel-wrapper">
+<!-- ══════ 사이드바 ══════ -->
+<nav class="novel-sidebar">
+  <div class="sidebar-logo">
+    <a href="index.html">← 목차로</a>
+  </div>
+  <div class="sidebar-vol-title">VOLUME 1</div>
+  <div class="sidebar-vol-name">성문이 열리다<br><span style="font-size:.8rem;font-weight:400;color:var(--text-muted)">프록시 왕국의 탄생</span></div>
+  <nav class="sidebar-nav">
+    <a class="sidebar-chapter" href="#ch1"><span class="ch-num">01</span>태초의 고요 — 기계실</a>
+    <a class="sidebar-chapter" href="#ch2"><span class="ch-num">02</span>main()의 탄생</a>
+    <a class="sidebar-chapter" href="#ch3"><span class="ch-num">03</span>법전관 파서의 임무</a>
+    <a class="sidebar-chapter" href="#ch4"><span class="ch-num">04</span>두루마리의 내용</a>
+    <a class="sidebar-chapter" href="#ch5"><span class="ch-num">05</span>신하들의 기상</a>
+    <a class="sidebar-chapter" href="#ch6"><span class="ch-num">06</span>수레바퀴 어른의 심장</a>
+    <a class="sidebar-chapter" href="#ch7"><span class="ch-num">07</span>박동의 비밀</a>
+    <a class="sidebar-chapter" href="#ch8"><span class="ch-num">08</span>성문이 열리다</a>
+    <a class="sidebar-chapter" href="#ch9"><span class="ch-num">09</span>첫 번째 손님</a>
+    <a class="sidebar-chapter" href="#ch10"><span class="ch-num">10</span>여권을 만들다</a>
+    <a class="sidebar-chapter" href="#ch11"><span class="ch-num">11</span>성 안의 세계</a>
+    <a class="sidebar-chapter" href="#ch12"><span class="ch-num">12</span>동시성의 마법</a>
+    <a class="sidebar-chapter" href="#ch13"><span class="ch-num">13</span>타이머들의 행진</a>
+    <a class="sidebar-chapter" href="#ch14"><span class="ch-num">14</span>SMP — 왕국의 복사</a>
+    <a class="sidebar-chapter" href="#ch15"><span class="ch-num">15</span>분기점에서</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="vol-nav-btns">
+      <span class="vol-nav-btn" style="opacity:.3;cursor:default">← 이전 권</span>
+      <a href="vol2.html" class="vol-nav-btn">2권 →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════ 본문 ══════ -->
+<main class="novel-main">
+  <div class="novel-topbar">
+    <div class="topbar-breadcrumb">
+      <a href="index.html">스퀴드 대서사시</a>
+      <span class="sep">›</span>
+      <span class="current">제1권: 성문이 열리다</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill"></div></div>
+  </div>
+
+  <!-- ══ 볼륨 히어로 ══ -->
+  <div class="vol-index-hero" style="min-height:50vh">
+    <div class="vol-index-bg" style="position:absolute;inset:0;z-index:0"></div>
+    <div style="position:absolute;inset:0;z-index:0;background-image:linear-gradient(rgba(201,168,76,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,.03) 1px,transparent 1px);background-size:40px 40px"></div>
+    <div class="vol-index-content" style="padding-top:6rem">
+      <div class="vol-label">Volume 1</div>
+      <h1 class="vol-main-title">성문이 열리다</h1>
+      <p class="vol-main-subtitle">프록시 왕국의 탄생</p>
+      <p class="vol-main-desc">
+        모든 것은 한 줄의 명령어에서 시작된다.<br>
+        기계가 눈을 뜨고, 규칙을 읽고, 심장 박동을 시작하고,<br>
+        마침내 성문을 열어 첫 번째 손님을 맞이하는 이야기.
+      </p>
+    </div>
+  </div>
+
+  <article class="novel-content">
+
+    <!-- ══════════════════════════════════
+         제1장
+    ══════════════════════════════════ -->
+    <div id="ch1" class="chapter-anchor"></div>
+    <div class="chapter-header">
+      <div class="chapter-vol">제1권 — 성문이 열리다</div>
+      <div class="chapter-num">제1장</div>
+      <h2 class="chapter-title" style="color:var(--text-primary)">태초의 고요</h2>
+      <div class="chapter-epigraph">
+        "기계에는 의지가 없다. 하지만 전원이 들어오는 순간, 기계는 목적을 가진다."
+      </div>
+    </div>
+
+    <p>
+      기계실은 언제나 춥다. 그것은 설계된 추위였다. 수백 대의 서버들이 내뿜는 열기를 강제로 끌어내기 위해, 냉각 시스템은 쉬지 않고 가동됐다. 섭씨 18도. 사람이 오래 있기에는 불쾌하고, 컴퓨터가 작동하기에는 최적인 온도. 기계들을 위한 기후. 형광등은 창문 없는 이 방을 하루 종일 하얗게 비췄다. 낮과 밤의 구분이 없었다. 시간의 감각이 없었다.
+    </p>
+
+    <p>
+      이 방에서 일하는 사람들은 금방 익숙해진다고 했다. 귀가 먹먹해지는 팬 소리에도, 피부가 건조해지는 냉기에도, 끊임없이 깜빡이는 LED들의 침묵의 언어에도. 그들은 이 방을 기계들의 심장부라고 불렀다. 서버들이 사는 곳. 데이터가 사는 곳. 인터넷의 일부가 사는 곳.
+    </p>
+
+    <p>
+      서버 랙들이 줄지어 서 있었다. 검은 철제 프레임 안에 슬라이드 방식으로 끼워진 서버들. 각각은 크기만 다를 뿐 똑같이 생긴 직사각형의 금속 상자들이었다. 1U, 2U, 4U — 랙 유닛으로 키를 재는 세계. 어떤 것은 데이터베이스를 돌렸다. 어떤 것은 웹 서버였다. 어떤 것은 로드 밸런서였다.
+    </p>
+
+    <p>
+      그리고 저 끝, 다른 서버들보다 조금 더 먼지가 쌓인 선반 위에 한 대가 있었다. 뚜렷하게 다르지 않았다. 같은 철제 프레임, 같은 버튼들, 같은 포트들. 하지만 이 서버에는 특별한 것이 설치되어 있었다.
+    </p>
+
+    <p>
+      <strong>Squid Proxy Server.</strong>
+    </p>
+
+    <p>
+      지금은 꺼져 있었다. 완전히. 팬도 돌지 않았고, LED도 켜지지 않았다. 포트에는 네트워크 케이블이 꽂혀 있었지만, 신호가 없었다. 프로세서는 차갑게 식어있었다. 메모리는 비어있었다. 디스크는 잠들어 있었다.
+    </p>
+
+    <p>
+      그냥 금속이었다. 그냥 실리콘이었다. 그냥 납땜 자국들이었다. 무게로 따지면 10킬로그램쯤 되는, 아무 의미 없는 물체였다.
+    </p>
+
+    <p>
+      하지만 어딘가의 모니터 앞에 앉은 손이 키보드를 향해 움직였다.
+    </p>
+
+    <div class="chapter-illustration">
+      <img src="assets/svg/server-room.svg" alt="기계실 삽화" style="max-width:100%;border-radius:8px;border:1px solid var(--border)"/>
+      <p class="illus-caption">기계실 — 스퀴드가 잠들어 있는 곳</p>
+    </div>
+
+    <p>
+      시스템 관리자 김철수는 오전 9시 3분에 자리에 앉았다. 커피가 아직 뜨거웠다. 그는 SSH 터미널을 열었고, 익숙한 손동작으로 서버에 접속했다. 화면에 프롬프트가 떴다. 그는 잠시 멈췄다가 타이핑했다.
+    </p>
+
+    <div class="inner-voice">
+      $ squid -f /etc/squid/squid.conf
+    </div>
+
+    <p>
+      엔터 키를 눌렀다.
+    </p>
+
+    <p>
+      기계실 저쪽 선반의 서버에서, 전원 표시등이 깜빡였다. 팬이 돌기 시작했다. LED들이 차례로 빛나기 시작했다. 디스크가 회전했다. 프로세서가 달궈졌다.
+    </p>
+
+    <p>
+      운영체제가 새 프로세스를 만들었다. 커널이 가상 메모리 공간을 할당했다. 실행 파일이 디스크에서 메모리로 로드됐다. 코드 섹션, 데이터 섹션, 스택 공간. 공유 라이브러리들이 매핑됐다. OpenSSL, libcrypto, libc...
+    </p>
+
+    <p>
+      그리고 실행이 시작됐다.
+    </p>
+
+    <div class="tech-box">
+      <div class="tech-box-header">
+        <div class="tech-box-icon">⚙</div>
+        <span class="tech-box-title">기술 해설 — 프로세스 시작 (src/main.cc)</span>
+        <span class="tech-box-toggle" style="margin-left:auto;color:var(--text-muted);font-family:var(--font-mono);font-size:.8rem">▼</span>
+      </div>
+      <div class="tech-box-body">
+        <p>모든 C 계열 프로그램의 진입점은 <code>main()</code> 함수다. Squid의 <code>main()</code>은 <code>src/main.cc</code>에 있으며, 놀라울 정도로 짧다:</p>
+        <pre><code>int main(int argc, char **argv) {
+    WIN32_Subsystem_Init(&amp;argc, &amp;argv);  // Windows 전용
+    return SquidMainSafe(argc, argv);
+}</code></pre>
+        <p><code>SquidMainSafe()</code>는 C++ 예외 안전망이다. <code>std::set_terminate()</code>를 등록하여 예상치 못한 예외로 프로세스가 추하게 종료되는 것을 방지한다. 진짜 일은 <code>SquidMain()</code>에서 일어난다.</p>
+        <p><strong>왜 이렇게 단계를 나누는가?</strong> 네트워크 서버는 예상치 못한 메모리 문제, 잘못된 패킷, 손상된 캐시 파일 등으로 예외가 발생할 수 있다. 최소한 깨끗하게 종료하고 오류 메시지를 남기기 위해 이런 구조를 쓴다.</p>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════
+         제2장
+    ══════════════════════════════════ -->
+    <div id="ch2" class="chapter-anchor"></div>
+    <h2>제2장 — main()의 탄생</h2>
+
+    <p>
+      스퀴드가 눈을 떴다.
+    </p>
+
+    <p>
+      정확히는, <code>SquidMain()</code> 함수의 첫 번째 줄이 실행됐다. 하지만 소설 속에서 이것은 하나의 의식이었다. 탄생의 의식. 아직 이름도 없고, 기억도 없고, 임무도 모르는 존재가 처음으로 눈을 뜨는 순간.
+    </p>
+
+    <p>
+      스퀴드가 처음 한 일은 주위를 둘러보는 것이었다. 자신이 어떤 왕국에 있는지, 어떤 신하들이 있는지 파악하는 것.
+    </p>
+
+    <pre><code>RegisterModules();</code></pre>
+
+    <p>
+      이 한 줄이 그 파악의 행위였다. Squid는 플러그인 방식으로 여러 모듈을 지원한다. 디스크 캐시를 위한 UFS, Aufs, Rock 등의 파일시스템 모듈. 각 모듈은 자신의 이름과 팩토리 함수를 등록한다. 마치 왕국의 신하들이 "저 여기 있습니다"라고 손을 드는 것처럼.
+    </p>
+
+    <p>
+      그다음, 명령서를 읽었다. 터미널에서 입력된 명령행 인자들.
+    </p>
+
+    <pre><code>CommandLine cmdLine(argc, argv, shortOpStr, squidOptions);
+cmdLine.forEachOption(mainHandleCommandLineOption);</code></pre>
+
+    <p>
+      <code>src/CommandLine.cc</code>의 <code>CommandLine</code> 클래스가 이것을 처리했다. <code>-f /etc/squid/squid.conf</code>는 설정 파일 경로. <code>-N</code>은 포그라운드 실행(데몬이 되지 않음). <code>-k reconfigure</code>는 실행 중인 Squid에게 재설정 신호를 보내는 것. <code>-d 1</code>은 디버그 레벨 1.
+    </p>
+
+    <p>
+      스퀴드는 자신이 받은 임무를 이해했다. 설정 파일은 <code>/etc/squid/squid.conf</code>. 데몬 모드로 실행. 지금 바로 시작.
+    </p>
+
+    <p>
+      다음 단계는 메모리 창고를 여는 것이었다.
+    </p>
+
+    <pre><code>Mem::Init();</code></pre>
+
+    <p>
+      <code>src/mem/</code> 디렉터리에 있는 메모리 풀 시스템의 초기화. 이것은 단순한 초기화가 아니었다. 앞으로 수백만 번 일어날 객체 생성과 소멸을 효율적으로 처리하기 위한 준비였다. 미리 16바이트짜리 블록 1000개, 32바이트짜리 블록 500개, 64바이트짜리 블록 300개... 이렇게 크기별로 메모리 풀을 만들어두고, 나중에 그 크기의 메모리가 필요하면 시스템에 요청하는 대신 풀에서 꺼낸다. 다 쓰면 시스템에 반납하는 대신 풀에 돌려놓는다.
+    </p>
+
+    <p>
+      이 시스템이 없으면 Squid는 매 연결마다, 매 요청마다 운영체제에 메모리를 달라고 구걸해야 한다. <code>malloc()</code>과 <code>free()</code>를 수백만 번 호출하면, 메모리 단편화가 생기고, 처리 속도가 떨어진다. 메모리 풀은 이 문제를 우아하게 해결한다.
+    </p>
+
+    <p>
+      그 다음, 파일시스템 초기화.
+    </p>
+
+    <pre><code>storeFsInit();
+Fs::Init();
+DiskIOModule::SetupAllModules();</code></pre>
+
+    <p>
+      캐시를 어떻게 저장할 것인가의 문제. UFS(Unix File System) — 가장 전통적인 방식. 파일 하나에 캐시 객체 하나. Aufs — 비동기 I/O를 사용하는 UFS. COSS(Cyclic Object Storage System) — 순환 버퍼 방식. Rock — 현대적인 데이터베이스 같은 접근. 운영자가 설정에서 어떤 것을 선택하든, 이 초기화 단계에서 그 모듈이 준비됐다.
+    </p>
+
+    <p>
+      그리고 마지막으로, 가장 중요한 두 가지.
+    </p>
+
+    <pre><code>Acl::Init();   // ACL 타입들 등록
+Auth::Init();  // 인증 모듈들 등록</code></pre>
+
+    <p>
+      나중에 누구를 들이고 누구를 내칠 것인지를 판단하는 시스템과, 손님의 신분을 확인하는 시스템이 깨어났다. 아직 규칙을 모른다. 규칙은 설정 파일에 있고, 아직 읽지 않았다. 하지만 규칙을 읽고 해석할 준비는 됐다.
+    </p>
+
+    <p>
+      스퀴드는 준비가 됐다는 것을 알았다. 이제 두루마리를 펼칠 시간이었다.
+    </p>
+
+    <div class="tech-box">
+      <div class="tech-box-header">
+        <div class="tech-box-icon">📋</div>
+        <span class="tech-box-title">기술 해설 — SquidMain() 초기화 순서 (src/main.cc)</span>
+        <span class="tech-box-toggle" style="margin-left:auto;color:var(--text-muted);font-family:var(--font-mono);font-size:.8rem">▼</span>
+      </div>
+      <div class="tech-box-body">
+        <p><code>SquidMain()</code>의 초기화 순서는 의존성을 반영한다:</p>
+        <pre><code>RegisterModules();          // 모듈 팩토리 등록
+CommandLine cmdLine(...);   // CLI 파싱
+ConfigureCurrentKid();      // SMP 워커 식별
+Mem::Init();                // 메모리 풀 — 가장 먼저
+storeFsInit();              // 파일시스템 모듈
+DiskIOModule::SetupAllModules(); // 디스크 I/O 엔진
+Acl::Init();                // ACL 타입 등록
+Auth::Init();               // 인증 모듈 등록
+Ip::ProbeTransport();       // IPv4/IPv6 가용성 확인
+Format::Token::Init();      // 로그 포맷 토큰
+Configuration::Parse();     // ← squid.conf 파싱
+Instance::ThrowIfAlreadyRunning(); // 중복 실행 방지
+comm_init();                // 소켓 시스템
+mainInitialize();           // 나머지 서브시스템
+mainLoop.run();             // ← 이벤트 루프 시작</code></pre>
+        <p><strong>중요한 점:</strong> <code>Mem::Init()</code>이 가장 먼저 호출된다. 이후의 모든 초기화 코드가 메모리 풀에 의존하기 때문이다. <code>Acl::Init()</code>는 <code>Configuration::Parse()</code> 전에 와야 한다. 설정 파싱 중에 ACL 타입들이 이미 등록되어 있어야 하기 때문이다.</p>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════
+         제3장
+    ══════════════════════════════════ -->
+    <div id="ch3" class="chapter-anchor"></div>
+    <h2>제3장 — 법전관 파서의 임무</h2>
+
+    <p>
+      법전관 파서. 이름은 단순했지만, 그가 맡은 임무는 왕국의 미래 전체를 결정하는 것이었다.
+    </p>
+
+    <p>
+      그는 <code>src/ConfigParser.cc</code>에 사는 인물이었다. 정확히는 그가 사용하는 도구들이 그곳에 있었다. 파서는 토큰(token) 기반으로 일했다. 설정 파일의 텍스트를 받아 의미 있는 단위로 쪼개는 것. 공백과 개행으로 구분된 단어들. 주석(<code>#</code>으로 시작하는 줄)은 무시. 특수 문자들의 처리.
+    </p>
+
+    <p>
+      더 중요한 파일은 <code>src/cf_parser.cci</code>였다. 이 파일은 손으로 쓰인 게 아니었다. <code>configure.ac</code>와 빌드 스크립트에 의해 자동 생성됐다. Squid의 수백 개 설정 지시어(directive) 각각에 대한 파싱 핸들러들이 이 파일 안에 있었다.
+    </p>
+
+    <p>
+      <code>Configuration::Parse()</code>가 불렸다. 파서가 두루마리를 들고 일어섰다.
+    </p>
+
+    <p>
+      파일을 열었다. <code>/etc/squid/squid.conf</code>. 버퍼에 한 줄씩 읽기 시작했다. 읽는다, 토큰화한다, 어떤 지시어인지 식별한다, 해당 핸들러를 찾아 호출한다. 반복.
+    </p>
+
+    <p>
+      파서의 작업은 겉으로는 단순해 보였다. 하지만 설정 파일의 복잡성을 생각하면 전혀 그렇지 않았다. 같은 지시어가 여러 번 나올 수 있었다. 지시어들 사이에 의존성이 있었다. 오류가 있으면 명확한 에러 메시지를 내야 했다. 특정 지시어는 다른 지시어보다 먼저 처리되어야 했다.
+    </p>
+
+    <p>
+      모든 것이 완료되면, 설정 값들은 <code>Config</code>라는 거대한 전역 구조체에 채워졌다. <code>src/SquidConfig.h</code>에 정의된 이 구조체는 왕국의 모든 결정을 지배하는 헌법 전체를 담고 있었다.
+    </p>
+
+    <!-- ══════════════════════════════════
+         제4장
+    ══════════════════════════════════ -->
+    <div id="ch4" class="chapter-anchor"></div>
+    <h2>제4장 — 두루마리의 내용</h2>
+
+    <p>
+      두루마리 속에는 무엇이 있었나.
+    </p>
+
+    <p>
+      파서가 두루마리를 펼쳤을 때, 첫 번째 줄이 눈에 들어왔다.
+    </p>
+
+    <pre><code>http_port 3128</code></pre>
+
+    <p>
+      왕국의 문이 어디에 있는지. 포트 3128. 이 번호가 파서의 손을 통해 <code>Config.portList</code>에 기록됐다. 나중에 소켓을 열 때 이 번호가 쓰인다.
+    </p>
+
+    <p>
+      그 다음 줄.
+    </p>
+
+    <pre><code>cache_dir ufs /var/cache/squid 10000 16 256</code></pre>
+
+    <p>
+      창고의 위치와 크기. UFS 방식으로. <code>/var/cache/squid</code> 디렉터리에. 10기가바이트. 첫 번째 계층 디렉터리 16개, 두 번째 계층 디렉터리 256개. 이 설정 하나가 디스크 캐시의 물리적 구조를 결정했다. 파서는 이것을 <code>Config.cacheSwap</code>에 기록했다.
+    </p>
+
+    <p>
+      그리고 다음.
+    </p>
+
+    <pre><code>cache_mem 256 MB
+maximum_object_size 512 MB
+minimum_object_size 0 KB</code></pre>
+
+    <p>
+      메모리 창고의 크기. 최대 객체 크기와 최소 객체 크기. 이것들이 나중에 무언가를 캐시할지 말지를 결정하는 기준이 됐다.
+    </p>
+
+    <p>
+      그다음에는 법전이 등장했다.
+    </p>
+
+    <pre><code>acl localnet src 192.168.0.0/16
+acl localnet src 172.16.0.0/12
+acl localnet src 10.0.0.0/8
+acl localhost src 127.0.0.1/32 ::1
+acl to_localhost dst 127.0.0.0/8 0.0.0.0/32 ::1
+acl SSL_ports port 443
+acl Safe_ports port 80
+acl Safe_ports port 21
+acl Safe_ports port 443
+acl Safe_ports port 70
+acl Safe_ports port 210
+acl Safe_ports port 1025-65535
+acl Safe_ports port 280
+acl Safe_ports port 488
+acl Safe_ports port 591
+acl Safe_ports port 777
+acl CONNECT method CONNECT</code></pre>
+
+    <p>
+      여기서 파서는 멈췄다. 이것들은 단순한 값이 아니었다. 이것들은 인물들이었다. <code>localnet</code>이라는 이름을 가진 집합. 내부 네트워크에서 온 자들의 무리. <code>localhost</code>는 이 기계 자신. <code>SSL_ports</code>는 SSL을 쓰는 포트들의 목록. <code>Safe_ports</code>는 안전하다고 간주되는 포트들.
+    </p>
+
+    <p>
+      파서는 각 ACL 정의에 대해 적절한 노드 타입을 만들었다. <code>src 192.168.0.0/16</code>은 <code>ACLIP</code> 타입 — IP 주소 매칭 노드. <code>port 443</code>은 <code>ACLPort</code> 타입 — 포트 번호 매칭 노드. <code>method CONNECT</code>는 <code>ACLMethod</code> 타입 — HTTP 메서드 매칭 노드.
+    </p>
+
+    <p>
+      이 노드들은 메모리의 어딘가에 자리를 잡았다. 이름으로 검색할 수 있는 해시 테이블에 등록됐다.
+    </p>
+
+    <p>
+      그 다음에 접근 규칙들이 왔다.
+    </p>
+
+    <pre><code>http_access deny !Safe_ports
+http_access deny CONNECT !SSL_ports
+http_access allow localhost manager
+http_access deny manager
+http_access allow localnet
+http_access allow localhost
+http_access deny all</code></pre>
+
+    <p>
+      이것이 왕국의 법전이었다. 파서는 이것을 단순한 텍스트로 처리하지 않았다. 각 줄을 분석해서 메모리 안에 트리 구조를 만들었다.
+    </p>
+
+    <p>
+      첫 번째 줄: "<code>Safe_ports</code>에 속하지 않는 포트로 오는 요청은 거부." 이것은 <code>deny</code> ACTION과, <code>!Safe_ports</code> 노드(Safe_ports의 부정)로 이루어진 규칙이 됐다.
+    </p>
+
+    <p>
+      두 번째 줄: "<code>CONNECT</code> 메서드이면서 <code>SSL_ports</code>에 속하지 않는 포트로의 터널 요청은 거부." 보안 규칙이었다. CONNECT를 이용해 임의의 포트로 터널을 뚫으려는 시도를 막는 것.
+    </p>
+
+    <p>
+      이 모든 규칙들이 <code>Config.accessList.http</code>라는 포인터가 가리키는 연결 리스트에 순서대로 이어졌다. 순서는 중요했다. 나중에 판관이 이 순서대로 판결을 내릴 것이기 때문이다.
+    </p>
+
+    <p>
+      두루마리의 나머지 내용들도 차례로 처리됐다. DNS 서버 주소들. 캐시 피어 설정. 타임아웃 값들. 로그 파일 경로들. 각 설정 지시어는 <code>Config</code> 구조체의 적절한 필드에 채워졌다.
+    </p>
+
+    <p>
+      두루마리의 끝에 도달했을 때, 파서는 두루마리를 내려놓았다. 그의 임무는 완료됐다. 왕국의 헌법이 메모리 안에 살아 숨쉬기 시작했다.
+    </p>
+
+    <div class="tech-box">
+      <div class="tech-box-header">
+        <div class="tech-box-icon">📜</div>
+        <span class="tech-box-title">기술 해설 — squid.conf 파싱과 Config 구조체</span>
+        <span class="tech-box-toggle" style="margin-left:auto;color:var(--text-muted);font-family:var(--font-mono);font-size:.8rem">▼</span>
+      </div>
+      <div class="tech-box-body">
+        <p><code>Configuration::Parse()</code>는 <code>src/ConfigParser.cc</code>를 사용해 <code>squid.conf</code>를 파싱하고 결과를 전역 변수 <code>Config</code>(<code>SquidConfig</code> 타입, <code>src/SquidConfig.h</code>)에 채운다.</p>
+        <p>파싱의 핵심은 <code>src/cf_parser.cci</code>에 자동 생성된 파싱 핸들러들이다. 예를 들어 <code>http_port</code> 지시어를 만나면:</p>
+        <pre><code>// 자동 생성된 핸들러 개념
+if (strcmp(directive, "http_port") == 0) {
+    parse_port_list(&Config.portList, HTTP_PORT);
+}</code></pre>
+        <p>ACL 파싱의 특이점:</p>
+        <ul>
+          <li><strong>정의 단계:</strong> <code>acl name type data</code> → <code>ACL_TYPE</code> 노드 생성 + 이름 해시 테이블에 등록</li>
+          <li><strong>사용 단계:</strong> <code>http_access allow/deny acl_name</code> → 이름으로 노드를 찾아 규칙 트리에 연결</li>
+          <li><strong>순서 의존성:</strong> ACL이 사용되기 전에 반드시 정의되어야 한다. Squid는 파일을 한 번만 읽으므로, 정의보다 먼저 나오는 참조는 에러다.</li>
+        </ul>
+        <p>파싱 완료 후 <code>RunRegisteredHere(RegisteredRunner::finalizeConfig)</code>가 호출되어 각 모듈이 설정값을 기반으로 최종 초기화를 수행한다.</p>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════
+         제5장
+    ══════════════════════════════════ -->
+    <div id="ch5" class="chapter-anchor"></div>
+    <h2>제5장 — 신하들의 기상</h2>
+
+    <p>
+      두루마리가 읽혔다. 왕국의 헌법이 세워졌다. 이제 신하들을 깨울 시간이었다.
+    </p>
+
+    <p>
+      <code>mainInitialize()</code>. 이 함수는 왕국 전체를 기동시키는 대행진이었다. 하나씩 살펴보자.
+    </p>
+
+    <p>
+      가장 먼저 깨어난 것은 신호 처리기(signal handler)들이었다.
+    </p>
+
+    <pre><code>squid_signal(SIGSEGV, death, SA_NODEFER | SA_RESETHAND);
+squid_signal(SIGBUS, death, SA_NODEFER | SA_RESETHAND);
+squid_signal(SIGPIPE, SIG_IGN, SA_RESTART);
+squid_signal(SIGCHLD, sig_child, SA_NODEFER | SA_RESTART);
+squid_signal(SIGHUP, reconfigure, SA_RESTART);</code></pre>
+
+    <p>
+      <code>SIGSEGV</code>와 <code>SIGBUS</code>는 심각한 오류 신호다. 세그멘테이션 폴트, 버스 오류. 이것들을 처리하는 <code>death()</code> 함수는 최대한 많은 디버그 정보를 기록하고 코어 덤프를 남기도록 설정됐다. 무엇이 잘못됐는지 나중에 분석할 수 있게.
+    </p>
+
+    <p>
+      <code>SIGPIPE</code>는 무시했다. <code>SIG_IGN</code>. 왜냐하면 네트워크 서버에서 파이프 오류는 흔하기 때문이다. 클라이언트가 갑자기 연결을 끊으면 <code>SIGPIPE</code>가 발생한다. 이것에 의해 프로세스가 종료되는 것을 막아야 했다.
+    </p>
+
+    <p>
+      <code>SIGHUP</code>은 재설정 신호. 운영자가 <code>squid -k reconfigure</code>를 보내면, 현재 동작을 유지한 채 설정 파일을 다시 읽는다. 서비스를 재시작하지 않고도 설정을 변경할 수 있는 것이다.
+    </p>
+
+    <p>
+      그다음 점쟁이 부서가 깨어났다.
+    </p>
+
+    <pre><code>ipcache_init();
+fqdncache_init();
+parseEtcHosts();
+Dns::Init();</code></pre>
+
+    <p>
+      <code>src/ipcache.cc</code>의 IP 캐시와 <code>src/fqdncache.cc</code>의 FQDN 캐시. 이들은 DNS 조회 결과를 기억하는 해시 테이블이었다. 각각 LRU(Least Recently Used) 방식으로 관리됐다. <code>parseEtcHosts()</code>는 <code>/etc/hosts</code> 파일을 읽어 그 내용을 캐시에 미리 채워두었다. 로컬 호스트 이름들을 DNS 서버에 물어보는 낭비를 막기 위해.
+    </p>
+
+    <p>
+      <code>Dns::Init()</code>는 Squid 자체 DNS 클라이언트를 기동했다. Squid는 운영체제의 표준 DNS 함수(<code>getaddrinfo()</code>, <code>gethostbyname()</code> 등)를 쓰지 않는다. 그 함수들은 블로킹이다. DNS 응답이 올 때까지 함수가 반환하지 않는다. 단일 스레드 이벤트 루프를 쓰는 Squid에게, 블로킹 함수는 왕국 전체를 멈추게 하는 독약이다.
+    </p>
+
+    <p>
+      그래서 Squid는 직접 만들었다. UDP 소켓을 통해 DNS 쿼리 패킷을 직접 만들어 보내고, 응답을 이벤트 루프에서 비동기로 받는 엔진. <code>src/dns/</code> 디렉터리에 있는 이 엔진은 RFC 1035를 직접 구현한다.
+    </p>
+
+    <p>
+      그다음 차례는 보안 관련 서브시스템들이었다.
+    </p>
+
+    <pre><code>Ssl::Helper::Init();
+Ssl::CertValidationHelper::Init();</code></pre>
+
+    <p>
+      SSL 관련 헬퍼들. SSL Bump(TLS 가로채기)가 설정에 활성화되어 있다면, 이 헬퍼들이 필요했다. 외부 프로세스로 실행되어 Squid의 이벤트 루프를 블로킹하지 않고 인증서 생성과 검증을 처리하는 역할이었다.
+    </p>
+
+    <p>
+      그다음은 리다이렉터와 인증 시스템이었다.
+    </p>
+
+    <pre><code>redirectInit();
+authenticateInit(&amp;Auth::TheConfig.schemes);
+externalAclInit();</code></pre>
+
+    <p>
+      <code>redirectInit()</code>는 URL 리다이렉터 헬퍼를 준비한다. 설정에 <code>url_rewrite_program</code>이 있으면 그 외부 프로그램을 자식 프로세스로 실행할 준비를 했다.
+    </p>
+
+    <p>
+      <code>authenticateInit()</code>는 인증 스킴들을 초기화했다. Basic, Digest, NTLM, Negotiate — 설정 파일에 활성화된 것들만. 각 스킴은 <code>src/auth/</code> 디렉터리의 서브디렉터리에 구현되어 있었다.
+    </p>
+
+    <p>
+      <code>externalAclInit()</code>는 외부 ACL 헬퍼들을 준비했다. 설정에 <code>external_acl_type</code>이 있으면 그 헬퍼 프로세스들을 시작할 준비.
+    </p>
+
+    <p>
+      그다음으로 중요한 HTTP와 에러 관련 초기화.
+    </p>
+
+    <pre><code>httpHeaderInitModule();
+errorInitialize();
+accessLogInit();</code></pre>
+
+    <p>
+      HTTP 헤더 처리 모듈이 초기화됐다. 알려진 헤더 이름들의 해시 테이블, 헤더 파싱에 필요한 자료구조들이 준비됐다.
+    </p>
+
+    <p>
+      에러 페이지 시스템이 초기화됐다. <code>src/errors/</code> 디렉터리의 HTML 템플릿 파일들이 메모리로 로드됐다. <code>ERR_ACCESS_DENIED</code>, <code>ERR_DNS_FAIL</code>, <code>ERR_CONNECT_FAIL</code>... 손님을 거부하거나 오류를 알려야 할 때 사용할 형식들.
+    </p>
+
+    <p>
+      액세스 로그 시스템이 초기화됐다. 설정에서 지정한 로그 파일들이 열렸다. 형식(Squid 기본 형식, Apache Combined 형식, 커스텀 형식 등)이 설정됐다.
+    </p>
+
+    <p>
+      이제 가장 중요한 두 가지.
+    </p>
+
+    <pre><code>storeInit();
+serverConnectionsOpen();</code></pre>
+
+    <p>
+      <code>storeInit()</code>는 캐시 왕국의 창고 전체를 기동했다. 디스크에 이미 있는 캐시 파일들의 인덱스를 읽었다. 이것은 시간이 걸릴 수 있었다. 수백만 개의 캐시 파일이 있는 경우, 그것들의 메타데이터를 모두 읽어 메모리 인덱스를 구축하는 작업이 필요하기 때문이다. Squid는 이 과정을 최적화하기 위해 'swap.state'라는 파일에 인덱스를 별도로 저장했다.
+    </p>
+
+    <p>
+      그리고 마침내 <code>serverConnectionsOpen()</code>. 성문이 열렸다. 설정 파일의 <code>http_port</code>, <code>https_port</code> 등으로 정의된 모든 포트에 소켓이 열렸다. <code>socket()</code>, <code>bind()</code>, <code>listen()</code>. 이제 외부에서 TCP 연결이 들어올 수 있었다.
+    </p>
+
+    <p>
+      마지막으로 이웃 피어들이 준비됐다.
+    </p>
+
+    <pre><code>neighbors_init();</code></pre>
+
+    <p>
+      <code>src/neighbors.cc</code>가 설정에 정의된 <code>cache_peer</code>들의 목록을 초기화했다. 이웃 캐시 서버들. 나중에 캐시 미스가 발생했을 때 먼저 이웃에게 물어볼 것이다.
+    </p>
+
+    <p>
+      그리고 주기적인 이벤트들이 등록됐다.
+    </p>
+
+    <pre><code>eventAdd("storeMaintain", Store::Maintain, nullptr, 1.0, 1);
+eventAdd("ipcache_purgelru", ipcache_purgelru, nullptr, 10.0, 1);
+eventAdd("fqdncache_purgelru", fqdncache_purgelru, nullptr, 15.0, 1);
+eventAdd("memPoolCleanIdlePools", Mem::CleanIdlePools, nullptr, 15.0, 1);</code></pre>
+
+    <p>
+      이것들은 왕국의 정기 청소 일정이었다. 1초마다 캐시 창고를 점검하고, 10초마다 IP 캐시를 정리하고, 15초마다 FQDN 캐시를 정리하고, 15초마다 유휴 메모리 풀을 OS에 반환하는 작업들.
+    </p>
+
+    <p>
+      모든 신하가 깨어났다. 모든 시스템이 준비됐다. 왕국이 완전히 기동됐다.
+    </p>
+
+    <p>
+      이제 심장을 기동할 시간이었다.
+    </p>
+
+    <!-- ══════════════════════════════════
+         제6장
+    ══════════════════════════════════ -->
+    <div id="ch6" class="chapter-anchor"></div>
+    <h2>제6장 — 수레바퀴 어른의 심장</h2>
+
+    <p>
+      왕국이 살아있으려면 심장이 필요했다. 단순하고, 지치지 않고, 절대 멈추지 않는 심장.
+    </p>
+
+    <p>
+      그것이 수레바퀴 어른이었다. <code>src/EventLoop.cc</code>.
+    </p>
+
+    <pre><code>EventLoop mainLoop;
+mainLoop.registerEngine(new SignalEngine(mainLoop));
+mainLoop.run();</code></pre>
+
+    <p>
+      <code>mainLoop.run()</code>이 불리는 순간, 제어권이 수레바퀴 어른에게 넘어갔다. 그리고 그는 이것을 절대 돌려주지 않았다. 이 함수가 반환하는 것은 Squid가 종료될 때뿐이었다.
+    </p>
+
+    <p>
+      수레바퀴 어른의 심장 박동은 이 한 줄이었다.
+    </p>
+
+    <pre><code>void EventLoop::run() {
+    while (!runOnce());
+}</code></pre>
+
+    <p>
+      단 두 줄. 하지만 이 두 줄 안에 왕국의 모든 생명이 담겨 있었다.
+    </p>
+
+    <p>
+      <code>runOnce()</code>가 <code>false</code>를 반환하는 한 계속 돈다. 그것이 전부였다. 보이지 않는 복잡성은 모두 <code>runOnce()</code> 안에 있었다.
+    </p>
+
+    <p>
+      수레바퀴 어른은 왕국의 모든 사건을 목격했다. 소켓에 새 데이터가 왔는지, 타이머가 만료됐는지, 디스크 I/O가 완료됐는지, 시그널이 왔는지. 모든 것을 감시했고, 해야 할 일이 생기면 처리했다.
+    </p>
+
+    <p>
+      하지만 그는 직접 하지 않았다. 처리할 것들을 **비동기 콜백 큐**에 쌓아두고, 그것들을 순서대로 실행했다. 이 방식이 왕국에서 수천 개의 일이 동시에 진행되는 것처럼 보이게 만드는 비결이었다.
+    </p>
+
+    <!-- ══════════════════════════════════
+         제7장
+    ══════════════════════════════════ -->
+    <div id="ch7" class="chapter-anchor"></div>
+    <h2>제7장 — 박동의 비밀</h2>
+
+    <p>
+      한 번의 박동, <code>runOnce()</code>. 안에서 무슨 일이 일어나는지 따라가보자.
+    </p>
+
+    <p>
+      <strong>첫 번째 단계.</strong> 등록된 엔진들을 한 바퀴 돌아보며 논블로킹으로 확인한다.
+    </p>
+
+    <pre><code>for (auto engine : engines_) {
+    if (engine == primaryEngine_) continue;  // 주요 엔진은 나중에
+    engine->checkEvents(0);  // 0 = 블로킹하지 말 것
+}</code></pre>
+
+    <p>
+      SignalEngine, StoreEngine 등의 보조 엔진들이 차례로 확인됐다. 각 엔진은 자신이 담당하는 영역에 처리할 것이 있으면 <code>AsyncCall</code> 객체들을 큐에 밀어넣었다.
+    </p>
+
+    <p>
+      <strong>두 번째 단계.</strong> 큐에 쌓인 콜백들을 전부 실행한다.
+    </p>
+
+    <pre><code>bool sawActivity = true;
+while (sawActivity) {
+    sawActivity = false;
+    while (auto call = callQueue.dequeue()) {
+        call->make();
+        sawActivity = true;
+    }
+    // 각 엔진 다시 확인
+    for (auto engine : engines_) {
+        engine->checkEvents(0);
+    }
+}</code></pre>
+
+    <p>
+      큐가 비어있을 때까지 계속 꺼내 실행했다. 한 콜백이 새로운 콜백을 큐에 넣으면, 그것도 처리했다. 모든 것이 처리된 후에야 다음 단계로 넘어갔다.
+    </p>
+
+    <p>
+      이 단계에서 많은 일이 일어났다. DNS 응답 처리. HTTP 요청 파싱 결과 처리. ACL 검사 결과 처리. 캐시에서 읽어온 데이터를 클라이언트에게 전송. 오리진 서버에서 받은 데이터를 캐시에 저장. 수백, 수천 개의 콜백들이 연쇄적으로 실행됐다.
+    </p>
+
+    <p>
+      <strong>세 번째 단계.</strong> 주요 엔진을 블로킹 모드로 호출한다.
+    </p>
+
+    <pre><code>primaryEngine_->checkEvents(loop_delay);</code></pre>
+
+    <p>
+      주요 엔진은 <code>CommSelectEngine</code> 또는 <code>CommEPollEngine</code>이었다. Linux에서는 거의 항상 <code>epoll</code>을 사용하는 후자. 이 엔진이 <code>epoll_wait(loop_delay)</code>를 불렀다.
+    </p>
+
+    <p>
+      여기서 수레바퀴 어른은 잠시 멈췄다. 기다렸다. 운영체제에 물었다. "어떤 소켓에 새 이벤트가 있나요? 없으면 최대 <code>loop_delay</code> 밀리초만 기다릴게요."
+    </p>
+
+    <p>
+      새 TCP 연결이 도착했거나, 어떤 소켓에 읽을 데이터가 생겼거나, 어떤 소켓에 쓸 공간이 생겼거나, 타임아웃이 됐거나. 그런 이벤트가 발생하면 <code>epoll_wait()</code>가 반환됐다. 이 이벤트들도 적절한 콜백으로 변환되어 큐에 쌓였다.
+    </p>
+
+    <p>
+      <strong>네 번째 단계.</strong> 시간 서비스를 갱신한다.
+    </p>
+
+    <pre><code>timeService_->tick();</code></pre>
+
+    <p>
+      Squid의 내부 시계인 <code>squid_curtime</code>이 갱신됐다. 만료된 이벤트 타이머들이 실행됐다.
+    </p>
+
+    <p>
+      그리고 이 사이클이 다시 시작됐다. 영원히. 종료 신호가 오기 전까지는.
+    </p>
+
+    <p>
+      이 박동의 리듬이 왕국의 숨결이었다. 일반적인 부하에서는 박동이 빨랐다. 밀리초마다 수십 개의 콜백이 실행됐다. 조용한 시간에는 박동이 느려졌다. <code>epoll_wait()</code>가 긴 타임아웃으로 잠들었다가, 새 연결이 오면 즉시 깨어났다.
+    </p>
+
+    <div class="tech-box">
+      <div class="tech-box-header">
+        <div class="tech-box-icon">🔄</div>
+        <span class="tech-box-title">기술 해설 — EventLoop와 비동기 I/O (src/EventLoop.cc, src/comm/)</span>
+        <span class="tech-box-toggle" style="margin-left:auto;color:var(--text-muted);font-family:var(--font-mono);font-size:.8rem">▼</span>
+      </div>
+      <div class="tech-box-body">
+        <p>Squid의 이벤트 루프는 Node.js의 libuv, Python의 asyncio와 같은 개념이지만 독자적으로 구현됐다.</p>
+        <p><strong>등록된 엔진들:</strong></p>
+        <ul>
+          <li><code>CommEPollEngine</code> (src/comm/EpollPoller.cc) — 주요 엔진. <code>epoll_wait()</code>로 소켓 이벤트 감시</li>
+          <li><code>SignalEngine</code> — UNIX 시그널을 이벤트 루프 안으로 통합</li>
+          <li><code>StoreEngine</code> — 캐시 유지보수</li>
+          <li><code>TimeEngine</code> — 주기적 타이머 관리</li>
+        </ul>
+        <p><strong>콜백 메커니즘 (src/base/AsyncCall.h):</strong></p>
+        <pre><code>// 콜백 생성 예시
+auto call = asyncCallback(33, 5,     // 섹션 33, 레벨 5
+    ConnStateData::readNextRequest,   // 실제 함수
+    this);                             // 대상 객체
+// 이벤트 루프가 다음 박동에 실행
+</code></pre>
+        <p><code>CbcPointer</code>로 감싸진 콜백은 대상 객체가 삭제됐으면 자동으로 무시된다. 댕글링 포인터 문제 방지의 핵심.</p>
+        <p><strong>성능 원칙:</strong> 이벤트 루프 스레드에서 실행되는 모든 코드는 빠르게 끝나야 한다. 1ms 이상 걸리는 작업은 비동기 패턴으로 처리하거나 외부 헬퍼로 위임한다.</p>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════
+         제8장
+    ══════════════════════════════════ -->
+    <div id="ch8" class="chapter-anchor"></div>
+    <h2>제8장 — 성문이 열리다</h2>
+
+    <p>
+      이벤트 루프가 돌기 시작했다. 첫 번째 박동. 두 번째 박동. 세 번째 박동.
+    </p>
+
+    <p>
+      아직 아무것도 없었다. 소켓에 이벤트가 없었다. 큐가 비어있었다. <code>epoll_wait()</code>가 조용히 기다렸다.
+    </p>
+
+    <p>
+      그러다 성문 앞에 뭔가가 나타났다.
+    </p>
+
+    <p>
+      회사 어딘가의 직원 컴퓨터에서 웹 브라우저가 열렸다. 누군가 주소창에 URL을 입력하고 엔터를 눌렀다. 브라우저는 프록시 설정을 확인했다. <code>192.168.1.1:3128</code>. Squid가 있는 곳.
+    </p>
+
+    <p>
+      브라우저가 TCP 연결을 시도했다. <code>connect()</code> 시스템 콜. SYN 패킷이 네트워크를 타고 날아갔다.
+    </p>
+
+    <p>
+      네트워크 인터페이스 카드가 그것을 받았다. 커널의 네트워크 스택이 처리했다. 포트 3128의 리슨 소켓에 이벤트가 발생했다.
+    </p>
+
+    <p>
+      <code>epoll_wait()</code>가 깨어났다.
+    </p>
+
+    <p>
+      이벤트 루프가 활성화됐다. <code>CommEPollEngine</code>이 이벤트를 처리했다. 리슨 소켓에 새 연결 이벤트. 등록된 콜백을 큐에 쌓았다.
+    </p>
+
+    <p>
+      <code>Comm::TcpAcceptor::acceptOne()</code>의 콜백이 실행됐다.
+    </p>
+
+    <pre><code>// src/comm/TcpAcceptor.cc
+void Comm::TcpAcceptor::acceptOne() {
+    // accept() 시스템 콜로 새 소켓 생성
+    auto newSocket = accept(listenSocket, &remoteAddr, &addrLen);
+    // 새 소켓을 non-blocking으로 설정
+    fcntl(newSocket, F_SETFL, O_NONBLOCK);
+    // 등록된 콜백 (httpAccept 또는 httpsAccept) 호출
+    notifyNewConnection(newSocket, remoteAddr);
+}</code></pre>
+
+    <p>
+      <code>accept()</code>가 성공했다. 새 TCP 소켓이 생겼다. SYN-ACK가 전송됐다. 3-way handshake가 완료됐다. 이제 클라이언트와 Squid 사이에 TCP 연결이 확립됐다.
+    </p>
+
+    <p>
+      그리고 <code>httpAccept()</code>가 불렸다.
+    </p>
+
+    <p>
+      성문이 열렸다.
+    </p>
+
+    <!-- ══════════════════════════════════
+         제9장
+    ══════════════════════════════════ -->
+    <div id="ch9" class="chapter-anchor"></div>
+    <h2>제9장 — 첫 번째 손님</h2>
+
+    <p>
+      <code>src/client_side.cc</code>의 <code>httpAccept()</code> 함수. 문지기 코네스타가 성문 앞으로 달려나오는 순간.
+    </p>
+
+    <pre><code>static void httpAccept(const CommAcceptCbParams &amp;params) {
+    if (params.flag != Comm::OK) {
+        // 연결 수락 실패
+        return;
+    }
+    // ConnStateData 생성 — 이 연결을 관리할 객체
+    auto *connState = new ConnStateData(params);
+    // 읽기 시작
+    connState->readNextRequest();
+}</code></pre>
+
+    <p>
+      <code>ConnStateData</code> 객체가 태어났다. 이것이 문지기 코네스타였다. 하나의 TCP 연결 전체를 관리하는 책임을 가진 객체. 그 안에는:
+    </p>
+
+    <ul style="margin:1rem 0 1.5rem 2rem;font-family:var(--font-sans);color:var(--text-secondary);line-height:2">
+      <li><code>clientConnection</code> — 실제 TCP 소켓</li>
+      <li><code>inBuf</code> (SBuf 타입) — 클라이언트로부터 데이터를 받는 수신 버퍼</li>
+      <li><code>pipelinePrefetchMax</code> — HTTP 파이프라이닝 설정</li>
+      <li><code>port</code> — 이 연결이 들어온 포트의 설정</li>
+      <li><code>flags</code> — 이 연결의 상태 플래그들</li>
+    </ul>
+
+    <p>
+      코네스타는 창문 밖을 내다봤다. 저 멀리, 네트워크 너머에 클라이언트가 있었다. 아직 아무 말도 하지 않았다. TCP 연결만 맺어진 상태.
+    </p>
+
+    <p>
+      코네스타가 읽기를 시작했다.
+    </p>
+
+    <pre><code>void ConnStateData::readNextRequest() {
+    // 타임아웃 설정 (clientRequestTimeout)
+    commSetConnTimeout(clientConnection,
+        Config.Timeout.request, ...);
+    // 읽기 이벤트 등록
+    Comm::Read(clientConnection,
+        clientReadRequest, this);
+}</code></pre>
+
+    <p>
+      <code>Comm::Read()</code>가 소켓에 읽기 이벤트를 등록했다. "이 소켓에 데이터가 오면 <code>clientReadRequest()</code>를 불러달라." 그리고 제어권을 이벤트 루프에게 돌려줬다.
+    </p>
+
+    <p>
+      왕국은 다른 일들을 처리했다. 다른 연결들, 다른 타이머들. 수레바퀴가 돌았다.
+    </p>
+
+    <p>
+      그러다 클라이언트가 말했다.
+    </p>
+
+    <p>
+      네트워크 데이터가 왔다. HTTP 요청이. <code>epoll</code>이 이것을 잡았다. 이벤트 루프가 깨어났다. 콜백이 큐에 쌓였다.
+    </p>
+
+    <p>
+      <code>clientReadRequest()</code>가 실행됐다. 소켓에서 데이터를 읽었다. <code>inBuf</code>에 저장했다.
+    </p>
+
+    <p>
+      하지만 한 번에 다 오지 않을 수 있었다. TCP는 스트림이다. HTTP 요청이 여러 패킷에 나뉘어 올 수 있었다. 코네스타는 참을성 있게 기다렸다. 데이터가 쌓일 때마다 파싱을 시도했다.
+    </p>
+
+    <p>
+      마침내 완전한 HTTP 요청이 버퍼에 모였다.
+    </p>
+
+    <div class="scene-break">* * *</div>
+
+    <p>
+      버퍼 안의 내용:
+    </p>
+
+    <pre><code>GET http://www.example.com/index.html HTTP/1.1\r\n
+Host: www.example.com\r\n
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)\r\n
+Accept: text/html,application/xhtml+xml\r\n
+Accept-Language: ko-KR,ko;q=0.9\r\n
+Accept-Encoding: gzip, deflate\r\n
+Connection: keep-alive\r\n
+\r\n</code></pre>
+
+    <p>
+      손님이 말했다. 코네스타가 들었다.
+    </p>
+
+    <!-- ══════════════════════════════════
+         제10장
+    ══════════════════════════════════ -->
+    <div id="ch10" class="chapter-anchor"></div>
+    <h2>제10장 — 여권을 만들다</h2>
+
+    <p>
+      코네스타가 손님의 말을 이해해야 했다. 단순한 텍스트가 아닌, 구조화된 정보로.
+    </p>
+
+    <p>
+      <code>Http1::RequestParser</code>가 작동했다. <code>src/parser/</code> 디렉터리의 HTTP/1.1 파서. RFC 7230의 문법을 따라, 버퍼 안의 텍스트를 분해했다.
+    </p>
+
+    <pre><code>// 파싱 과정 개념
+Http::Stream *ConnStateData::parseRequests() {
+    auto hp = std::make_unique&lt;Http1::RequestParser&gt;();
+    hp->parse(inBuf);
+
+    if (hp->needsMoreData()) {
+        // 아직 데이터 부족 — 더 기다린다
+        return nullptr;
+    }
+
+    if (hp->parseError()) {
+        // HTTP 문법 오류 — 400 Bad Request
+        return sendSyntaxError(...);
+    }
+
+    return parseHttpRequest(hp.get());
+}</code></pre>
+
+    <p>
+      파서는 첫 번째 줄부터 시작했다. <code>GET http://www.example.com/index.html HTTP/1.1</code>. 공백으로 세 부분을 나눴다.
+    </p>
+
+    <p>
+      첫 번째 부분: <code>GET</code>. HTTP 메서드. <code>src/http/RequestMethod.h</code>의 <code>HttpRequestMethod</code> 열거형에서 찾아 <code>Http::METHOD_GET</code>으로 변환.
+    </p>
+
+    <p>
+      두 번째 부분: <code>http://www.example.com/index.html</code>. URI. <code>src/anyp/Uri.h</code>의 <code>AnyP::Uri</code> 클래스가 이것을 분해했다. 스킴(<code>http</code>), 호스트(<code>www.example.com</code>), 경로(<code>/index.html</code>).
+    </p>
+
+    <p>
+      세 번째 부분: <code>HTTP/1.1</code>. 버전. 1.1.
+    </p>
+
+    <p>
+      그다음, 헤더들을 파싱했다. 줄 단위로. 콜론으로 이름과 값을 나눴다. <code>HttpHeader</code> 객체에 채워 넣었다.
+    </p>
+
+    <p>
+      이 모든 정보가 하나의 객체 안으로 들어갔다. <code>HttpRequest</code>. 손님의 여권.
+    </p>
+
+    <pre><code>// src/HttpRequest.h — 핵심 멤버들
+class HttpRequest {
+    HttpRequestMethod method;  // GET
+    AnyP::Uri url;             // http://www.example.com/index.html
+    HttpHeader header;         // Host, User-Agent, Accept 등
+    Ip::Address client_addr;  // 손님의 IP (예: 192.168.1.100)
+    Ip::Address my_addr;       // 우리 주소 (예: 192.168.1.1:3128)
+    RequestFlags flags;        // cachable? hierarchical? etc.
+    time_t ims;                // If-Modified-Since (없으면 -1)
+    Auth::UserRequest::Pointer auth_user_request; // 인증 상태
+    HierarchyLogEntry hier;    // 어디서 어떻게 처리됐는지 기록
+    MasterXaction::Pointer masterXaction; // 이 트랜잭션의 식별자
+};</code></pre>
+
+    <p>
+      여권이 만들어졌다. 코네스타는 이것을 받아들었다. 손님의 모든 정보가 담긴 16필드짜리 문서.
+    </p>
+
+    <p>
+      이제 다음 단계였다. 코네스타의 역할은 여기까지였다. 손님을 받아 여권을 만들어 왕국 내부로 안내하는 것. 그 이후는 다른 이들의 일이었다.
+    </p>
+
+    <pre><code>clientProcessRequest(conn, hp, context);</code></pre>
+
+    <p>
+      손님이 왕국 안으로 들어갔다.
+    </p>
+
+    <div class="tech-box">
+      <div class="tech-box-header">
+        <div class="tech-box-icon">📨</div>
+        <span class="tech-box-title">기술 해설 — HTTP 파싱과 HttpRequest (src/parser/, src/HttpRequest.h)</span>
+        <span class="tech-box-toggle" style="margin-left:auto;color:var(--text-muted);font-family:var(--font-mono);font-size:.8rem">▼</span>
+      </div>
+      <div class="tech-box-body">
+        <p><code>src/parser/</code> 디렉터리의 <code>Http1::RequestParser</code>는 RFC 7230 문법을 따른다. 파서는 상태 기계(state machine) 방식으로 구현됐다 — 데이터가 부분적으로 왔을 때 상태를 보존하고 나중에 이어서 처리할 수 있다.</p>
+        <p><strong>파싱의 복잡성:</strong></p>
+        <ul>
+          <li>HTTP 메서드는 대소문자 구분 (GET ≠ get)</li>
+          <li>헤더 이름은 대소문자 무관 (Host == host == HOST)</li>
+          <li>줄 끝은 CRLF(<code>\r\n</code>)이어야 하지만, LF(<code>\n</code>)만 있어도 관대하게 처리</li>
+          <li>헤더 연속(line folding) 처리</li>
+          <li>Content-Length와 Transfer-Encoding: chunked의 충돌 처리</li>
+        </ul>
+        <p><strong>HTTPS 요청의 특이점:</strong> 클라이언트가 <code>CONNECT www.example.com:443 HTTP/1.1</code>을 보내면, 파서는 이것을 특수 처리한다. 메서드가 <code>CONNECT</code>이고 URI가 <code>host:port</code> 형식이면 터널 요청임을 인식한다.</p>
+        <p><strong>HTTP/2 지원:</strong> Squid는 클라이언트 측에서 HTTP/2를 지원한다 (TLS ALPN 협상). 하지만 오리진 서버와의 연결은 여전히 HTTP/1.1을 주로 사용한다.</p>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════
+         제11장
+    ══════════════════════════════════ -->
+    <div id="ch11" class="chapter-anchor"></div>
+    <h2>제11장 — 성 안의 세계</h2>
+
+    <p>
+      <code>clientProcessRequest()</code> 함수 안에서, 왕국의 처리 시스템이 손님을 맞았다.
+    </p>
+
+    <p>
+      여기서 중요한 분기가 있었다. 먼저 확인했다: 이것이 <code>CONNECT</code> 요청인가?
+    </p>
+
+    <pre><code>if (request->method == Http::METHOD_CONNECT) {
+    // CONNECT 요청 → 터널 모드
+    tunnelStart(http);
+    return;
+}</code></pre>
+
+    <p>
+      <code>CONNECT</code> 메서드는 HTTPS 통신을 위해 쓰인다. 클라이언트가 "이 서버로 가는 터널을 뚫어달라"고 요청하는 것. 이 경우 Squid는 HTTP 내용을 처리하지 않고, 단순히 두 소켓 사이에서 바이트를 중계한다. 이것은 4권에서 자세히 다룬다.
+    </p>
+
+    <p>
+      <code>CONNECT</code>가 아니라면, 일반 HTTP 요청 처리 경로로 갔다.
+    </p>
+
+    <pre><code>ClientHttpRequest *http = new ClientHttpRequest(conn);
+http->request = request;
+context->http = http;
+</code></pre>
+
+    <p>
+      <code>ClientHttpRequest</code> 객체가 탄생했다. 청지기. 하나의 HTTP 트랜잭션 전체 — 요청 하나와 그에 대한 응답 하나 — 를 관리하는 객체였다.
+    </p>
+
+    <p>
+      <code>ConnStateData</code>와 <code>ClientHttpRequest</code>의 차이는 중요했다. <code>ConnStateData</code>는 TCP 연결 수준이었다. 하나의 TCP 연결 위에서 HTTP Keep-Alive를 사용하면 여러 개의 HTTP 요청이 순서대로 오갈 수 있다. 각 HTTP 요청마다 새로운 <code>ClientHttpRequest</code>가 만들어졌다. 하지만 <code>ConnStateData</code>는 연결이 끊어질 때까지 하나가 계속 살아있었다.
+    </p>
+
+    <p>
+      <code>ClientHttpRequest</code>가 만들어지자마자, callout 체인이 시작됐다.
+    </p>
+
+    <pre><code>http->doCallouts();</code></pre>
+
+    <p>
+      <code>src/client_side_request.cc</code>의 <code>ClientRequestContext::doCallouts()</code>. 교통 정리관이 나선 것이다. 손님이 왕국을 통과하기 위해 거쳐야 할 검문소들의 순서를 관리하는 함수.
+    </p>
+
+    <p>
+      검문소 목록은 이랬다:
+    </p>
+
+    <ol style="margin:1rem 0 1.5rem 2rem;font-family:var(--font-sans);color:var(--text-secondary);line-height:2.2">
+      <li><strong>호스트 헤더 보안 검사</strong> — Host 헤더가 URL과 일치하는지</li>
+      <li><strong>HTTP 접근 검사</strong> — ACL로 허용/거부 판정 (제2권의 주제)</li>
+      <li><strong>ICAP 적응</strong> (있으면) — 외부 서비스가 요청을 수정할 수 있게</li>
+      <li><strong>URL 리다이렉터</strong> (있으면) — URL을 다른 곳으로 변경</li>
+      <li><strong>적응 후 HTTP 접근 검사</strong> — 수정된 요청에 대해 다시 ACL 검사</li>
+      <li><strong>Store ID 변환</strong> — 캐시 키 커스텀화</li>
+      <li><strong>No-Cache 규칙 검사</strong> — 캐시하지 말아야 할 요청인지</li>
+      <li><strong>SSL Bump 결정</strong> — TLS 가로채기 여부</li>
+      <li><strong>최종 처리</strong> — 캐시 조회 또는 포워딩</li>
+    </ol>
+
+    <p>
+      각 단계는 비동기였다. 단계를 시작하고, 결과를 기다리고, 결과가 오면 다음 단계로 넘어갔다. 기다리는 동안 이벤트 루프는 다른 일들을 처리했다.
+    </p>
+
+    <p>
+      손님은 아직 기다리고 있었다. 브라우저 화면에는 로딩 아이콘이 돌고 있었다. 하지만 왕국 안에서는 이미 많은 일들이 시작됐다.
+    </p>
+
+    <!-- ══════════════════════════════════
+         제12장
+    ══════════════════════════════════ -->
+    <div id="ch12" class="chapter-anchor"></div>
+    <h2>제12장 — 동시성의 마법</h2>
+
+    <p>
+      첫 번째 손님이 법정을 기다리는 동안, 성문 앞에 두 번째 손님이 나타났다.
+    </p>
+
+    <p>
+      그리고 세 번째, 네 번째, 열 번째, 백 번째...
+    </p>
+
+    <p>
+      수레바퀴 어른은 당황하지 않았다. 이것이 바로 그가 설계된 방식이었다.
+    </p>
+
+    <p>
+      각 TCP 연결마다 <code>ConnStateData</code> 객체 하나가 생겼다. 각 HTTP 트랜잭션마다 <code>ClientHttpRequest</code> 객체 하나가 생겼다. 이 객체들은 모두 동시에 힙 메모리 안에 존재했다. 서로의 존재를 방해하지 않았다.
+    </p>
+
+    <p>
+      어떻게 이게 가능한가?
+    </p>
+
+    <p>
+      비결은 "기다리지 않는 것"이었다.
+    </p>
+
+    <p>
+      연결 A의 <code>ClientHttpRequest</code>가 ACL 검사를 기다리는 동안, 수레바퀴 어른은 연결 B의 소켓에서 데이터를 읽었다. 연결 B의 파싱이 끝나는 동안, 연결 C에 캐시 데이터를 전송했다. 연결 C의 전송이 진행되는 동안, 연결 D의 DNS 결과를 처리했다.
+    </p>
+
+    <p>
+      누구도 누군가를 위해 기다리지 않았다. 모두가 자신의 현재 단계에서 할 수 있는 것을 했다. 할 것이 없으면 그냥 이벤트를 기다렸다. 이것이 비동기의 본질이었다.
+    </p>
+
+    <p>
+      실제 숫자로 보면: 일반적인 Squid 설치에서 수천 개의 동시 연결이 유지될 수 있었다. 각 연결이 Thread를 할당받는 전통적인 방식이었다면, 수천 개의 스레드가 필요했다. 스레드 하나에 수십 킬로바이트의 스택이 필요하니, 1000개의 스레드면 수십 메가바이트가 그냥 낭비됐다. 게다가 스레드 간 컨텍스트 스위칭 오버헤드.
+    </p>
+
+    <p>
+      Squid의 방식은 달랐다. 각 연결에는 <code>ConnStateData</code> 객체만 있었다. 메모리는 실제로 사용하는 만큼만. CPU는 실제로 처리할 것이 있을 때만. 낭비가 없었다.
+    </p>
+
+    <p>
+      물론 한계도 있었다. CPU를 오래 점유하는 작업은 문제가 됐다. 복잡한 정규식 ACL이나 무거운 암호화 연산이 이벤트 루프 스레드에서 실행되면, 그 시간 동안 다른 모든 연결이 기다려야 했다. 이런 작업들은 외부 헬퍼 프로세스로 위임하거나, SMP 모드에서 여러 워커 프로세스로 분산했다.
+    </p>
+
+    <div class="tech-box">
+      <div class="tech-box-header">
+        <div class="tech-box-icon">⚡</div>
+        <span class="tech-box-title">기술 해설 — 단일 스레드 비동기 vs 멀티스레드 (AsyncJob, RefCount)</span>
+        <span class="tech-box-toggle" style="margin-left:auto;color:var(--text-muted);font-family:var(--font-mono);font-size:.8rem">▼</span>
+      </div>
+      <div class="tech-box-body">
+        <p><strong>Squid의 비동기 패턴:</strong> 모든 장기 작업은 <code>AsyncJob</code>을 상속받는다 (<code>src/base/AsyncJob.h</code>):</p>
+        <pre><code>class MyJob : public AsyncJob {
+    void start() override {
+        // 비동기 작업 등록 후 반환
+        // (이벤트 루프를 블로킹하지 않음)
+    }
+    bool doneAll() const override { return finished_; }
+    void swanSong() override { /* 정리 */ }
+};</code></pre>
+        <p><strong>참조 카운팅:</strong> <code>src/base/RefCount.h</code>의 <code>RefCountable</code>. 여러 곳에서 같은 객체를 참조하면 참조 카운트가 올라가고, 마지막 참조가 없어지면 자동 삭제. C++의 <code>shared_ptr</code>과 유사하지만 Squid 전용으로 최적화됨.</p>
+        <p><strong>CbcPointer (Callback-based Counted Pointer):</strong> 콜백이 실행될 때 대상 객체가 이미 삭제됐으면 콜백을 무시한다. 비동기 세계에서 필수적인 안전장치.</p>
+        <pre><code>// src/base/CbcPointer.h
+template&lt;typename C&gt; class CbcPointer {
+    bool valid() const;  // 객체가 아직 살아있는가?
+    C *raw();            // 살아있으면 포인터 반환
+};</code></pre>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════
+         제13장
+    ══════════════════════════════════ -->
+    <div id="ch13" class="chapter-anchor"></div>
+    <h2>제13장 — 타이머들의 행진</h2>
+
+    <p>
+      왕국에는 주기적인 행사들이 있었다. 매일, 매시간, 매분, 매초 반복되는 의식들.
+    </p>
+
+    <p>
+      <code>src/event.cc</code>의 이벤트 시스템. 타이머들의 관리자.
+    </p>
+
+    <p>
+      초기화 때 등록된 이벤트들이 각자의 시각을 기다리고 있었다. 수레바퀴 어른이 박동할 때마다, 현재 시각과 이벤트 예정 시각을 비교했다. 시각이 됐으면 실행했다. 그리고 다음 번 실행 시각을 다시 예약했다.
+    </p>
+
+    <p>
+      1초마다: <strong>storeMaintain</strong>이 깨어났다. <code>Store::Maintain()</code>. 캐시 창고를 돌아다니며 만료된 것들을 정리했다. 용량이 넘치면 교체 정책에 따라 오래된 것들을 내보냈다.
+    </p>
+
+    <p>
+      5초마다: <strong>statMaintain</strong>이 깨어났다. 통계를 갱신했다. 초당 요청 수, 캐시 히트율, 대역폭 사용량.
+    </p>
+
+    <p>
+      10초마다: <strong>ipcache_purgelru</strong>가 깨어났다. IP 캐시에서 오래된 항목들을 청소했다. DNS TTL이 만료된 것들.
+    </p>
+
+    <p>
+      15초마다: <strong>fqdncache_purgelru</strong>가 깨어났다. FQDN 캐시 청소.
+    </p>
+
+    <p>
+      15초마다: <strong>memPoolCleanIdlePools</strong>가 깨어났다. 오랫동안 사용하지 않은 메모리 풀 블록들을 운영체제에 반환했다.
+    </p>
+
+    <p>
+      1분마다: <strong>neighborAlive</strong>가 확인했다. 피어 캐시들이 아직 살아있는지. ICP/HTCP 핑을 보내고 응답을 확인했다. 응답이 없으면 그 피어를 "죽은 것"으로 표시했다.
+    </p>
+
+    <p>
+      이 타이머들이 돌아가는 모습은 마치 조선 시대 왕궁에서 시각을 알리는 북소리 같았다. 정해진 간격으로, 정해진 일을 수행하고, 다시 자리로 돌아가는 의식.
+    </p>
+
+    <p>
+      왕국이 혼자 자기 자신을 관리했다. 운영자가 쉬는 동안에도, 새벽 3시에도, 주말에도. 타이머들은 쉬지 않았다.
+    </p>
+
+    <!-- ══════════════════════════════════
+         제14장
+    ══════════════════════════════════ -->
+    <div id="ch14" class="chapter-anchor"></div>
+    <h2>제14장 — SMP — 왕국의 복사</h2>
+
+    <p>
+      왕국에는 비밀이 있었다.
+    </p>
+
+    <p>
+      현대의 서버는 CPU 코어가 여러 개다. 4개, 8개, 16개, 32개... 하지만 Squid의 기본 설계는 단일 스레드였다. 하나의 이벤트 루프, 하나의 스레드. 하나의 코어만 사용한다.
+    </p>
+
+    <p>
+      이것은 낭비였다. 그래서 SMP(Symmetric Multi-Processing) 모드가 만들어졌다.
+    </p>
+
+    <pre><code># squid.conf
+workers 4</code></pre>
+
+    <p>
+      이 한 줄이면 Squid는 4개의 워커 프로세스를 만들었다. 각각은 독립적인 이벤트 루프를 가졌다. 각각 다른 CPU 코어에서 실행될 수 있었다.
+    </p>
+
+    <p>
+      하지만 독립적이기만 하면 문제가 생겼다. 워커 A가 어떤 URL을 캐싱했는데, 워커 B는 그것을 몰라서 다시 오리진에서 가져온다면? 낭비였다.
+    </p>
+
+    <p>
+      그래서 공유 메모리가 도입됐다.
+    </p>
+
+    <pre><code>// src/ipc/mem/ — IPC 메모리 관리
+// 워커들이 공유하는 메모리 세그먼트
+// StoreEntry 상태, 캐시 인덱스 등을 공유</code></pre>
+
+    <p>
+      조율자(Coordinator) 프로세스가 중간에서 워커들을 관리했다. <code>src/ipc/Coordinator.cc</code>. 연결 분배, 공유 메모리 조율, 워커 상태 모니터링.
+    </p>
+
+    <pre><code>// src/main.cc
+if (IamCoordinatorProcess()) {
+    Ipc::Coordinator::Start();
+} else if (IamWorkerProcess()) {
+    mainLoop.run();  // 일반 이벤트 루프
+} else if (IamDiskProcess()) {
+    DiskdUpdateQueue();  // 디스크 I/O 전용
+}</code></pre>
+
+    <p>
+      프로세스 타입에 따라 다른 역할. 조율자는 전체를 관리하고, 워커들은 실제 요청을 처리하고, 디스크 프로세스는 캐시 파일을 읽고 쓴다.
+    </p>
+
+    <p>
+      같은 URL을 여러 워커가 동시에 요청받으면 어떻게 됐나? Collapsed Forwarding. <code>src/CollapsedForwarding.cc</code>. 첫 번째 워커가 오리진에서 가져오기 시작하면, 트랜지언트 스토어에 "이 URL 가져오는 중"이라는 표시가 남겨진다. 다른 워커들은 그것을 보고 기다린다. 데이터가 오면 모두 함께 받는다.
+    </p>
+
+    <p>
+      왕국이 복사됐다. 여러 개의 왕국이 하나처럼 움직였다.
+    </p>
+
+    <!-- ══════════════════════════════════
+         제15장
+    ══════════════════════════════════ -->
+    <div id="ch15" class="chapter-anchor"></div>
+    <h2>제15장 — 분기점에서</h2>
+
+    <p>
+      손님이 <code>doCallouts()</code>의 첫 번째 관문을 향해 걸어가고 있었다.
+    </p>
+
+    <p>
+      왕국의 성문이 열렸다. 첫 번째 손님이 들어왔다. 여권이 만들어졌다. 처리 시스템이 가동됐다.
+    </p>
+
+    <p>
+      이제 손님에게는 두 가지 미래가 있었다.
+    </p>
+
+    <p>
+      첫 번째 미래: 법정에서 거부당한다. 손님의 IP가 내부망이 아니거나, 요청한 URL이 금지된 것이거나, 허용되지 않는 포트로의 접속이거나. 403 Forbidden이 돌아간다. 여행이 끝난다.
+    </p>
+
+    <p>
+      두 번째 미래: 법정을 통과한다. 그러면 창고로 향한다. 창고에 이 URL에 대한 기억이 있는가? 있으면 바로 응답한다. 없으면 국경 밖으로 나간다.
+    </p>
+
+    <p>
+      이 분기점에 도달한 손님은 아무것도 모른다. 자신의 운명이 이미 결정되고 있다는 것을. 판관이 깨어나고 있다는 것을. 창고지기가 자물쇠를 준비하고 있다는 것을.
+    </p>
+
+    <p>
+      수레바퀴가 돈다.
+    </p>
+
+    <p>
+      왕국이 돌아간다.
+    </p>
+
+    <p>
+      이야기가 계속된다.
+    </p>
+
+    <div class="scene-break">✦ 제1권 끝 ✦</div>
+
+    <blockquote>
+      <p>"이벤트 루프를 이해하는 자는 Squid의 심장을 이해한다. 심장을 이해하는 자는 왕국 전체를 이해한다."</p>
+    </blockquote>
+
+    <!-- 챕터 네비 -->
+    <div class="chapter-nav">
+      <span class="chapter-nav-btn prev" style="opacity:.3;cursor:default">
+        <span>
+          <span class="nav-label">이전</span>
+          <span class="nav-title">시작</span>
+        </span>
+      </span>
+      <a href="vol2.html" class="chapter-nav-btn next">
+        <span>
+          <span class="nav-label">다음 권</span>
+          <span class="nav-title">제2권: 판관의 법정 →</span>
+        </span>
+      </a>
+    </div>
+
+  </article>
+</main>
+</div>
+
+<button class="mobile-menu-btn">☰</button>
+<script src="js/main.js"></script>
+</body>
+</html>

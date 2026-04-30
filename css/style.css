@@ -502,6 +502,26 @@ pre code { background: none; border: none; padding: 0; font-size: inherit; }
   border-color: var(--accent-gold);
   color: var(--accent-gold);
 }
+.sidebar-lang-link {
+  display: block;
+  margin-top: .75rem;
+  padding: .55rem;
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: .8rem;
+  text-align: center;
+  text-decoration: none;
+  transition: all .2s;
+  letter-spacing: .02em;
+}
+.sidebar-lang-link:hover {
+  border-color: var(--accent-gold);
+  color: var(--accent-gold);
+  background: rgba(201,168,76,.06);
+}
 
 /* ──── 본문 영역 ──── */
 .novel-main {

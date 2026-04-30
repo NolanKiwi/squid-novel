@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en" data-volume="3">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Vol.3 The Warehouse of Forgotten Things — The Squid Epic</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+</head>
+<body>
+
+<nav class="novel-topbar">
+  <a href="index.html" class="topbar-back">← The Squid Epic</a>
+  <div class="topbar-breadcrumb">
+    <span class="topbar-vol">VOLUME 3</span>
+    <span class="topbar-title">The Warehouse of Forgotten Things</span>
+  </div>
+  <div class="lang-switcher">
+    <span class="lang-btn active">EN</span>
+    <a href="/vol3.html" class="lang-btn">KO</a>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+</nav>
+
+<aside class="novel-sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-vol">VOLUME 3</div>
+    <div class="sidebar-title">The Warehouse of Forgotten Things</div>
+  </div>
+  <nav class="sidebar-toc">
+    <a href="#ch1" class="toc-item">Chapter 1 · The First Cache Hit</a>
+    <a href="#ch2" class="toc-item">Chapter 2 · The Storekeeper</a>
+    <a href="#ch3" class="toc-item">Chapter 3 · The Three Vaults</a>
+    <a href="#ch4" class="toc-item">Chapter 4 · The Object's Life</a>
+    <a href="#ch5" class="toc-item">Chapter 5 · The Key Maker</a>
+    <a href="#ch6" class="toc-item">Chapter 6 · The Freshness Oracle</a>
+    <a href="#ch7" class="toc-item">Chapter 7 · The Pattern of Patterns</a>
+    <a href="#ch8" class="toc-item">Chapter 8 · The Forgetfulness Law</a>
+    <a href="#ch9" class="toc-item">Chapter 9 · The LRU Wheel</a>
+    <a href="#ch10" class="toc-item">Chapter 10 · The Frequency Counter</a>
+    <a href="#ch11" class="toc-item">Chapter 11 · The Disk Scribes</a>
+    <a href="#ch12" class="toc-item">Chapter 12 · Collapsed Forwarding</a>
+    <a href="#ch13" class="toc-item">Chapter 13 · The Vary Puzzle</a>
+    <a href="#ch14" class="toc-item">Chapter 14 · The Purge Command</a>
+    <a href="#ch15" class="toc-item">Chapter 15 · Memory's Purpose</a>
+  </nav>
+</aside>
+
+<button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">☰</button>
+
+<main class="novel-main">
+
+  <header class="vol-hero">
+    <div class="vol-hero-num">VOLUME 3</div>
+    <h1 class="vol-hero-title">The Warehouse of Forgotten Things</h1>
+    <p class="vol-hero-sub">Cache, Memory, and Forgetting</p>
+    <p class="vol-hero-desc">
+      Everything changes after the second visit. The Storekeeper remembers what was
+      already fetched and will not fetch it again. Remembering is the kingdom's strength;
+      forgetting is its wisdom.
+    </p>
+  </header>
+
+  <!-- Chapter 1 -->
+  <article class="chapter" id="ch1">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 1</span>
+      <h2 class="chapter-title">The First Cache Hit</h2>
+    </div>
+    <div class="chapter-body">
+      <p>There is a moment that defines every caching proxy. The first time a requested object is already in storage. The first <strong>cache hit</strong>.</p>
+      <p>Before that moment, the proxy was merely a relay — a sophisticated middleman that added latency to every request. After that moment, it became something else: a warehouse that shortened the distance between desire and fulfillment.</p>
+      <p>The sequence was precise. The ACL judge had said ALLOW. ClientHttpRequest now consulted the <strong>Store::Controller</strong>. It called <code>storeGetPublic()</code> with the request's URL, passing through the key-generation machinery to produce a 128-bit MD5 hash. If that hash existed in the store index — if a StoreEntry was found with that key — the answer came not from the network but from memory or disk.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">src/client_side_request.cc — the cache lookup moment</div>
+        <pre><code>void
+ClientHttpRequest::checkNoCache()
+{
+    if (r->flags.noCache) {
+        // Client sent Cache-Control: no-cache — bypass the store
+        doCallouts();
+        return;
+    }
+    // Look up the store
+    StoreEntry *entry = storeGetPublicByRequest(r);
+    if (entry) {
+        http->storeEntry(entry); // cache hit path
+        processRequest();
+    } else {
+        // cache miss — must forward
+        doCallouts();
+    }
+}</code></pre>
+      </div>
+
+      <p>The first cache hit was the moment the warehouse justified its existence. Everything before it was infrastructure. Everything after it was reward.</p>
+    </div>
+  </article>
+
+  <!-- Chapter 2 -->
+  <article class="chapter" id="ch2">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 2</span>
+      <h2 class="chapter-title">The Storekeeper</h2>
+    </div>
+    <div class="chapter-body">
+      <p>The warehouse had a master: <strong>Store::Controller</strong>, implemented in <code>src/store/Controller.cc</code>. It was the single authority over all stored objects — what was remembered, what was forgotten, how much space remained, which tier to use for each object.</p>
+      <p>The Controller's primary interface was simple: <code>find()</code>, <code>create()</code>, <code>purge()</code>. But behind these simple verbs was a system of extraordinary complexity — a three-tier hierarchy where each tier had different characteristics and different rules.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">src/store/Controller.cc — the find() operation</div>
+        <pre><code>StoreEntry *
+Store::Controller::find(const cache_key *key)
+{
+    // Check transient store first (shared memory, SMP-safe)
+    if (auto *e = transients-&gt;find(key))
+        return e;
+
+    // Check memory cache
+    if (auto *e = mem_policy-&gt;findIn(memCache, key))
+        return e;
+
+    // Check disk cache
+    for (auto *disk : swapDirs) {
+        if (auto *e = disk-&gt;get(key))
+            return e;
+    }
+    return nullptr;
+}</code></pre>
+      </div>
+
+      <p>The Controller was also the destination for new objects arriving from the network. When the Forward Commander returned with a response, the Controller received the response body byte by byte, decided whether it was cacheable, and if so routed it to the appropriate tier. All while the client was simultaneously reading from the same stream — a technique called <strong>streaming store-and-serve</strong>.</p>
+      <blockquote class="inner-voice">The Storekeeper never slept. Every byte that passed through the proxy was weighed, assessed, and either remembered or discarded.</blockquote>
+    </div>
+  </article>
+
+  <!-- Chapter 3 -->
+  <article class="chapter" id="ch3">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 3</span>
+      <h2 class="chapter-title">The Three Vaults</h2>
+    </div>
+    <div class="chapter-body">
+      <p>The warehouse was not a single room. It was a hierarchy of three distinct vaults, each with different speed, capacity, and purpose.</p>
+      <p>The first vault was <strong>Transients</strong> — shared memory in SMP mode, used to coordinate workers. When multiple workers received requests for the same uncached object simultaneously, the Transients vault prevented them from all forwarding at once. One worker became the fetcher; the others waited for the result.</p>
+      <p>The second vault was <strong>Memory Cache</strong> — RAM. Fast, expensive, limited. Objects here were served in microseconds. The memory cache held the hottest, most recently accessed objects. Its size was controlled by <code>cache_mem</code> in squid.conf.</p>
+      <p>The third vault was <strong>Disk Cache</strong> — the <code>cache_dir</code> hierarchy. Slow, cheap, large. Objects here were served in milliseconds. Squid supported multiple disk cache implementations: <code>ufs</code> (synchronous Unix I/O), <code>aufs</code> (async threads), <code>diskd</code> (separate disk daemon process), and <code>rock</code> (circular log-structured store).</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">Three-tier cache hierarchy</div>
+        <pre><code>Transients (shared memory, ~MB)
+    ↓ miss
+Memory Cache (RAM, cache_mem, typically ~256MB)
+    ↓ miss
+Disk Cache (disk, cache_dir, typically ~GB-TB)
+    ↓ miss
+Network (origin server)</code></pre>
+      </div>
+
+      <blockquote class="inner-voice">Speed and capacity are enemies. The vaults arranged them in truce: the fast was small, the large was slow, and between them a constant negotiation of what was worth keeping where.</blockquote>
+    </div>
+  </article>
+
+  <!-- Chapter 4 -->
+  <article class="chapter" id="ch4">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 4</span>
+      <h2 class="chapter-title">The Object's Life</h2>
+    </div>
+    <div class="chapter-body">
+      <p>Every cached object had a biography. It was born when a response arrived from the network and the Controller decided it was worth keeping. It lived in memory and disk, serving requests. And eventually it died — evicted by the replacement policy, expired by its headers, or purged by an administrator command.</p>
+      <p>The biography was encoded in a <strong>StoreEntry</strong> object. This structure carried the object's state through its entire lifecycle.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">src/store.h — StoreEntry states</div>
+        <pre><code>typedef enum {
+    STORE_OK,           // fully fetched and stored
+    STORE_PENDING,      // still being fetched from network
+} store_status_t;
+
+typedef enum {
+    SWAPOUT_NONE,       // not written to disk
+    SWAPOUT_WRITING,    // currently being written to disk
+    SWAPOUT_DONE,       // fully written to disk
+    SWAPOUT_FAILED,     // disk write failed
+} swap_status_t;</code></pre>
+      </div>
+
+      <p>While an object was in STORE_PENDING, it was simultaneously being written to disk and served to waiting clients. Multiple clients could attach to the same StoreEntry as <strong>StoreClients</strong> — they each maintained a read offset and were notified as new data arrived. The Forward Commander wrote to the front of the buffer; the StoreClients read from behind. The object grew while it was being consumed.</p>
+      <p>This was the streaming nature of the cache. No waiting for a full download before serving. No serving without also caching. One network connection feeding many clients and the disk simultaneously.</p>
+    </div>
+  </article>
+
+  <!-- Chapter 5 -->
+  <article class="chapter" id="ch5">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 5</span>
+      <h2 class="chapter-title">The Key Maker</h2>
+    </div>
+    <div class="chapter-body">
+      <p>Every object in the warehouse had a key — a unique identifier used to locate it among millions of stored items. The key had to be fast to compute, compact to store, and collision-resistant enough that two different URLs would never accidentally map to the same key.</p>
+      <p>The solution was MD5. The <strong>Key Maker</strong>, implemented in <code>src/store_key_md5.cc</code>, computed a 128-bit MD5 hash of the URL (and optionally, for certain HTTP methods, the request body or headers).</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">src/store_key_md5.cc — key generation</div>
+        <pre><code>const cache_key *
+storeKeyPublicByRequest(HttpRequest * request)
+{
+    static cache_key digest[SQUID_MD5_DIGEST_LENGTH];
+    // For most requests: hash of the URL
+    // For VARY responses: hash of URL + Accept-Encoding etc.
+    MD5Update(&amp;M, (unsigned char *)url, strlen(url));
+    MD5Final(digest, &amp;M);
+    return digest;
+}</code></pre>
+      </div>
+
+      <p>The 128-bit MD5 key was stored in the disk cache's index files and in the memory hash table. Lookup was O(1) — hash the URL, look up the key in a hash table, get the StoreEntry pointer.</p>
+      <p>MD5 was considered cryptographically broken by 2026 — but cache key generation did not require cryptographic security. It required speed and collision resistance for the URL space. In that role, MD5 remained perfectly adequate, and replacing it would have required migrating every existing cache file.</p>
+      <blockquote class="inner-voice">Some tools outlive the reasons they were chosen. MD5 became the cache's key not because it was best, but because it was first, and first is hard to displace.</blockquote>
+    </div>
+  </article>
+
+  <!-- Chapter 6 -->
+  <article class="chapter" id="ch6">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 6</span>
+      <h2 class="chapter-title">The Freshness Oracle</h2>
+    </div>
+    <div class="chapter-body">
+      <p>A warehouse full of stale goods serves no one. The kingdom needed an oracle to answer one question for every cached object: is this still fresh enough to serve, or must it be re-fetched from the origin?</p>
+      <p>The <strong>Freshness Oracle</strong> — <code>src/refresh.cc</code> — answered this question. Its primary function was <code>refreshCheck()</code>, which examined a StoreEntry and an incoming request and returned one of three verdicts: FRESH (serve from cache), STALE (must re-fetch), or STALE_BUT_USABLE (serve from cache but revalidate with origin).</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">src/refresh.cc — freshness determination hierarchy</div>
+        <pre><code>// Priority order:
+// 1. Cache-Control: max-age (if present in response)
+// 2. Expires header (if present)
+// 3. Last-Modified heuristic: age = (now - last_modified) * heuristic_pct
+// 4. refresh_pattern rules from squid.conf
+
+// Example:
+// refresh_pattern -i \\.jpg$ 1440 20% 4320
+//   min=1440min, pct=20%, max=4320min
+//   if LM-heuristic-age is in [min, max], use it
+//   else if outside range, clamp to range</code></pre>
+      </div>
+
+      <p>The LM-Factor heuristic was based on a simple observation: documents that haven't changed in a long time are likely to continue not changing. If a document's Last-Modified header showed it was last modified 100 days ago and it had been in cache for 10 days, it was probably still fresh. The default heuristic used 10% of the age since last modification as the estimated freshness lifetime.</p>
+      <p>The <code>refresh_pattern</code> directive gave administrators fine-grained control over these defaults — different rules for images, scripts, HTML pages, API responses.</p>
+    </div>
+  </article>
+
+  <!-- Chapter 7 -->
+  <article class="chapter" id="ch7">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 7</span>
+      <h2 class="chapter-title">The Pattern of Patterns</h2>
+    </div>
+    <div class="chapter-body">
+      <p>The <code>refresh_pattern</code> directive was a list of rules, each consisting of a regex pattern, a minimum freshness time, a percentage heuristic, and a maximum freshness time. The Freshness Oracle walked this list and applied the first matching rule.</p>
+      <p>Common configurations were well-understood recipes. Static assets — JavaScript, CSS, images with content-hash filenames — could be cached for months or years with <code>max</code> set high. Dynamic API responses needed short freshness windows. Error pages should not be cached at all.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">typical refresh_pattern configuration</div>
+        <pre><code># Static assets with hash in filename: cache indefinitely
+refresh_pattern -i \.[0-9a-f]{8}\.(js|css|woff2)$ 525960 100% 525960
+
+# Images: allow up to 7 days
+refresh_pattern -i \.(jpg|jpeg|png|gif|webp)$ 1440 20% 10080
+
+# HTML: conservative, 1 hour max
+refresh_pattern -i \.html?$ 0 10% 60
+
+# Default for everything else
+refresh_pattern . 0 20% 4320</code></pre>
+      </div>
+
+      <p>The Pattern of Patterns was the administrator's primary tool for tuning cache behavior. A well-configured refresh_pattern could dramatically improve hit ratios; a poorly configured one could cause stale content to be served for days or force unnecessary re-fetches of objects that hadn't changed.</p>
+      <blockquote class="inner-voice">Every rule in the pattern was a bet: a bet about the future behavior of the content it matched. The administrator placed these bets with incomplete information, and the cache paid out accordingly.</blockquote>
+    </div>
+  </article>
+
+  <!-- Chapter 8 -->
+  <article class="chapter" id="ch8">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 8</span>
+      <h2 class="chapter-title">The Forgetfulness Law</h2>
+    </div>
+    <div class="chapter-body">
+      <p>The warehouse was finite. Disks filled up. RAM was limited. At some point the Storekeeper had to choose: what to discard to make room for the new? This was the domain of the <strong>replacement policy</strong> — the law of forgetting.</p>
+      <p>The replacement policy was defined by the <code>cache_replacement_policy</code> directive in squid.conf, and implemented in the <code>src/repl/</code> directory. Two policies shipped with Squid: <strong>LRU</strong> (Least Recently Used) and <strong>LFUDA</strong> (Least Frequently Used with Dynamic Aging).</p>
+      <p>The policy was consulted whenever the Storekeeper needed to evict objects to make room. The policy maintained its own data structure alongside the store — a structure that could efficiently identify the "least valuable" object according to its specific metric.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">src/repl/repl_modules.cc — policy interface</div>
+        <pre><code>// Each replacement policy implements this interface:
+struct _RemovalPolicy {
+    void (*Add)(RemovalPolicy *, StoreEntry *, RemovalPolicyNode *);
+    void (*Remove)(RemovalPolicy *, StoreEntry *, RemovalPolicyNode *);
+    void (*Referenced)(RemovalPolicy *, StoreEntry *, RemovalPolicyNode *);
+    RemovalPolicyWalker *(*WalkInit)(RemovalPolicy *);
+};</code></pre>
+      </div>
+
+      <p>The policy received notifications: Add (a new object entered the store), Remove (an object was evicted), Referenced (an object was accessed). It used these notifications to maintain its ordering structure. When eviction was needed, it walked the structure in eviction order and removed objects until enough space was freed.</p>
+    </div>
+  </article>
+
+  <!-- Chapter 9 -->
+  <article class="chapter" id="ch9">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 9</span>
+      <h2 class="chapter-title">The LRU Wheel</h2>
+    </div>
+    <div class="chapter-body">
+      <p>LRU was the simplest and most intuitive replacement policy: evict the object that was least recently accessed. The assumption was that recently accessed objects were likely to be accessed again soon, and rarely accessed objects were unlikely to be needed.</p>
+      <p>The implementation was a <strong>doubly-linked list</strong>. Every time an object was referenced, it was moved to the front of the list. The back of the list held the least recently used objects. Eviction always removed from the back.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">src/repl/lru/lru.cc — O(1) operations</div>
+        <pre><code>static void
+lru_Referenced(RemovalPolicy * policy, StoreEntry * entry,
+               RemovalPolicyNode * node)
+{
+    LruPolicyData *lru = (LruPolicyData *) policy->_data;
+    LruNode *lnode = (LruNode *) node->_data;
+    // Move to front: O(1) linked list splice
+    dlinkDelete(&amp;lnode-&gt;node, &amp;lru-&gt;list);
+    dlinkAdd(entry, &amp;lnode-&gt;node, &amp;lru-&gt;list);
+}</code></pre>
+      </div>
+
+      <p>Every LRU operation — insert, remove, reference — was O(1). The doubly-linked list enabled constant-time splice operations: unhook a node from its current position, relink the neighbors, insert the node at the front. Three pointer updates. No traversal, no sorting, no rebalancing.</p>
+      <p>LRU was excellent for workloads with strong temporal locality — where recently accessed content was likely to be accessed again. It struggled with scan patterns, where a large sequential scan would evict all hot objects to make room for cold ones.</p>
+      <blockquote class="inner-voice">The LRU Wheel turned smoothly because it never tried to be clever. It remembered only one thing: when you were last needed.</blockquote>
+    </div>
+  </article>
+
+  <!-- Chapter 10 -->
+  <article class="chapter" id="ch10">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 10</span>
+      <h2 class="chapter-title">The Frequency Counter</h2>
+    </div>
+    <div class="chapter-body">
+      <p>LFUDA — Least Frequently Used with Dynamic Aging — was LRU's more sophisticated sibling. Instead of tracking recency, it tracked frequency: how many times had each object been requested? The least-requested object was evicted first.</p>
+      <p>But pure frequency had a problem: objects cached long ago might have accumulated high frequency counts that could never be overtaken by newer objects, even if the newer ones were more popular now. To compensate, LFUDA used <strong>dynamic aging</strong>: a global age counter that was added to newly inserted objects, effectively reducing the relative value of old high-frequency counts.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">src/repl/lfuda/lfuda.cc — heap-based eviction</div>
+        <pre><code>// Key formula:
+// eviction_key = refcount + age_factor
+// where age_factor is the global "cache age" counter
+
+// When evicting: remove the object with the lowest key
+// This is a min-heap operation: O(log N)
+static void
+lfuda_Referenced(RemovalPolicy * policy, StoreEntry * entry, ...)
+{
+    LfudaNode *node = ...;
+    node-&gt;key = ++node-&gt;refcount + ldata-&gt;cache_age;
+    heap_update(ldata-&gt;theHeap, node-&gt;heapNode, ...);
+}</code></pre>
+      </div>
+
+      <p>LFUDA used a <strong>min-heap</strong>. Inserting or updating a node was O(log N). Finding the minimum (the eviction candidate) was O(1). For large caches with millions of objects, this was slightly more expensive than LRU's O(1) operations — but LFUDA provided much better hit rates for workloads with stable popularity distributions, like large media repositories.</p>
+      <p>The choice between LRU and LFUDA was one of the cache tuning questions that distinguished novice administrators from experienced ones.</p>
+    </div>
+  </article>
+
+  <!-- Chapter 11 -->
+  <article class="chapter" id="ch11">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 11</span>
+      <h2 class="chapter-title">The Disk Scribes</h2>
+    </div>
+    <div class="chapter-body">
+      <p>Memory was temporary. When Squid restarted, the memory cache vanished. The disk cache survived reboots, survived process crashes, accumulated years of stored content. The disk was the true long-term memory of the warehouse.</p>
+      <p>Writing to disk was a delicate art. Synchronous writes blocked the event loop — an intolerable condition in a single-threaded proxy. Squid offered three strategies for avoiding this problem.</p>
+      <p>The first was <strong>aufs</strong> — async UFS, which used a thread pool for all disk I/O. The event loop dispatched write requests to threads; the threads performed the actual syscalls; completion was reported via a notification pipe that the event loop could select() on.</p>
+      <p>The second was <strong>diskd</strong> — a separate process dedicated to disk I/O, communicating with the main process via IPC message queues. Even more isolated than threads, but with higher communication overhead.</p>
+      <p>The third was <strong>rock</strong> — a log-structured store that serialized all writes into a single sequential append-only file. Sequential writes are faster than random writes, and a circular log structure enabled efficient space reuse.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">cache_dir type comparison</div>
+        <pre><code>cache_dir ufs  /var/spool/squid 10000 16 256  # classic, sync
+cache_dir aufs /var/spool/squid 10000 16 256  # async threads
+cache_dir rock /var/spool/squid 10000 # circular log, SMP-friendly</code></pre>
+      </div>
+
+      <blockquote class="inner-voice">The disk scribes worked in shifts that the main process never saw. They were the kingdom's night workers, inscribing memories onto platters while the Gatekeeper slept between requests.</blockquote>
+    </div>
+  </article>
+
+  <!-- Chapter 12 -->
+  <article class="chapter" id="ch12">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 12</span>
+      <h2 class="chapter-title">Collapsed Forwarding</h2>
+    </div>
+    <div class="chapter-body">
+      <p>In a busy proxy, the same uncached object might be requested by hundreds of clients simultaneously — a thundering herd. Without coordination, each request would trigger a separate forward to the origin server, multiplying load by hundreds.</p>
+      <p><strong>Collapsed Forwarding</strong> prevented this. When the first request for an object triggered a forward, subsequent requests for the same object were <em>collapsed</em> — attached to the same StoreEntry as additional StoreClients. They would all receive the response as it streamed in, from a single origin request.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">src/CollapsedForwarding.cc — the thundering herd solution</div>
+        <pre><code>// Worker A misses on /heavy-file.iso, starts fetching
+// Worker B also misses, but:
+bool
+CollapsedForwarding::Collapse(StoreEntry *e)
+{
+    // Atomically check if another worker is already fetching
+    if (e->hittingRequiresCollapsing()) {
+        // Yes! Attach to the existing entry as a reader
+        e->lock("collapsed");
+        return true; // don't forward again
+    }
+    return false; // we're the fetcher
+}</code></pre>
+      </div>
+
+      <p>In SMP mode, Collapsed Forwarding required inter-worker coordination through shared memory — the Transients store. Worker A wrote the response to the Transients store; Workers B, C, D read from it. The Coordinator process mediated the handshake.</p>
+      <p>Collapsed Forwarding was one of the features that made a heavily-loaded Squid dramatically more efficient than a collection of independent proxies. The many became one, and the one fetched for all.</p>
+    </div>
+  </article>
+
+  <!-- Chapter 13 -->
+  <article class="chapter" id="ch13">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 13</span>
+      <h2 class="chapter-title">The Vary Puzzle</h2>
+    </div>
+    <div class="chapter-body">
+      <p>HTTP had a complication that made simple URL-keyed caching insufficient: the <code>Vary</code> header. When a server responded with <code>Vary: Accept-Encoding</code>, it meant "this response is specific to the Accept-Encoding header you sent. A client with a different Accept-Encoding might get a different response."</p>
+      <p>This meant that the same URL might have multiple valid cached representations — one for clients that accepted gzip, one for those that didn't. The cache key could not be just the URL; it had to include the values of the Vary headers.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">src/HttpReply.cc — Vary handling</div>
+        <pre><code>// When storing a response with Vary:
+// 1. Store the "Vary key" as a secondary key on the StoreEntry
+// 2. The vary key = MD5(URL + sorted-vary-header-values)
+
+// When looking up a request:
+// 1. Find entry by primary key (URL only)
+// 2. If found, check if vary key matches
+// 3. If vary keys differ, it's a miss — the stored version
+//    was for different headers</code></pre>
+      </div>
+
+      <p>The Vary puzzle was one of the harder problems in HTTP caching. Multiple variants of the same URL could exist in the cache simultaneously, each with a different vary key. The cache had to store all of them, find the right one for each request, and evict them independently.</p>
+      <p>The Vary Puzzle had no elegant solution — only careful bookkeeping.</p>
+    </div>
+  </article>
+
+  <!-- Chapter 14 -->
+  <article class="chapter" id="ch14">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 14</span>
+      <h2 class="chapter-title">The Purge Command</h2>
+    </div>
+    <div class="chapter-body">
+      <p>Not all forgetting was governed by replacement policies or freshness rules. Sometimes an administrator needed to immediately remove a specific object from the cache — because it contained incorrect content, sensitive information, or had been updated at the origin and the cache needed to be cleared before its natural expiration.</p>
+      <p>This was the <strong>PURGE</strong> method — an HTTP method not defined in the standard but implemented by Squid as an administrative command. An HTTP PURGE request to the proxy with a specific URL would cause the Storekeeper to remove all cached representations of that URL.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">PURGE request example</div>
+        <pre><code>PURGE http://example.com/article/12345 HTTP/1.1
+Host: example.com
+
+# Squid response:
+HTTP/1.1 200 OK
+X-Cache: PURGED
+
+# Or if not found:
+HTTP/1.1 404 Not Found</code></pre>
+      </div>
+
+      <p>The PURGE command was available only to IP addresses listed in the <code>purge</code> ACL. Without this protection, any client could evict any cached content. With it, only trusted management systems could issue purge commands — content delivery networks, CMS platforms, deployment systems that needed to invalidate cached content after updates.</p>
+      <blockquote class="inner-voice">The power to forget was as important as the power to remember. Without purging, the warehouse accumulated errors alongside truths, and could not be corrected without being demolished.</blockquote>
+    </div>
+  </article>
+
+  <!-- Chapter 15 -->
+  <article class="chapter" id="ch15">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 15</span>
+      <h2 class="chapter-title">Memory's Purpose</h2>
+    </div>
+    <div class="chapter-body">
+      <p>Why did the warehouse exist? The answer seemed obvious: to save bandwidth. To reduce load on origin servers. To speed up responses for end users. All of these were true.</p>
+      <p>But the deeper answer was resilience. A proxy with a large cache could serve clients even when origin servers were slow, overloaded, or temporarily unavailable. The warehouse was not merely an optimization — it was a buffer between the chaos of the open internet and the stability expected by users.</p>
+      <p>In the early days of the internet, when bandwidth was measured in kilobits and origin servers routinely fell over under modest load, caching proxies were essential infrastructure. Every university, every ISP, every large organization ran a Squid proxy — or something like it — to make the internet usable.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">The cache hit ratio — the warehouse's report card</div>
+        <pre><code># cachemgr.cgi output:
+Hits as % of all requests:     67.3%
+Hits as % of bytes sent:       71.2%
+Memory hits:                   34.1%
+Disk hits:                     33.2%
+Misses:                        32.7%
+
+# A hit ratio of 67% means 2 out of 3 requests
+# never touched the network.</code></pre>
+      </div>
+
+      <p>In modern networks — with CDNs, HTTP/2, and gigabit connections — the case for forward proxies was less urgent. But Squid persisted. In corporate environments for content filtering. In developing regions with expensive bandwidth. In content delivery networks as a reverse proxy. The warehouse found new purposes as old ones faded.</p>
+      <p>The Storekeeper adapted. The warehouse endured.</p>
+      <blockquote class="inner-voice">Memory is not just about the past. It is about making the future cheaper to reach.</blockquote>
+    </div>
+  </article>
+
+  <nav class="chapter-nav">
+    <a href="vol2.html" class="chapter-nav-btn">← Volume 2: The Court of the Judge</a>
+    <a href="vol4.html" class="chapter-nav-btn">Volume 4: Beyond the Border →</a>
+  </nav>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-logo">The Squid Epic</div>
+    <div class="footer-links">
+      <a href="https://github.com/squid-cache/squid" target="_blank" rel="noopener">squid-cache/squid</a>
+      <a href="https://github.com/NolanKiwi/squid-novel" target="_blank" rel="noopener">This project</a>
+      <a href="/vol3.html">한국어</a>
+    </div>
+    <div class="footer-copy">A technical novel based on the Squid Proxy source code</div>
+  </div>
+</footer>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

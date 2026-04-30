@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en" data-volume="4">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Vol.4 Beyond the Border — The Squid Epic</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+</head>
+<body>
+
+<nav class="novel-topbar">
+  <a href="index.html" class="topbar-back">← The Squid Epic</a>
+  <div class="topbar-breadcrumb">
+    <span class="topbar-vol">VOLUME 4</span>
+    <span class="topbar-title">Beyond the Border</span>
+  </div>
+  <div class="lang-switcher">
+    <span class="lang-btn active">EN</span>
+    <a href="/vol4.html" class="lang-btn">KO</a>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+</nav>
+
+<aside class="novel-sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-vol">VOLUME 4</div>
+    <div class="sidebar-title">Beyond the Border</div>
+  </div>
+  <nav class="sidebar-toc">
+    <a href="#ch1" class="toc-item">Chapter 1 · The Cache Miss</a>
+    <a href="#ch2" class="toc-item">Chapter 2 · The Forward Commander</a>
+    <a href="#ch3" class="toc-item">Chapter 3 · The Peer Council</a>
+    <a href="#ch4" class="toc-item">Chapter 4 · The DNS Oracle</a>
+    <a href="#ch5" class="toc-item">Chapter 5 · The Address Book</a>
+    <a href="#ch6" class="toc-item">Chapter 6 · Happy Eyeballs</a>
+    <a href="#ch7" class="toc-item">Chapter 7 · The Connection Pool</a>
+    <a href="#ch8" class="toc-item">Chapter 8 · The HTTP Negotiator</a>
+    <a href="#ch9" class="toc-item">Chapter 9 · The Secret Tunnel</a>
+    <a href="#ch10" class="toc-item">Chapter 10 · The Failure Path</a>
+    <a href="#ch11" class="toc-item">Chapter 11 · The Retry Logic</a>
+    <a href="#ch12" class="toc-item">Chapter 12 · TLS Beyond the Gate</a>
+    <a href="#ch13" class="toc-item">Chapter 13 · Pinned Connections</a>
+    <a href="#ch14" class="toc-item">Chapter 14 · The Mission Complete</a>
+    <a href="#ch15" class="toc-item">Chapter 15 · The Road That Always Opens</a>
+  </nav>
+</aside>
+
+<button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">☰</button>
+
+<main class="novel-main">
+
+  <header class="vol-hero">
+    <div class="vol-hero-num">VOLUME 4</div>
+    <h1 class="vol-hero-title">Beyond the Border</h1>
+    <p class="vol-hero-sub">Forwarding, Connections, and Tunnels</p>
+    <p class="vol-hero-desc">
+      Cache miss. The Forward Commander steps up. Consults the DNS Oracle,
+      shouts to the peer caches, races IPv6 against IPv4,
+      and sometimes digs a secret tunnel.
+    </p>
+  </header>
+
+  <!-- Chapter 1 -->
+  <article class="chapter" id="ch1">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 1</span>
+      <h2 class="chapter-title">The Cache Miss</h2>
+    </div>
+    <div class="chapter-body">
+      <p>The Storekeeper had checked all three vaults. Memory: nothing. Disk: nothing. The object had never been fetched, or it had been fetched and forgotten. Either way, the answer was the same: <strong>MISS</strong>.</p>
+      <p>The Freshness Oracle confirmed it — there was nothing to validate, nothing to refresh. The request had to leave the kingdom's borders and go to the open internet to fetch what was needed.</p>
+      <p>This moment — the cache miss — was the proxy's most expensive operation. It required DNS resolution, TCP connection establishment, TLS negotiation, an HTTP request, a response, and the streaming of potentially megabytes of data back through the proxy to the client. Every cache hit avoided all of this. Every miss forced it.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">src/client_side_request.cc — beginning the forward path</div>
+        <pre><code>void
+ClientHttpRequest::processMiss()
+{
+    // Create a new StoreEntry for this miss
+    http-&gt;storeEntry(storeCreateEntry(...));
+
+    // Hand off to the Forward Commander
+    FwdState::Start(
+        http-&gt;getConn()-&gt;clientConnection,
+        http-&gt;storeEntry(),
+        http-&gt;request,
+        http-&gt;al
+    );
+}</code></pre>
+      </div>
+
+      <p>The Forward Commander received the baton. The mission had begun.</p>
+    </div>
+  </article>
+
+  <!-- Chapter 2 -->
+  <article class="chapter" id="ch2">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 2</span>
+      <h2 class="chapter-title">The Forward Commander</h2>
+    </div>
+    <div class="chapter-body">
+      <p><strong>FwdState</strong>, implemented in <code>src/FwdState.cc</code>, was the Forward Commander — the coordinator of everything required to fetch a response from beyond the proxy's borders. Its job was to orchestrate a complex sequence of async operations and deliver a result to the waiting StoreEntry.</p>
+      <p>The Commander's lifecycle had a clear progression: peer selection → DNS resolution → connection establishment → HTTP request dispatch → response streaming → completion (or failure and retry).</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">src/FwdState.cc — state machine overview</div>
+        <pre><code>class FwdState {
+    // Phase 1: Where do we send this?
+    void peerSelect();           // ask neighbors.cc
+
+    // Phase 2: What is the IP address?
+    // (done implicitly by HappyConnOpener via ipcache)
+
+    // Phase 3: Connect
+    void connectStart();         // spawn HappyConnOpener
+    void noteConnection(...);    // connection established callback
+
+    // Phase 4: Send request, receive response
+    void dispatch();             // hand to serverConnection
+
+    // Phase 5: Done or retry
+    void complete();
+    void reforward();
+};</code></pre>
+      </div>
+
+      <p>The Commander was an <strong>AsyncJob</strong> — it registered itself with the event loop, yielded control between phases, and was garbage-collected by the RefCount machinery when its mission ended. It held a CbcPointer to the StoreEntry to detect if the entry had been purged while the forward was in progress.</p>
+      <blockquote class="inner-voice">The Forward Commander was always calm. Whether the mission took 50 milliseconds or 50 seconds, it followed the same sequence: one step at a time, notify when done, handle failure without panic.</blockquote>
+    </div>
+  </article>
+
+  <!-- Chapter 3 -->
+  <article class="chapter" id="ch3">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 3</span>
+      <h2 class="chapter-title">The Peer Council</h2>
+    </div>
+    <div class="chapter-body">
+      <p>Before going directly to the origin server, the Forward Commander consulted the <strong>Peer Council</strong>: the neighbor cache hierarchy defined in <code>src/neighbors.cc</code>.</p>
+      <p>Squid supported two types of peers: <strong>parents</strong> (caches higher in the hierarchy that could both cache and forward) and <strong>siblings</strong> (caches at the same level that could only share cached content). The peer selection algorithm consulted each configured peer and asked: do you have this object?</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">src/neighbors.cc — peer query protocols</div>
+        <pre><code>// ICP (Internet Cache Protocol) — UDP, fast, unreliable
+// Send ICP_QUERY to all peers, wait for ICP_HIT or ICP_MISS
+// Use first HIT peer, or parent if all MISS
+
+// HTCP (Hyper Text Caching Protocol) — UDP, more features
+// Like ICP but with full HTTP headers in query/response
+// Supports CLR (clear) operation for purge propagation
+
+void
+neighborsUDPPing(HttpRequest *request, StoreEntry *entry,
+                 IRCB *callback, void *data, ...)</code></pre>
+      </div>
+
+      <p>Peer selection had to be fast — clients were waiting. The UDP-based ICP protocol was designed for this: send a small query to multiple peers simultaneously, wait a configurable number of milliseconds for responses, pick the best peer that responded. If no peer had the object, go directly to the origin.</p>
+      <p>The Peer Council represented the internet-age vision of cooperative caching: a mesh of proxies that collectively reduced load on origin servers by sharing their caches. In modern deployments this had largely been replaced by CDN architectures, but the machinery remained in Squid for organizations that still used hierarchical proxy configurations.</p>
+    </div>
+  </article>
+
+  <!-- Chapter 4 -->
+  <article class="chapter" id="ch4">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 4</span>
+      <h2 class="chapter-title">The DNS Oracle</h2>
+    </div>
+    <div class="chapter-body">
+      <p>A hostname was not an address. Before the Forward Commander could open a TCP connection to <code>www.example.com</code>, it needed to know the IP address — and for that it needed to consult the <strong>DNS Oracle</strong>: <code>src/ipcache.cc</code>.</p>
+      <p>The DNS Oracle was an asynchronous DNS resolver with a built-in cache. It maintained a hash table of hostname → [IP addresses] mappings, each with a TTL. If a hostname had been recently resolved, the cached answer was returned immediately. If not, a real DNS query was dispatched.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">src/ipcache.cc — async DNS with multi-IP support</div>
+        <pre><code>void
+ipcache_nbgethostbyname(const char *name, IPH *handler, void *handlerData)
+{
+    IpcacheEntry *i = ipcache_get(name);
+    if (i &amp;&amp; !ipcacheExpired(i)) {
+        // cache hit — call handler immediately (async convention)
+        ipcacheCallback(i, Ip::Forward, -1, handler, handlerData);
+        return;
+    }
+    // cache miss — dispatch DNS query, callback when resolved
+    ipcacheAddPending(name, handler, handlerData);
+}</code></pre>
+      </div>
+
+      <p>The DNS Oracle returned not just one IP address but all of them — the full list returned by the DNS server. This was critical for Happy Eyeballs (the next chapter) and for failover. If a connection to the first IP failed, the Forward Commander could try the second, the third.</p>
+      <p>Negative results were also cached — NXDOMAIN responses (hostname does not exist) and SERVFAIL results were stored with short TTLs to prevent storms of DNS queries for known-bad hostnames.</p>
+      <blockquote class="inner-voice">The DNS Oracle knew every name the kingdom had ever asked about. It was the oldest and most consulted advisor in the court.</blockquote>
+    </div>
+  </article>
+
+  <!-- Chapter 5 -->
+  <article class="chapter" id="ch5">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 5</span>
+      <h2 class="chapter-title">The Address Book</h2>
+    </div>
+    <div class="chapter-body">
+      <p>DNS was not the only source of addresses. The kingdom maintained additional address resolution mechanisms for special cases.</p>
+      <p><strong>ipcache</strong> was the primary cache, storing DNS results. But <code>src/fqdncache.cc</code> maintained the reverse: a cache of IP → hostname mappings for reverse DNS lookups, used in access logging and some ACL types.</p>
+      <p>The <code>hosts</code> file was also consulted — Squid could be configured to read the system's <code>/etc/hosts</code> file and use those static mappings before querying DNS. Useful for test environments, split-horizon DNS, and overriding DNS for specific hostnames.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">src/dns/rfc1035.cc — DNS packet handling</div>
+        <pre><code>// Squid includes its own minimal DNS client
+// (not relying on getaddrinfo, which is blocking)
+// Sends UDP queries to configured nameservers
+// Handles: A, AAAA, PTR, CNAME (chain following)
+// Timeout and retry logic for unreliable UDP
+
+ssize_t
+rfc1035BuildAQuery(const char *hostname, char *buf, size_t sz,
+                   unsigned short qid, rfc1035_query * query)</code></pre>
+      </div>
+
+      <p>Squid's DNS client was deliberately minimal — it handled only the record types needed for proxy operation. Full DNS functionality (MX records, SRV records, DNSSEC) was not implemented. This kept the code small and focused, at the cost of flexibility for advanced configurations that needed non-standard DNS behavior.</p>
+    </div>
+  </article>
+
+  <!-- Chapter 6 -->
+  <article class="chapter" id="ch6">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 6</span>
+      <h2 class="chapter-title">Happy Eyeballs</h2>
+    </div>
+    <div class="chapter-body">
+      <p>The DNS Oracle had returned multiple addresses — perhaps two IPv6 and three IPv4. Which one should the Forward Commander connect to? The naive answer was "try them in order." The correct answer was far more sophisticated.</p>
+      <p>RFC 8305 defined <strong>Happy Eyeballs</strong>, an algorithm designed to find the fastest working connection without making the user wait for sequential failures. The Squid implementation lived in <code>src/HappyConnOpener.cc</code>.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">src/HappyConnOpener.cc — RFC 8305 racing</div>
+        <pre><code>// Step 1: Try IPv6 first (RFC 8305 §4)
+connectToNextPeer(); // attempt IPv6
+
+// Step 2: If IPv6 doesn't connect within 250ms...
+if (waitingForSpeedRace &amp;&amp; gotNewAddress) {
+    // Start IPv4 attempt in parallel — don't cancel IPv6
+    connectToNextPeer(); // attempt IPv4
+}
+
+// Step 3: Use whichever connects first
+// Cancel the slower one</code></pre>
+      </div>
+
+      <p>The 250ms timeout before launching the parallel IPv4 attempt was calibrated to prefer IPv6 (which is generally preferred by RFC 8305) while not penalizing users with broken IPv6 connectivity by making them wait for a full IPv6 timeout. If IPv6 connected within 250ms, IPv4 was never tried. If it didn't, both raced.</p>
+      <p>The name "Happy Eyeballs" came from the user experience goal: users should not see a "spinning" browser indicator caused by network protocol fallback. Their experience should remain smooth — happy — regardless of which protocol worked.</p>
+      <blockquote class="inner-voice">Competition between protocols was not waste. It was the algorithm's way of serving the user better than either protocol could alone.</blockquote>
+    </div>
+  </article>
+
+  <!-- Chapter 7 -->
+  <article class="chapter" id="ch7">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 7</span>
+      <h2 class="chapter-title">The Connection Pool</h2>
+    </div>
+    <div class="chapter-body">
+      <p>TCP connection establishment was expensive: SYN, SYN-ACK, ACK — a round trip before a single byte of HTTP could be sent. For TLS connections, add two more round trips for the handshake. For short-lived HTTP requests on busy servers, this overhead dominated total latency.</p>
+      <p>The solution was connection reuse. Squid maintained a <strong>connection pool</strong> — a cache of idle established connections, organized by destination (hostname, port, TLS parameters). When the Forward Commander needed a connection to a server it had recently communicated with, it checked the pool first.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">src/servers/FwdServer.cc — connection pool</div>
+        <pre><code>Comm::ConnectionPointer
+FwdState::pconnPop(const Comm::ConnectionPointer &amp;dest, const char *domain)
+{
+    // Check idle connection pool
+    Comm::ConnectionPointer temp =
+        theOutgoingTransport.pop(dest, domain, checkReturnedConnectivity);
+    if (temp != nullptr) {
+        ++n_tries;
+        return temp; // reuse existing connection
+    }
+    return nullptr; // must establish new connection
+}</code></pre>
+      </div>
+
+      <p>The pool had limits — a maximum number of idle connections per destination, and a global maximum. Connections too old or from destinations that hadn't been visited recently were closed and removed. The pool was managed by the same event loop that managed everything else — a periodic callback walked the pool and closed expired connections.</p>
+      <p>HTTP/1.1's <code>Connection: keep-alive</code> was the enabling protocol feature. HTTP/2 went further — a single TCP connection could carry hundreds of simultaneous request/response streams, making connection pooling even more valuable.</p>
+    </div>
+  </article>
+
+  <!-- Chapter 8 -->
+  <article class="chapter" id="ch8">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 8</span>
+      <h2 class="chapter-title">The HTTP Negotiator</h2>
+    </div>
+    <div class="chapter-body">
+      <p>With a connection established, the Forward Commander handed control to a new actor: the <strong>HTTP Negotiator</strong>. This was the component responsible for sending the actual HTTP request and reading the response.</p>
+      <p>For HTTP/1.1, this was <code>HttpStateData</code> in <code>src/http.cc</code> — a state machine that wrote the request headers, optionally wrote a request body, read the response status line, read response headers, and then streamed the response body into the StoreEntry.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">src/http.cc — request serialization</div>
+        <pre><code>void
+HttpStateData::sendRequest()
+{
+    MemBuf mb;
+    mb.init();
+    // Write request line and headers
+    request-&gt;pack(&amp;mb);
+    // Send via the established connection
+    Comm::Write(serverConn, &amp;mb, callbackContext);
+}
+
+void
+HttpStateData::processReply()
+{
+    // Parse response status and headers
+    // Start streaming body to StoreEntry
+    // Notify waiting clients (StoreClients) as data arrives
+}</code></pre>
+      </div>
+
+      <p>The HTTP Negotiator had to handle a large number of edge cases: chunked transfer encoding, gzip content encoding (optionally decoded by the proxy), HTTP/1.0 vs HTTP/1.1 differences, response headers that affected cacheability, redirects that required starting over with a new request.</p>
+      <p>For HTTP/2 connections, a different implementation — <code>Http2::Stream</code> — handled the multiplexed stream protocol, translating between Squid's internal request/response model and the HTTP/2 framing layer.</p>
+    </div>
+  </article>
+
+  <!-- Chapter 9 -->
+  <article class="chapter" id="ch9">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 9</span>
+      <h2 class="chapter-title">The Secret Tunnel</h2>
+    </div>
+    <div class="chapter-body">
+      <p>Not all connections could be proxied as HTTP requests. HTTPS destinations — port 443 — used TLS from the very first byte. The proxy could not read the request URL, could not make ACL decisions on the request path, could not cache the response. It could only relay bytes.</p>
+      <p>This relay was implemented in <code>src/tunnel.cc</code> by the <strong>TunnelStateData</strong> class. When a client sent a CONNECT request:</p>
+      <pre class="inline-code">CONNECT www.example.com:443 HTTP/1.1</pre>
+      <p>— the proxy established a TCP connection to www.example.com:443 and then responded to the client:</p>
+      <pre class="inline-code">HTTP/1.1 200 Connection established</pre>
+      <p>After that, all data flowing between client and server was blindly relayed. The proxy copied bytes from client to server and from server to client without reading or modifying them.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">src/tunnel.cc — TunnelStateData blind relay</div>
+        <pre><code>// Two AsyncJobs connected back-to-back:
+// client socket → server socket
+// server socket → client socket
+
+static void
+copyRead(TunnelStateData *tunnelState, TunnelStateData::Connection &amp;from)
+{
+    // Read from source
+    comm_read(from.conn, from.buf, from.bytesWanted(...), copyReadHandler, ...);
+}
+
+static void
+copyWrite(TunnelStateData *tunnelState, TunnelStateData::Connection &amp;to)
+{
+    // Write to destination
+    Comm::Write(to.conn, to.buf, to.len, copyWriteHandler, ...);
+}</code></pre>
+      </div>
+
+      <p>The tunnel was opaque. The proxy could not see what URLs were being fetched, could not cache responses, could not modify requests. ACL decisions on CONNECT requests had to be made on hostname and port alone — before the tunnel was established.</p>
+      <blockquote class="inner-voice">The Secret Tunnel was the proxy's admission that it could not always see. Sometimes the best service was to step aside and let the encrypted conversation flow through unexamined.</blockquote>
+    </div>
+  </article>
+
+  <!-- Chapter 10 -->
+  <article class="chapter" id="ch10">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 10</span>
+      <h2 class="chapter-title">The Failure Path</h2>
+    </div>
+    <div class="chapter-body">
+      <p>The Forward Commander's mission did not always succeed. DNS resolution might fail. The TCP connection might be refused. The TLS handshake might fail due to a certificate error. The server might respond with a 5xx status. The connection might drop mid-response.</p>
+      <p>Every failure was handled by the same error propagation machinery. The failing component called <code>ErrorState::sendError()</code> or invoked the Forward Commander's <code>fail()</code> method. The Commander recorded the error and decided: retry or give up?</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">src/FwdState.cc — failure handling</div>
+        <pre><code>void
+FwdState::fail(ErrorState *errorState)
+{
+    err = errorState;
+    if (canRetry(errorState)) {
+        reforward();    // try again with next peer/address
+    } else {
+        complete();     // mission failed — send error to client
+    }
+}
+
+bool
+FwdState::canRetry(ErrorState *err) const
+{
+    // Retryable if: not yet tried all peers/addresses
+    //               AND error is retriable (connect refused,
+    //               not read errors mid-response)
+    return n_tries &lt; max_tries &amp;&amp; err-&gt;type != ERR_READ_ERROR;
+}</code></pre>
+      </div>
+
+      <p>When all retries were exhausted, the Forward Commander called <code>complete()</code> with the most informative error state it had collected. The error was passed to the ErrorState machinery, which generated an appropriate HTTP error response and delivered it to the client.</p>
+      <p>The client received a well-formatted error page — "Connection refused," "DNS resolution failed," "Gateway timeout" — rather than a raw protocol error. The kingdom maintained its composure even in failure.</p>
+    </div>
+  </article>
+
+  <!-- Chapter 11 -->
+  <article class="chapter" id="ch11">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 11</span>
+      <h2 class="chapter-title">The Retry Logic</h2>
+    </div>
+    <div class="chapter-body">
+      <p>Retrying was not the same as repeating. A retry had to make a <em>different</em> choice — a different peer, a different IP address, a different transport — or it was not a retry but merely the same failure twice.</p>
+      <p>The Forward Commander tracked which peers and IP addresses had been tried and failed. Each retry took the next untried option from the peer selection and IP address lists. If a connection attempt to IPv6 address 1 of a server failed, the retry might try IPv6 address 2, or fall back to IPv4, or try a parent cache instead.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">src/FwdState.cc — structured retry progression</div>
+        <pre><code>void
+FwdState::reforward()
+{
+    // Mark current server connection as failed
+    if (serverConn) {
+        // Don't return failed connection to pool
+        serverConn-&gt;close();
+        serverConn = nullptr;
+    }
+
+    // Request a new peer/address selection
+    // (peerSelect will skip already-tried options)
+    peerSelect();
+}</code></pre>
+      </div>
+
+      <p>For idempotent requests — GET, HEAD, OPTIONS — retrying after certain failures was safe. A GET request that failed mid-response could be retried from the beginning; the client would not know. For non-idempotent requests — POST, PUT, DELETE — retrying was dangerous. Retrying a POST that had partially succeeded could cause duplicate actions.</p>
+      <p>The retry logic was conservative for non-idempotent requests: retry only on connection failures before any request data was sent. Once the request had been transmitted, no retry.</p>
+    </div>
+  </article>
+
+  <!-- Chapter 12 -->
+  <article class="chapter" id="ch12">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 12</span>
+      <h2 class="chapter-title">TLS Beyond the Gate</h2>
+    </div>
+    <div class="chapter-body">
+      <p>When the destination server required TLS — and by 2020 most did — the Forward Commander had to negotiate a TLS session. This was handled by the <strong>Security</strong> subsystem in <code>src/security/</code>.</p>
+      <p>TLS negotiation for outbound connections was distinct from TLS with clients. For outbound connections, Squid was the TLS <em>client</em> — it presented the server's certificate for verification, negotiated a cipher suite, and established the encrypted channel.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">src/security/PeerConnector.cc — TLS handshake</div>
+        <pre><code>class Security::PeerConnector : public AsyncJob
+{
+    // Phase 1: connect TCP (done by HappyConnOpener)
+    // Phase 2: TLS handshake
+    void negotiate();
+
+    void handleNegotiateError(int result) {
+        // SSL_connect returned <= 0
+        // Could be: SSL_ERROR_WANT_READ (not an error, need more data)
+        //           SSL_ERROR_SSL (fatal TLS error)
+        //           SSL_ERROR_SYSCALL (TCP error during TLS)
+    }
+};</code></pre>
+      </div>
+
+      <p>Certificate verification was a complex topic. By default, Squid verified the server's certificate against the system's CA bundle. But administrators could configure custom CA certificates, disable verification entirely (for internal servers with self-signed certs), or implement custom verification callbacks.</p>
+      <p>For SSL Bump deployments where the proxy was also decrypting client traffic, the outbound TLS session had to be established and inspected before re-encrypting for the client — a complex dance of two simultaneous TLS sessions for each HTTPS connection.</p>
+    </div>
+  </article>
+
+  <!-- Chapter 13 -->
+  <article class="chapter" id="ch13">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 13</span>
+      <h2 class="chapter-title">Pinned Connections</h2>
+    </div>
+    <div class="chapter-body">
+      <p>Some protocols broke the proxy's clean separation between client connection and server connection. NTLM authentication was the most common: the NTLM handshake was bound to a specific TCP connection. If the proxy routed NTLM requests through different server connections, the handshake would fail.</p>
+      <p>The solution was <strong>connection pinning</strong>. Once an NTLM handshake began on a specific client connection → server connection pair, those two connections were pinned together. All subsequent requests from that client, for the duration of that authentication session, were sent on the same server connection.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">src/client_side.cc — connection pinning</div>
+        <pre><code>// ConnStateData tracks the pinned server connection:
+Comm::ConnectionPointer pinning.serverConnection;
+const char *pinning.host;
+int pinning.port;
+bool pinning.auth; // pinned because of auth handshake
+
+// When serving a new request on this client connection:
+// Check if we have a pinned server connection
+// If yes, use it directly — skip peer selection, DNS, pool</code></pre>
+      </div>
+
+      <p>Pinning was a pragmatic compromise. It sacrificed the proxy's ability to load-balance across server connections for the sake of protocol compatibility. Without it, NTLM authentication simply did not work through the proxy. With it, it worked, at the cost of slightly reduced connection efficiency for NTLM users.</p>
+      <blockquote class="inner-voice">The proxy could not change the protocols it served. It could only adapt to them, however inelegant the adaptation.</blockquote>
+    </div>
+  </article>
+
+  <!-- Chapter 14 -->
+  <article class="chapter" id="ch14">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 14</span>
+      <h2 class="chapter-title">The Mission Complete</h2>
+    </div>
+    <div class="chapter-body">
+      <p>The response arrived. Status 200. Content-Type: text/html. Content-Length: 48,293. The HTTP Negotiator read the headers, assessed cacheability, and began streaming the body into the StoreEntry.</p>
+      <p>As bytes arrived from the server, they were simultaneously written to the StoreEntry's memory buffer and read by the StoreClients — the waiting client connections. The client saw data flowing almost immediately, long before the full response had been received from the server.</p>
+      <p>When the last byte arrived and the response was complete, the StoreEntry's status changed from STORE_PENDING to STORE_OK. The disk write — if the object was cacheable and within size limits — had been running in parallel. The Storekeeper marked the entry as fully written.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">src/FwdState.cc — mission complete</div>
+        <pre><code>void
+FwdState::complete()
+{
+    debugs(17, 3, "FwdState::complete " &lt;&lt; entry-&gt;url());
+
+    if (entry-&gt;store_status == STORE_PENDING) {
+        entry-&gt;complete(); // mark as fully received
+    }
+
+    if (Comm::IsConnOpen(serverConn)) {
+        if (entry-&gt;keepalive())
+            pconnPush(serverConn, ...); // return to pool
+        else
+            serverConn-&gt;close();
+    }
+    // FwdState's RefCount drops to zero → self-destructs
+}</code></pre>
+      </div>
+
+      <p>The Forward Commander's final act was to either return the server connection to the pool (if keep-alive) or close it. Then the Commander's reference count dropped to zero, and it dissolved — its job done, its memory freed, its mission recorded in the StoreEntry it left behind.</p>
+    </div>
+  </article>
+
+  <!-- Chapter 15 -->
+  <article class="chapter" id="ch15">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 15</span>
+      <h2 class="chapter-title">The Road That Always Opens</h2>
+    </div>
+    <div class="chapter-body">
+      <p>The forward path was Squid's most complex subsystem — a web of interacting async jobs, each responsible for one piece of the journey from "miss" to "response." DNS resolution, peer selection, Happy Eyeballs racing, connection pooling, HTTP negotiation, error handling, retry logic, TLS, pinning — each was a separate component, each communicating through callbacks and shared state.</p>
+      <p>What held this complexity together was the invariant of the forward path: <em>either a response is delivered to the StoreEntry, or an error is delivered, but one or the other always happens.</em> The Forward Commander guaranteed this. No silent failures, no hung requests, no resources leaked in the failure path.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">Forward path component interaction</div>
+        <pre><code>ClientHttpRequest::processMiss()
+  └── FwdState::Start()
+        ├── peerSelect() → neighbors.cc
+        ├── HappyConnOpener
+        │     ├── ipcache (DNS)
+        │     └── Comm::Connect (TCP)
+        ├── Security::PeerConnector (TLS)
+        ├── HttpStateData (HTTP/1.1)
+        │     └── StoreEntry stream
+        └── complete() / fail()</code></pre>
+      </div>
+
+      <p>The road to the open internet was never blocked forever. DNS servers went down, network routes failed, origin servers crashed — but Squid always found a path or honestly reported that no path existed. The mission might fail, but it would not be forgotten. The kingdom's honor required a clear answer, in both success and defeat.</p>
+      <blockquote class="inner-voice">The Forward Commander did not always return victorious. But it always returned. There was no going out and simply not coming back. Every mission had an ending — and an accounting.</blockquote>
+    </div>
+  </article>
+
+  <nav class="chapter-nav">
+    <a href="vol3.html" class="chapter-nav-btn">← Volume 3: The Warehouse of Forgotten Things</a>
+    <a href="vol5.html" class="chapter-nav-btn">Volume 5: The Ledger, the Wounds, the Crown →</a>
+  </nav>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-logo">The Squid Epic</div>
+    <div class="footer-links">
+      <a href="https://github.com/squid-cache/squid" target="_blank" rel="noopener">squid-cache/squid</a>
+      <a href="https://github.com/NolanKiwi/squid-novel" target="_blank" rel="noopener">This project</a>
+      <a href="/vol4.html">한국어</a>
+    </div>
+    <div class="footer-copy">A technical novel based on the Squid Proxy source code</div>
+  </div>
+</footer>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

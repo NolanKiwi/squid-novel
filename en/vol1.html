@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en" data-volume="1">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Vol.1: The Gates Open — The Squid Epic</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <style>
+    :root { --vol-color: #c9a84c; }
+    .vol-index-bg {
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201,168,76,.15) 0%, transparent 60%),
+                  linear-gradient(180deg, #0a0c10 0%, #0f1117 100%);
+    }
+  </style>
+</head>
+<body>
+<div class="novel-wrapper">
+<nav class="novel-sidebar">
+  <div class="sidebar-logo"><a href="index.html">← Contents</a></div>
+  <div class="sidebar-vol-title">VOLUME 1</div>
+  <div class="sidebar-vol-name">The Gates Open<br><span style="font-size:.8rem;font-weight:400;color:var(--text-muted)">Birth of the Proxy Kingdom</span></div>
+  <nav class="sidebar-nav">
+    <a class="sidebar-chapter" href="#ch1"><span class="ch-num">01</span>The Primordial Silence</a>
+    <a class="sidebar-chapter" href="#ch2"><span class="ch-num">02</span>The Birth of main()</a>
+    <a class="sidebar-chapter" href="#ch3"><span class="ch-num">03</span>The Law Scribe's Mission</a>
+    <a class="sidebar-chapter" href="#ch4"><span class="ch-num">04</span>Contents of the Scroll</a>
+    <a class="sidebar-chapter" href="#ch5"><span class="ch-num">05</span>The Retainers Awaken</a>
+    <a class="sidebar-chapter" href="#ch6"><span class="ch-num">06</span>The Great Wheel's Heart</a>
+    <a class="sidebar-chapter" href="#ch7"><span class="ch-num">07</span>Secrets of the Pulse</a>
+    <a class="sidebar-chapter" href="#ch8"><span class="ch-num">08</span>The Gates Open</a>
+    <a class="sidebar-chapter" href="#ch9"><span class="ch-num">09</span>The First Visitor</a>
+    <a class="sidebar-chapter" href="#ch10"><span class="ch-num">10</span>Forging the Passport</a>
+    <a class="sidebar-chapter" href="#ch11"><span class="ch-num">11</span>The World Within the Walls</a>
+    <a class="sidebar-chapter" href="#ch12"><span class="ch-num">12</span>The Magic of Concurrency</a>
+    <a class="sidebar-chapter" href="#ch13"><span class="ch-num">13</span>The March of the Timers</a>
+    <a class="sidebar-chapter" href="#ch14"><span class="ch-num">14</span>SMP — The Kingdom Multiplied</a>
+    <a class="sidebar-chapter" href="#ch15"><span class="ch-num">15</span>At the Crossroads</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="vol-nav-btns">
+      <span class="vol-nav-btn" style="opacity:.3;cursor:default">← Prev</span>
+      <a href="vol2.html" class="vol-nav-btn">Vol.2 →</a>
+    </div>
+  </div>
+</nav>
+
+<main class="novel-main">
+  <div class="novel-topbar">
+    <div class="topbar-breadcrumb">
+      <a href="index.html">The Squid Epic</a>
+      <span class="sep">›</span>
+      <span class="current">Vol.1: The Gates Open</span>
+    </div>
+    <div class="lang-switcher"><span class="lang-btn active">EN</span><a href="/vol1.html" class="lang-btn">KO</a></div>
+    <div class="progress-bar"><div class="progress-fill"></div></div>
+  </div>
+
+  <div class="vol-index-hero" style="min-height:50vh">
+    <div class="vol-index-bg" style="position:absolute;inset:0;z-index:0"></div>
+    <div style="position:absolute;inset:0;z-index:0;background-image:linear-gradient(rgba(201,168,76,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,.03) 1px,transparent 1px);background-size:40px 40px"></div>
+    <div class="vol-index-content" style="padding-top:6rem">
+      <div class="vol-label">Volume 1</div>
+      <h1 class="vol-main-title">The Gates Open</h1>
+      <p class="vol-main-subtitle">Birth of the Proxy Kingdom</p>
+      <p class="vol-main-desc">
+        Everything begins with a single command.<br>
+        The machine opens its eyes, reads the rules, starts its heartbeat,<br>
+        and throws open the gates to greet the first visitor.
+      </p>
+    </div>
+  </div>
+
+  <article class="novel-content">
+
+<h2 class="chapter-title" id="ch1">
+  <span class="chapter-number">Chapter 1</span>
+  The Primordial Silence
+</h2>
+
+<p>Three in the morning. The machine room was cold.</p>
+
+<p>Row upon row of server racks stretched into the dark. Blue LED indicators blinked at irregular intervals. Cooling fans ran in a low, continuous hum — the breathing of something that never slept. And in the very center of it all, a single server sat waiting for its moment.</p>
+
+<p>Its name was printed on a label stuck to the chassis: <strong>SQUID PROXY — v6.x</strong>.</p>
+
+<p>The server had been powered down. Completely silent. No processes, no threads, no file descriptors open. Pure hardware waiting for electricity and intention.</p>
+
+<p>Then someone typed a command.</p>
+
+<pre class="code-block"><code>$ squid -f /etc/squid/squid.conf</code></pre>
+
+<p>The shell passed the string to the kernel. The kernel loaded the binary from disk into memory. Text segment, data segment, stack, heap — all arranged precisely. And then it called <code>main()</code>.</p>
+
+<p>The kingdom was about to be born.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/main.cc — The very first lines</div>
+  <div class="tech-box-body">
+<pre><code>int
+main(int argc, char **argv)
+{
+    return SquidMainSafe(argc, argv);
+}
+
+int
+SquidMainSafe(int argc, char **argv)
+{
+    try {
+        return SquidMain(argc, argv);
+    } catch (const std::exception &e) {
+        std::cerr &lt;&lt; "FATAL: " &lt;&lt; e.what() &lt;&lt; std::endl;
+        return 1;
+    } catch (...) {
+        std::cerr &lt;&lt; "FATAL: unknown exception" &lt;&lt; std::endl;
+        return 1;
+    }
+}</code></pre>
+    <p>The outermost shell. SquidMainSafe() wraps everything in a try-catch — one last line of defence before the process crashes. SquidMain() is where the real work begins.</p>
+  </div>
+</div>
+
+<p>Inside <code>SquidMain()</code> lay the roadmap of a kingdom's construction. Modules loaded. Command-line arguments parsed. Memory systems initialized. Config file found. Workers started.</p>
+
+<p>One line at a time, the kingdom assembled itself.</p>
+
+<div class="scene-break">⁂</div>
+
+<p>The first step was registering all the modules. <code>RegisterModules()</code>.</p>
+
+<p>Squid was not a monolith. It was a federation. Dozens of modules — DNS, cache, ACL, SSL, ICAP, logging — each needed to announce itself to the central registry before it could be used. Like nobles swearing fealty before a coronation.</p>
+
+<pre class="code-block"><code>void
+RegisterModules()
+{
+    Acl::RegisterMaker("src",    &amp;AclMakerWrapper&lt;ACLIP&gt;);
+    Acl::RegisterMaker("dst",    &amp;AclMakerWrapper&lt;ACLIP&gt;);
+    Acl::RegisterMaker("time",   &amp;AclMakerWrapper&lt;ACLTime&gt;);
+    Acl::RegisterMaker("port",   &amp;AclMakerWrapper&lt;ACLIntRange&gt;);
+    Acl::RegisterMaker("method", &amp;AclMakerWrapper&lt;ACLMethod&gt;);
+    // ...dozens more
+}</code></pre>
+
+<p>Each <code>RegisterMaker()</code> call stored a factory function in a global map. Later, when the config parser encountered <code>acl mynet src 192.168.0.0/16</code>, it would look up "src" in the registry and call its factory to produce the right ACL object. The registry was the kingdom's phonebook.</p>
+
+<!-- ════════════════ Chapter 2 ════════════════ -->
+<h2 class="chapter-title" id="ch2">
+  <span class="chapter-number">Chapter 2</span>
+  The Birth of main()
+</h2>
+
+<p>Memory had to be prepared before any serious work could begin. <code>Mem::Init()</code>.</p>
+
+<p>Squid was pathologically obsessed with memory. It had its own pool allocator, its own string type, its own reference-counting framework. All of it had to be bootstrapped in the right order, because each piece depended on the pieces below it.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/mem/Pool.cc — Memory pool initialization</div>
+  <div class="tech-box-body">
+<pre><code>void
+Mem::Init(void)
+{
+    // Register all the standard-size pools
+    // Pools are indexed by object size
+    // e.g., pool for 64-byte objects, 128-byte objects, etc.
+
+    mempool_init();
+
+    // Register pools for known types
+    // This is where MEMPROXY_CLASS classes get their pools
+    mem_init_mallocs();
+}</code></pre>
+    <p>Squid's memory pool system pre-allocates blocks of memory and hands them out without calling malloc() each time. When an object is "freed," it goes back into the pool rather than being returned to the OS. This dramatically reduces malloc/free overhead at high request rates.</p>
+  </div>
+</div>
+
+<p>With memory ready, the filesystem module initialized, and ACL factories registered, it was time for the most important step: reading the config file.</p>
+
+<p>The config file was the kingdom's constitution. <code>squid.conf</code>. Everything — cache size, access rules, listening ports, peer caches, logging format — lived in that single text file. Without it, the kingdom had no shape, no purpose, no identity.</p>
+
+<p>The Law Scribe was summoned.</p>
+
+<!-- ════════════════ Chapter 3 ════════════════ -->
+<h2 class="chapter-title" id="ch3">
+  <span class="chapter-number">Chapter 3</span>
+  The Law Scribe's Mission
+</h2>
+
+<p>The Law Scribe was <strong>ConfigParser</strong>. Its job: read the squid.conf file, one line at a time, and build the kingdom's internal model of the rules.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/ConfigParser.cc — Line-by-line parsing</div>
+  <div class="tech-box-body">
+<pre><code>void
+ConfigParser::ParseFile(const char *filename)
+{
+    FILE *fp = fopen(filename, "r");
+    if (!fp) {
+        fatalf("Cannot open config file: %s", filename);
+    }
+
+    char line[BUFSIZ];
+    while (fgets(line, sizeof(line), fp)) {
+        // Strip comments (# to end of line)
+        // Strip leading/trailing whitespace
+        // Handle line continuations (\)
+        // Skip blank lines
+
+        // Tokenize and dispatch to handler
+        parseConfigFileLine();
+    }
+    fclose(fp);
+}
+
+// The dispatch table — generated from cf.data.pre
+// Each directive name maps to a handler function
+// e.g., "http_port" → parse_http_port()
+//       "cache_dir" → parse_cache_dir()
+//       "acl"       → aclParseAclLine()</code></pre>
+    <p>The config parser is largely auto-generated from cf.data.pre, a meta-description of every config directive. Running make regenerates cf_parser.cci — a giant dispatch table mapping directive names to handler functions. This way, adding a new directive only requires editing one place.</p>
+  </div>
+</div>
+
+<p>The parser moved through the file methodically. Each non-blank, non-comment line was a directive. The first word on the line was the directive name. The rest were its arguments.</p>
+
+<p>When the parser hit <code>acl</code>, it called <code>aclParseAclLine()</code>. That function read the ACL name, looked up the type in the registry, called the factory, and stored the resulting <code>Acl::Node</code> in a global map. Later, <code>http_access allow mynet</code> would retrieve that ACL by name and wire it into the access control tree.</p>
+
+<p>The constitution was being written, article by article.</p>
+
+<!-- ════════════════ Chapter 4 ════════════════ -->
+<h2 class="chapter-title" id="ch4">
+  <span class="chapter-number">Chapter 4</span>
+  Contents of the Scroll
+</h2>
+
+<p>What was actually in a typical <code>squid.conf</code>? Here is a minimal but real configuration.</p>
+
+<pre class="code-block"><code>http_port 3128
+
+cache_dir ufs /var/spool/squid 10240 16 256
+cache_mem 256 MB
+maximum_object_size 100 MB
+
+acl localnet src 192.168.0.0/16
+acl SSL_ports port 443
+acl Safe_ports port 80 443 8080 21 70 210 1025-65535
+acl CONNECT method CONNECT
+
+http_access deny !Safe_ports
+http_access deny CONNECT !SSL_ports
+http_access allow localnet
+http_access deny all
+
+cache_mgr admin@example.com
+access_log /var/log/squid/access.log squid</code></pre>
+
+<p>Each line was a story.</p>
+
+<p><code>http_port 3128</code> told the kingdom where to hang its front door. Port 3128, the traditional proxy port. Clients would connect here.</p>
+
+<p><code>cache_dir ufs /var/spool/squid 10240 16 256</code> established the stone warehouse — 10 gigabytes on disk, laid out in a 16×256 two-level directory hierarchy. That's 4,096 subdirectories to spread the load.</p>
+
+<p><code>http_access deny !Safe_ports</code> was the first of the Judge's laws. "Deny anyone trying to reach a port that isn't on the safe list." Stop port-scanning abuse at the gate.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/cf.data.pre — Where directives are born</div>
+  <div class="tech-box-body">
+<pre><code># Each entry in cf.data.pre looks like:
+NAME: http_port
+TYPE: PortCfg
+DEFAULT: 3128
+LOC: Config.Sockaddr.http
+DOC_START
+    Squid normally listens to port 3128 ...
+DOC_END
+
+# The build system generates parse_http_port(),
+# dump_http_port(), free_http_port() from this.
+# ~200 directives, all described this way.</code></pre>
+    <p>cf.data.pre is the single source of truth for all config directives. The Perl script cf_gen.pl reads it and generates cf_parser.cci — a massive C switch/table. This is a classic code-generation pattern; hand-writing handlers for 200 directives would be error-prone and tedious.</p>
+  </div>
+</div>
+
+<!-- ════════════════ Chapter 5 ════════════════ -->
+<h2 class="chapter-title" id="ch5">
+  <span class="chapter-number">Chapter 5</span>
+  The Retainers Awaken
+</h2>
+
+<p>Config was loaded. The kingdom's shape was defined. Now the retainers had to be roused.</p>
+
+<p><code>mainInitialize()</code> was the great awakening ceremony. Each subsystem's <code>init()</code> or <code>Init()</code> function was called in careful order, because the order mattered — you can't open network sockets before the event system is ready; you can't start the cache before the filesystem is checked.</p>
+
+<pre class="code-block"><code>static void
+mainInitialize(void)
+{
+    ipcache_init();           // DNS resolver cache
+    fqdncache_init();         // Reverse DNS cache
+    Dns::Init();              // Async DNS subsystem
+
+    storeInit();              // Cache: open/rebuild swap dirs
+    storeFsInit();            // Filesystem drivers
+
+    neighbors_init();         // Load cache peer list
+    neighborsRegisterWithCacheManager();
+
+    clientdbInit();           // Per-client stats table
+
+    // Periodic timers
+    eventAdd("storeMaintain", storeMaintain, nullptr, 1.0, 1);
+    eventAdd("ipcache_purgelru", ipcache_purgelru, nullptr, 10.0, 1);
+    eventAdd("fqdncache_purgelru", fqdncache_purgelru, nullptr, 15.0, 1);
+
+    serverConnectionsOpen();  // Bind and listen on http_port
+    // ...
+}</code></pre>
+
+<p>Each <code>eventAdd()</code> planted a recurring timer. <code>storeMaintain</code> would fire every second to prune expired cache entries. <code>ipcache_purgelru</code> would fire every 10 seconds to evict old DNS entries. These timers were the kingdom's heartbeat — the rhythmic maintenance that kept the system healthy over time.</p>
+
+<p>Then <code>serverConnectionsOpen()</code>. The moment of truth. Squid bound its listening socket to port 3128 and called <code>listen()</code>. The front door was now physically open. Clients could knock. But nothing would answer yet — the event loop hadn't started.</p>
+
+<!-- ════════════════ Chapter 6 ════════════════ -->
+<h2 class="chapter-title" id="ch6">
+  <span class="chapter-number">Chapter 6</span>
+  The Great Wheel's Heart
+</h2>
+
+<p>Everything that had happened so far — module registration, config parsing, memory initialization, subsystem startup — was just preparation. It was all synchronous, all sequential, all blocking. One thing after another in a straight line.</p>
+
+<p>Now came the thing that made Squid <em>Squid</em>.</p>
+
+<p><code>mainLoop.run()</code>. The event loop. The Great Wheel.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/EventLoop.cc — The infinite loop</div>
+  <div class="tech-box-body">
+<pre><code>void
+EventLoop::run()
+{
+    last_loop = false;
+    while (!last_loop) {
+        runOnce();
+    }
+}
+
+bool
+EventLoop::runOnce()
+{
+    bool sawEvents = false;
+
+    // 1. Run all registered engine callbacks
+    //    (timers that have fired, signals, etc.)
+    for (auto &amp;engine : engines) {
+        int timeout = engine->checkEvents(0);
+        if (timeout == AsyncEngine::EVENT_IDLE) continue;
+        sawEvents = true;
+    }
+
+    // 2. Flush the async callback queue
+    while (AsyncCallQueue::Instance().fire()) {
+        sawEvents = true;
+    }
+
+    // 3. Wait for I/O events (epoll_wait / kevent)
+    //    Timeout: until the next timer fires
+    comm_select(calculateTimeout());
+
+    return sawEvents;
+}</code></pre>
+    <p>The event loop is Squid's soul. It runs forever — or until shutdown is signaled. Each iteration: fire pending callbacks, drain the async queue, then block on epoll/kqueue until something happens (socket readable, timer expired, signal received). That "block on epoll" is where the CPU actually rests.</p>
+  </div>
+</div>
+
+<p>The Great Wheel began to turn. <code>while(!last_loop)</code>. It would turn until someone killed the process or sent a shutdown signal. Minutes, hours, days, years — it didn't matter. It just kept turning.</p>
+
+<p>In between turns, everything happened. DNS replies arrived. New TCP connections knocked. Cache entries expired. Peer caches sent ICP hits. Access log buffers were flushed. Each of these was an event, and each event triggered callbacks that had been registered earlier.</p>
+
+<p>The magic: none of this blocked. A single OS thread handled it all. While waiting for a DNS reply, it served five other requests. While writing a cache file to disk, it parsed three incoming HTTP headers. Total concurrency from zero threads.</p>
+
+<!-- ════════════════ Chapter 7 ════════════════ -->
+<h2 class="chapter-title" id="ch7">
+  <span class="chapter-number">Chapter 7</span>
+  Secrets of the Pulse
+</h2>
+
+<p>What actually happened inside <code>comm_select()</code> — the wait-for-I/O step?</p>
+
+<p>On Linux, it was <code>epoll_wait()</code>. On BSDs and macOS, <code>kevent()</code>. On ancient systems, <code>select()</code> or <code>poll()</code>. All of them did the same thing: hand the OS a list of file descriptors to watch and a timeout. The OS put the process to sleep. When any of those file descriptors became readable or writable — or when the timeout expired — the OS woke the process up and reported what happened.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/comm/Select.cc — epoll inner loop</div>
+  <div class="tech-box-body">
+<pre><code>int
+Comm::DoSelect(int msec)
+{
+    struct epoll_event events[MAX_POLL_TIME];
+    int num = epoll_wait(kdpfd, events, MAX_POLL_TIME, msec);
+
+    if (num &lt; 0) {
+        if (errno == EINTR) return COMM_OK; // signal interrupted
+        return COMM_ERROR;
+    }
+
+    // For each ready file descriptor...
+    for (int i = 0; i &lt; num; ++i) {
+        int fd = events[i].data.fd;
+        bool read_ready  = events[i].events &amp; EPOLLIN;
+        bool write_ready = events[i].events &amp; EPOLLOUT;
+
+        // Schedule the registered callbacks
+        if (read_ready  &amp;&amp; fd_table[fd].read_handler)
+            ScheduleCallHere(fd_table[fd].read_handler);
+        if (write_ready &amp;&amp; fd_table[fd].write_handler)
+            ScheduleCallHere(fd_table[fd].write_handler);
+    }
+
+    return COMM_OK;
+}</code></pre>
+    <p>epoll_wait() returns when one or more sockets are ready. Squid doesn't immediately call the handlers — it schedules them via ScheduleCallHere() onto the AsyncCallQueue. The queue is then drained in the next phase of runOnce(). This two-phase approach keeps the event loop's internal state consistent.</p>
+  </div>
+</div>
+
+<p>Time was a first-class citizen in this world. <code>squid_curtime</code> — a global variable holding the current Unix timestamp — was updated every loop iteration. Most of Squid didn't call <code>gettimeofday()</code> directly; instead, they read <code>squid_curtime</code>. It was a small optimization with a big impact: at 10,000 requests per second, calling gettimeofday() 10,000 times per second added up fast.</p>
+
+<!-- ════════════════ Chapter 8 ════════════════ -->
+<h2 class="chapter-title" id="ch8">
+  <span class="chapter-number">Chapter 8</span>
+  The Gates Open
+</h2>
+
+<p>The event loop was running. A file descriptor — the listening socket — was registered with epoll. And someone knocked.</p>
+
+<p>A client machine somewhere on the network initiated a TCP connection to port 3128. The kernel completed the three-way handshake without waking Squid. Then epoll noticed the listening socket had become readable — meaning a completed connection was waiting in the accept queue — and woke the event loop.</p>
+
+<p>The callback on the listening socket fired: <code>httpAccept()</code>.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/client_side.cc — Accepting connections</div>
+  <div class="tech-box-body">
+<pre><code>void
+Comm::TcpAcceptor::acceptOne()
+{
+    // Pull one connection from the accept queue
+    Comm::ConnectionPointer newConn = new Comm::Connection;
+    newConn->fd = comm_accept(conn->fd, newConn->remote);
+
+    if (newConn->fd &lt; 0) {
+        // EAGAIN: no more connections right now
+        return;
+    }
+
+    // Set socket options: TCP_NODELAY, SO_KEEPALIVE, etc.
+    commSetCloseOnExec(newConn->fd);
+    fd_note(newConn->fd, "client http connect");
+
+    // Pass the new connection to the protocol handler
+    typedef CommCbFunPtrCallT&lt;CommAcceptCbPtrFun&gt; MyCall;
+    AsyncCall::Pointer call = commCbCall(5, 5, "httpAccept",
+                                          CommAcceptCbPtrFun(httpAccept));
+    ScheduleCallHere(call);
+}
+
+static void
+httpAccept(const CommAcceptCbParams &amp;params)
+{
+    // Create ConnStateData to manage the new client connection
+    ConnStateData *connState = new ConnStateData(params.conn, ...);
+    connState->readNextRequest();
+}</code></pre>
+    <p>TcpAcceptor loops over the accept queue, pulling out all pending connections without blocking. For each one, it creates a ConnStateData — the Gatekeeper — and calls readNextRequest() to start reading the client's HTTP request.</p>
+  </div>
+</div>
+
+<p>A file descriptor was born. The kernel assigned it a number — say, 47. From this point forward, fd 47 represented one client's connection. It would live until the connection closed or timed out.</p>
+
+<p>And a <strong>ConnStateData</strong> was born alongside it. The Gatekeeper. The object that would shepherd this connection from its first byte to its last.</p>
+
+<!-- ════════════════ Chapter 9 ════════════════ -->
+<h2 class="chapter-title" id="ch9">
+  <span class="chapter-number">Chapter 9</span>
+  The First Visitor
+</h2>
+
+<p>The Gatekeeper called <code>readNextRequest()</code>. This registered a read callback on fd 47 with epoll. Then control returned to the event loop.</p>
+
+<p>A few milliseconds later, epoll fired: the client had sent data. The Gatekeeper's read callback was scheduled. When it fired, bytes arrived in the read buffer.</p>
+
+<pre class="code-block"><code>GET http://www.example.com/index.html HTTP/1.1
+Host: www.example.com
+User-Agent: Mozilla/5.0 ...
+Accept: text/html
+Connection: keep-alive
+
+</code></pre>
+
+<p>Raw bytes in a buffer. Now they had to be parsed.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/client_side.cc — HTTP request parsing</div>
+  <div class="tech-box-body">
+<pre><code>void
+ConnStateData::parseRequests()
+{
+    // Feed bytes into the HTTP/1 parser
+    while (!inBuf.isEmpty()) {
+        Http1::RequestParser hp;
+        hp.parse(inBuf);
+
+        if (hp.needsMoreData()) {
+            // Incomplete request — wait for more bytes
+            break;
+        }
+
+        if (hp.parseError()) {
+            // Malformed request — send 400 Bad Request
+            debugs(33, 2, "Bad HTTP request");
+            clientStreamAbort(...);
+            break;
+        }
+
+        // Complete request parsed
+        // Build HttpRequest object from parsed fields
+        HttpRequest *req = HttpRequest::FromUrlXXX(
+            hp.requestUri(), hp.method(), hp.messageVersion());
+
+        // Start processing the request
+        ClientHttpRequest *http = new ClientHttpRequest(this);
+        http->request = req;
+        clientProcessRequest(this, hp, http);
+    }
+}</code></pre>
+    <p>Http1::RequestParser is a state-machine parser. It handles incomplete data (TCP can split a request across multiple packets), malformed requests, and all the edge cases of HTTP/1.0 and HTTP/1.1. On success, it returns a parsed method, URI, version, and headers.</p>
+  </div>
+</div>
+
+<p>The parser worked through the bytes. <code>GET</code> — the method. <code>http://www.example.com/index.html</code> — the URI. <code>HTTP/1.1</code> — the version. Then headers, one by one, until the blank line that marked the end of the header section.</p>
+
+<p>A <code>HttpRequest</code> object materialized. The visitor's passport.</p>
+
+<!-- ════════════════ Chapter 10 ════════════════ -->
+<h2 class="chapter-title" id="ch10">
+  <span class="chapter-number">Chapter 10</span>
+  Forging the Passport
+</h2>
+
+<p>The <code>HttpRequest</code> was not just a bag of strings. It was a richly structured object.</p>
+
+<pre class="code-block"><code>class HttpRequest : public Http::Message
+{
+public:
+    HttpRequestMethod method;     // GET, POST, CONNECT, ...
+    AnyP::Uri url;                // Parsed URL components
+
+    // Scheme, host, port, path, query — all separated
+    // url.getScheme() == AnyP::PROTO_HTTP
+    // url.host()      == "www.example.com"
+    // url.port()      == 80
+    // url.path()      == "/index.html"
+
+    HttpHeader header;            // Parsed headers
+    Auth::UserRequest::Pointer auth_user_request; // Auth info
+
+    // Cache-Control flags extracted from headers
+    bool no_cache;
+    bool no_store;
+
+    // Connection flags
+    bool persistent;              // Connection: keep-alive?
+}</code></pre>
+
+<p>The URL parser was its own maze. <code>AnyP::Uri::parse()</code> handled the full complexity of RFC 3986 — scheme, authority, path, query, fragment. HTTPS CONNECT requests had a different form: <code>CONNECT example.com:443 HTTP/1.1</code>, where the "URL" was just a host:port pair. The parser had to know the difference.</p>
+
+<p>Once the passport was forged, the visitor entered the kingdom's inner corridors. The callout chain.</p>
+
+<!-- ════════════════ Chapter 11 ════════════════ -->
+<h2 class="chapter-title" id="ch11">
+  <span class="chapter-number">Chapter 11</span>
+  The World Within the Walls
+</h2>
+
+<p>The callout chain. <code>doCallouts()</code>. A series of checkpoints between "request received" and "response sent."</p>
+
+<p>Each checkpoint was guarded. Some were always present. Some activated only under certain conditions. They ran in a fixed order, one at a time, each asynchronous — meaning each checkpoint could pause, wait for external information, and resume later.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> src/client_side_request.cc — The callout chain</div>
+  <div class="tech-box-body">
+<pre><code>void
+ClientRequestContext::doCallouts()
+{
+    // Each flag tracks whether this callout has been done
+    if (!http->request->flags.done_follow_x_forwarded_for) {
+        checkFollowXForwardedFor();
+        return;  // async — will call doCallouts() again when done
+    }
+
+    if (!http->request->flags.done_adaptation) {
+        checkAdaptation();      // ICAP REQMOD check
+        return;
+    }
+
+    if (!http->request->flags.done_acl_http_access) {
+        http->request->flags.done_acl_http_access = true;
+        // This is the main access control check
+        ACLFilledChecklist *acl_checklist =
+            clientAclChecklistCreate(Config.accessList.http, http);
+        acl_checklist->nonBlockingCheck(
+            clientAccessCheckDoneWrapper, this);
+        return;
+    }
+
+    if (!http->request->flags.done_redirect) {
+        checkRedirect();
+        return;
+    }
+
+    // All callouts done — proceed to cache lookup
+    clientProcessRequest2();
+}</code></pre>
+    <p>doCallouts() is a recursive-by-callback function. Each callout sets its flag when it completes and re-calls doCallouts(). The function effectively resumes from where it left off on each call. It's a hand-written coroutine — sequential logic expressed as a chain of callbacks.</p>
+  </div>
+</div>
+
+<p>The most important callout: <strong>ACL http_access check</strong>. This is where the Judge was summoned. The Gatekeeper handed the visitor's passport to the Judge and waited for a verdict: allowed or denied.</p>
+
+<p>If denied, the connection received an error page and was closed. If allowed, the kingdom's next challenge awaited: the cache lookup.</p>
+
+<!-- ════════════════ Chapter 12 ════════════════ -->
+<h2 class="chapter-title" id="ch12">
+  <span class="chapter-number">Chapter 12</span>
+  The Magic of Concurrency
+</h2>
+
+<p>Pause here. Step back.</p>
+
+<p>Everything described so far — accepting a connection, reading bytes, parsing HTTP, running the callout chain — happened in a single thread, on a single CPU core. No parallelism.</p>
+
+<p>And yet, while this visitor's ACL check was waiting for an external LDAP query to return, Squid was simultaneously:</p>
+<ul>
+  <li>Streaming a cached video to another client</li>
+  <li>Completing a TLS handshake with a third client</li>
+  <li>Receiving a DNS reply for a fourth client's request</li>
+  <li>Writing a completed cache entry to disk</li>
+  <li>Responding to a cache manager HTTP request</li>
+</ul>
+
+<p>How? The event loop. Every operation that would block — waiting for a network reply, waiting for disk I/O, waiting for a timer — was converted into a non-blocking operation plus a callback. The callback was registered with epoll. The event loop drove all of it from a single thread.</p>
+
+<blockquote class="inner-voice">
+I am not like a web server that spawns a thread per request. I am one. One thread, one process — in default mode — handling thousands of simultaneous connections. While I wait for your DNS reply, I'm also serving someone else's cache hit. While I'm writing your response to disk, I'm reading someone else's request off the wire. I never block. I only wait — and while I wait, I work on something else.
+</blockquote>
+
+<!-- ════════════════ Chapter 13 ════════════════ -->
+<h2 class="chapter-title" id="ch13">
+  <span class="chapter-number">Chapter 13</span>
+  The March of the Timers
+</h2>
+
+<p>Beyond request-driven events, the kingdom had its own internal clock.</p>
+
+<p>Timers. Periodic events registered with <code>eventAdd()</code>. They fired whether or not any client was connected.</p>
+
+<pre class="code-block"><code>// Maintenance timers (from mainInitialize)
+eventAdd("storeMaintain",      storeMaintain,      nullptr,  1.0, 1);  // every 1s
+eventAdd("ipcache_purgelru",   ipcache_purgelru,   nullptr, 10.0, 1);  // every 10s
+eventAdd("fqdncache_purgelru", fqdncache_purgelru, nullptr, 15.0, 1);  // every 15s
+eventAdd("memPoolCleanIdlePools", MemPools::GetInstance().flushMeters,
+                                               nullptr, 15.0, 1);  // every 15s
+eventAdd("clientdbGC",         clientdbGC,         nullptr, 6*3600, 1); // every 6h</code></pre>
+
+<p>Each timer fired, did its work, and re-registered itself for the next interval. The system never stopped cleaning up after itself.</p>
+
+<p><code>storeMaintain</code> was the most frequent. Every second, it asked the cache: "Are you over capacity? Are any entries expired?" If yes, it evicted a batch. Small increments, continuously, so the cache never had to do a massive stop-the-world purge.</p>
+
+<!-- ════════════════ Chapter 14 ════════════════ -->
+<h2 class="chapter-title" id="ch14">
+  <span class="chapter-number">Chapter 14</span>
+  SMP — The Kingdom Multiplied
+</h2>
+
+<p>Single-threaded was fast but had a ceiling. Modern servers had 16, 32, 64 cores. Squid's single thread could max out one core, but the other 63 sat idle.</p>
+
+<p>The answer: <strong>SMP mode</strong>. <code>workers N</code> in squid.conf.</p>
+
+<div class="tech-box">
+  <div class="tech-box-header"><span class="tech-box-toggle">▼</span> squid.conf — SMP configuration</div>
+  <div class="tech-box-body">
+<pre><code># Spawn 8 independent worker processes
+workers 8
+
+# Shared memory for cross-worker coordination
+# (automatically managed by Squid)
+
+# Each worker binds to the same port via SO_REUSEPORT
+# The kernel load-balances incoming connections across workers
+http_port 3128</code></pre>
+    <p>In SMP mode, Squid spawns N worker processes plus one Coordinator process plus disk helper processes. Each worker runs a full event loop independently. They share a cache via shared memory (ipc/) and coordinate on in-progress requests via CollapsedForwarding.</p>
+  </div>
+</div>
+
+<p>The SMP architecture used separate processes, not threads. Each worker was an independent OS process with its own event loop, its own file descriptor table, its own stack. They shared nothing by default — except for the shared memory regions used for the transient cache and for coordination messages.</p>
+
+<p>The <strong>Coordinator</strong> process managed the workers. It handled configuration reloads, reconfigure signals, and monitored worker health. If a worker crashed, the Coordinator could restart it without taking down the entire proxy.</p>
+
+<p><strong>CollapsedForwarding</strong> solved the thundering-herd problem across workers. If two workers both got a cache miss for the same URL simultaneously, only one would forward to the origin. The other would wait for the result in shared memory.</p>
+
+<!-- ════════════════ Chapter 15 ════════════════ -->
+<h2 class="chapter-title" id="ch15">
+  <span class="chapter-number">Chapter 15</span>
+  At the Crossroads
+</h2>
+
+<p>The visitor's passport was forged. The callout chain had run. The ACL had spoken: <em>allowed</em>.</p>
+
+<p>Now came the crossroads.</p>
+
+<p>Two paths. Two questions:</p>
+
+<p><strong>First:</strong> Does the kingdom already have what this visitor wants? Check the cache. If yes — a <em>cache hit</em> — serve it immediately without leaving the building.</p>
+
+<p><strong>Second:</strong> If no — a <em>cache miss</em> — the Forward Commander must be dispatched beyond the border to retrieve it from the origin server.</p>
+
+<p>The cache lookup was about to begin. The Storekeeper would be consulted. And the kingdom's memory — deep, vast, and finitely bounded — would answer.</p>
+
+<blockquote class="inner-voice">
+I sit at the crossing between memory and the outside world. Every request either finds what it needs in my warehouse or makes me send someone to fetch it. My hit rate is my worth. Eighty-seven percent today. Eighty-seven packets out of a hundred never left this building. The origin servers never felt them. The network never saw them. They were mine to give.
+
+That is what I am for.
+</blockquote>
+
+<p>Volume One ends here.</p>
+
+<p>In Volume Two, Judge ACL takes the stage. The laws will be read. The verdicts will be handed down. And some visitors will learn that not all gates lead inward.</p>
+
+  </article>
+
+  <div class="chapter-nav">
+    <span class="chapter-nav-btn prev" style="opacity:.3;cursor:default">← No previous</span>
+    <a href="index.html" class="chapter-nav-btn index">Contents</a>
+    <a href="vol2.html" class="chapter-nav-btn next">Vol.2: The Court of the Judge →</a>
+  </div>
+</main>
+</div>
+<button class="mobile-menu-btn">☰</button>
+<script src="../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en" data-volume="2">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Vol.2 The Court of the Judge — The Squid Epic</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+</head>
+<body>
+
+<nav class="novel-topbar">
+  <a href="index.html" class="topbar-back">← The Squid Epic</a>
+  <div class="topbar-breadcrumb">
+    <span class="topbar-vol">VOLUME 2</span>
+    <span class="topbar-title">The Court of the Judge</span>
+  </div>
+  <div class="lang-switcher">
+    <span class="lang-btn active">EN</span>
+    <a href="/vol2.html" class="lang-btn">KO</a>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+</nav>
+
+<aside class="novel-sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-vol">VOLUME 2</div>
+    <div class="sidebar-title">The Court of the Judge</div>
+  </div>
+  <nav class="sidebar-toc">
+    <a href="#ch1" class="toc-item">Chapter 1 · The Gate After the Gate</a>
+    <a href="#ch2" class="toc-item">Chapter 2 · The Judge's Constitution</a>
+    <a href="#ch3" class="toc-item">Chapter 3 · The Checklist</a>
+    <a href="#ch4" class="toc-item">Chapter 4 · The IP Ledger</a>
+    <a href="#ch5" class="toc-item">Chapter 5 · The Clock Court</a>
+    <a href="#ch6" class="toc-item">Chapter 6 · The Pattern Witch</a>
+    <a href="#ch7" class="toc-item">Chapter 7 · The Outer Judges</a>
+    <a href="#ch8" class="toc-item">Chapter 8 · The Path Recognizer</a>
+    <a href="#ch9" class="toc-item">Chapter 9 · The Identity Inquisitors</a>
+    <a href="#ch10" class="toc-item">Chapter 10 · The Logic Architects</a>
+    <a href="#ch11" class="toc-item">Chapter 11 · Asynchrony — The Suspended Trial</a>
+    <a href="#ch12" class="toc-item">Chapter 12 · The Penalty Scribes</a>
+    <a href="#ch13" class="toc-item">Chapter 13 · The Glass Inspector</a>
+    <a href="#ch14" class="toc-item">Chapter 14 · A Day in the Courtroom</a>
+    <a href="#ch15" class="toc-item">Chapter 15 · The Law That Never Ends</a>
+  </nav>
+</aside>
+
+<button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">☰</button>
+
+<main class="novel-main">
+
+  <header class="vol-hero">
+    <div class="vol-hero-num">VOLUME 2</div>
+    <h1 class="vol-hero-title">The Court of the Judge</h1>
+    <p class="vol-hero-sub">ACL, Rules, and Verdicts</p>
+    <p class="vol-hero-desc">
+      The request passed through the gate. But even inside there are checkpoints.
+      Judge ACL interrogates every packet. Allow or deny —
+      the law breathes between zero and one.
+    </p>
+  </header>
+
+  <!-- Chapter 1 -->
+  <article class="chapter" id="ch1">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 1</span>
+      <h2 class="chapter-title">The Gate After the Gate</h2>
+    </div>
+    <div class="chapter-body">
+      <p>The Gatekeeper accepted the connection. Parsed the HTTP request. Read the method, URL, headers — all the way through. And then handed the work to a new actor: <strong>ClientHttpRequest</strong>.</p>
+      <p>ClientHttpRequest was not the Gatekeeper. It was not a guardian of raw connections. It was a processor of completed requests — a being that existed to carry one petition from the client's mouth to the kingdom's final verdict. And its first act was to march the petition to the courtroom.</p>
+      <p>The courtroom had a name: <code>src/client_side_request.cc</code>. Inside it a chain of tests waited — a sequence called <strong>doCallouts()</strong>. X-Forwarded-For processing. ICAP adaptation. And then, most importantly: the ACL judgment.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">src/client_side_request.cc — doCallouts()</div>
+        <pre><code>void
+ClientHttpRequest::doCallouts()
+{
+    // Step 1: X-Forwarded-For
+    if (!calloutContext->host_header_verify_done)
+        hostHeaderVerify();
+    // Step 2: ICAP
+    else if (!calloutContext->adaptation_acl_check_done)
+        adaptationAclCheckDone(...);
+    // Step 3: ACL
+    else if (!calloutContext->acl_checklist_done)
+        aclCheckFastOrSlow();
+    // ...
+}</code></pre>
+      </div>
+
+      <p>The chain was unbreakable. Each step had to complete before the next could begin. And if any step returned DENY — the petition died there, without ever reaching the cache or the network.</p>
+      <p>The courtroom awaited.</p>
+    </div>
+  </article>
+
+  <!-- Chapter 2 -->
+  <article class="chapter" id="ch2">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 2</span>
+      <h2 class="chapter-title">The Judge's Constitution</h2>
+    </div>
+    <div class="chapter-body">
+      <p>Judge ACL's laws were not born at runtime. They were written in a file: <code>squid.conf</code>. Lines like:</p>
+      <pre class="inline-code">acl localnet src 10.0.0.0/8
+http_access allow localnet
+http_access deny all</pre>
+      <p>These declarations were the kingdom's constitution. When the kingdom booted, <strong>ConfigParser</strong> read the conf file from top to bottom and called upon a man named <strong>aclParseAclLine()</strong> to interpret each <code>acl</code> line.</p>
+      <p>aclParseAclLine looked at the type — <code>src</code>, <code>dst</code>, <code>time</code>, <code>url_regex</code>, and hundreds more — and called a factory function. The factory conjured the right ACL object and stored it in a global map keyed by name.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">src/acl/Acl.cc — ACL factory</div>
+        <pre><code>Acl::Node *
+Acl::Node::Make(const char * const typeName)
+{
+    const auto &amp; makers = Registry();
+    const auto pos = makers.find(typeName);
+    if (pos == makers.end())
+        throw TextException(ToSBuf("unknown ACL type: ", typeName), ...);
+    return (pos-&gt;second)();
+}</code></pre>
+      </div>
+
+      <p>Each ACL type registered itself at program startup using a static initializer. The registry was a map from type name to factory lambda. When the constitution was read, the factories breathed life into an army of judgment objects — each one a frozen rule waiting to be consulted.</p>
+      <blockquote class="inner-voice">A law that no one reads is still a law. These objects slept in memory for the entire lifetime of the proxy, awakened only when a request knocked on the courtroom door.</blockquote>
+    </div>
+  </article>
+
+  <!-- Chapter 3 -->
+  <article class="chapter" id="ch3">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 3</span>
+      <h2 class="chapter-title">The Checklist</h2>
+    </div>
+    <div class="chapter-body">
+      <p>When a request arrived at the courtroom, the system did not invoke ACL objects directly. It created a temporary document — a <strong>ACLChecklist</strong> — and handed it the request's context.</p>
+      <p>The Checklist was the trial itself. It held a reference to the request, carried the client's IP address, remembered which rules had been consulted and which had not, and maintained a stack for the current evaluation path through nested AND/OR logic.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">src/acl/Checklist.h — the trial document</div>
+        <pre><code>class ACLChecklist {
+public:
+    Acl::Answer fastCheck();
+    void nonBlockingCheck(ACLCB *, void *);
+
+private:
+    const acl_access *accessList = nullptr;
+    Acl::InnerNode::Breadcrumbs matchPath;
+    bool asyncInProgress_ = false;
+    // ...
+};</code></pre>
+      </div>
+
+      <p>The Checklist had two modes of operation. The first was <strong>fastCheck()</strong> — synchronous evaluation, completed within the current call stack. The second was <strong>nonBlockingCheck()</strong> — asynchronous evaluation, which could suspend mid-trial while waiting for an external process to respond, and resume later via callback.</p>
+      <p>The distinction mattered enormously. Most ACL types were fast: IP matching, time checking, string matching. But some ACL types had to consult external oracles — processes outside the proxy that knew things the proxy did not. Those required the async path, and the trial would be suspended until the oracle answered.</p>
+      <blockquote class="inner-voice">A trial that cannot pause is a trial that cannot be fair. The Checklist learned to wait.</blockquote>
+    </div>
+  </article>
+
+  <!-- Chapter 4 -->
+  <article class="chapter" id="ch4">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 4</span>
+      <h2 class="chapter-title">The IP Ledger</h2>
+    </div>
+    <div class="chapter-body">
+      <p>The most common ACL type in the kingdom was <code>src</code> — match by source IP address. Its implementation lived in <code>src/acl/Ip.cc</code>, and it used a data structure older than most of its colleagues: the <strong>radix trie</strong>.</p>
+      <p>A radix trie is a tree where each node represents a bit of the address. To look up whether 192.168.1.42 was in the set 192.168.0.0/16, the trie walked 16 bits down the tree and found a match. To check whether it was NOT in any of ten thousand blocked ranges, it still walked only 32 bits — the depth of an IPv4 address.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">src/acl/Ip.cc — radix lookup</div>
+        <pre><code>int
+ACLIP::match(ACLChecklist *checklist)
+{
+    const auto &amp; ip = dynamic_cast&lt;ACLIPChecklist*&gt;(checklist)-&gt;src_addr;
+    return data-&gt;match(ip);
+    // data is a SplayTree&lt;acl_ipdata&gt; with radix semantics
+}</code></pre>
+      </div>
+
+      <p>IPv6 was handled identically, with 128 bits instead of 32. The same radix structure, the same walking logic, the same O(address-length) lookup time regardless of how many addresses were in the set.</p>
+      <p>The IP Ledger was the fastest judge in the courtroom. No disk access, no network calls, no external processes. Just a tree walk through bits already in memory. For the vast majority of requests, it rendered its verdict in microseconds.</p>
+      <blockquote class="inner-voice">The best law is the law that answers before you finish asking the question.</blockquote>
+    </div>
+  </article>
+
+  <!-- Chapter 5 -->
+  <article class="chapter" id="ch5">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 5</span>
+      <h2 class="chapter-title">The Clock Court</h2>
+    </div>
+    <div class="chapter-body">
+      <p>Some laws applied only at certain hours. The <code>time</code> ACL type, implemented in <code>src/acl/Time.cc</code>, was the kingdom's temporal gatekeeper — a judge who looked not at who was asking, but <em>when</em> they were asking.</p>
+      <p>The implementation was elegant in its simplicity. For each configured time range, the ACL stored a bitmask — one bit for each minute of the week. There are 7 × 24 × 60 = 10,080 minutes in a week. The bitmask was exactly 10,080 bits — 1,260 bytes.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">src/acl/Time.cc — weekly bitmask</div>
+        <pre><code>// "time MTWHF 08:00-17:00" compiles to:
+// bit[Monday*1440 + 8*60 + 0] through [Monday*1440 + 16*60 + 59] = 1
+// bit[Tuesday*...] through [...] = 1
+// ... and so on for W, T, H, F
+
+int
+ACLTime::match(ACLChecklist *checklist)
+{
+    const time_t when = squid_curtime % (7 * 24 * 3600);
+    const int minute = when / 60;
+    return data-&gt;find(minute) ? 1 : 0;
+}</code></pre>
+      </div>
+
+      <p>To check whether the current time matched a time ACL, the code computed which minute of the week it currently was — a number from 0 to 10,079 — and looked up that bit. One bit test. No parsing, no date math, no string comparison. The entire schedule was precompiled at config time into a lookup table that answered in nanoseconds.</p>
+      <p>The Clock Court never deliberated. It glanced at its watch and immediately knew.</p>
+    </div>
+  </article>
+
+  <!-- Chapter 6 -->
+  <article class="chapter" id="ch6">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 6</span>
+      <h2 class="chapter-title">The Pattern Witch</h2>
+    </div>
+    <div class="chapter-body">
+      <p>Not all judgments could be expressed as IP ranges or time windows. Some required pattern matching — the ability to say "this URL looks like it contains the word 'malware'" or "this domain ends in .evil.com". For this the kingdom employed the Pattern Witch: <strong>ACLRegex</strong>.</p>
+      <p>The Pattern Witch lived in <code>src/acl/RegexData.cc</code> and carried a compiled list of regular expressions. Each expression was a POSIX regex, compiled at config time and stored ready-to-execute.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">src/acl/RegexData.cc — regex matching</div>
+        <pre><code>bool
+ACLRegexData::match(const char *word)
+{
+    for (const auto &amp; re : data) {
+        if (re.match(word)) {
+            debugs(28, 4, "regex match: " &lt;&lt; re.c_str());
+            return true;
+        }
+    }
+    return false;
+}</code></pre>
+      </div>
+
+      <p>The Pattern Witch was powerful but expensive. A list of a thousand regexes tested against every URL meant a thousand regex evaluations per request. For this reason, experienced administrators kept their regex ACLs sparse — or replaced them with faster alternatives like <code>dstdomain</code>, which used a hash lookup instead of pattern matching.</p>
+      <p>But for the cases where only a pattern would do — URL blacklists, content type filters, custom header inspections — the Pattern Witch was indispensable. She saw meaning in strings where the other judges saw only bytes.</p>
+      <blockquote class="inner-voice">She whispered the patterns to herself as she read, and the patterns whispered back: match, no match, match.</blockquote>
+    </div>
+  </article>
+
+  <!-- Chapter 7 -->
+  <article class="chapter" id="ch7">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 7</span>
+      <h2 class="chapter-title">The Outer Judges</h2>
+    </div>
+    <div class="chapter-body">
+      <p>There was knowledge the kingdom could not hold within itself. User databases, active directory servers, custom business logic systems — these lived outside the proxy and could not be compiled into squid.conf. To consult them, the kingdom employed a special mechanism: <strong>external ACL</strong>.</p>
+      <p>The external ACL system, implemented in <code>src/external_acl.cc</code>, spawned helper processes — small programs that read lines from stdin and wrote <code>OK</code> or <code>ERR</code> to stdout. The proxy sent them formatted queries and waited for answers.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">external ACL helper protocol</div>
+        <pre><code"># squid sends:
+192.168.1.42 jsmith GET http://example.com/
+
+# helper responds:
+OK user=jsmith group=employees log="authenticated"
+# or:
+ERR message="user not found"</code></pre>
+      </div>
+
+      <p>But waiting was expensive. The proxy cached external ACL responses — keyed by the query string, with a configurable TTL. If the same user from the same IP requested the same resource within the TTL window, the cached answer was used and the helper was not consulted.</p>
+      <p>The cache was a bounded hash table with LRU eviction. It stored <strong>ExternalACLEntry</strong> objects, each with an answer, a timestamp, and a tag — whether the answer was still fresh, nearly stale, or expired.</p>
+      <blockquote class="inner-voice">The outer judges were wise but slow. The kingdom learned to remember their verdicts.</blockquote>
+    </div>
+  </article>
+
+  <!-- Chapter 8 -->
+  <article class="chapter" id="ch8">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 8</span>
+      <h2 class="chapter-title">The Path Recognizer</h2>
+    </div>
+    <div class="chapter-body">
+      <p>URL structure was another axis of judgment. The <code>url_path</code>, <code>urlpath_regex</code>, and <code>dstdomain</code> ACL types allowed administrators to make decisions based on the destination of a request, not its source.</p>
+      <p>The <code>dstdomain</code> type was special. It used a hash set rather than a list or tree, enabling O(1) average-case lookup. When compiled, the list of domains was stored in a <strong>SplayTree</strong> sorted lexicographically from right to left — so that <code>.example.com</code> entries would match both <code>www.example.com</code> and <code>mail.example.com</code>.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">src/acl/DomainData.cc — right-to-left domain matching</div>
+        <pre><code>bool
+ACLDomainData::match(const char *host)
+{
+    // compare reversed: "moc.elpmaxe" matches ".moc.elpmaxe"
+    char reversed[SQUIDHOSTNAMELEN];
+    reverseString(host, reversed);
+    return data.find(reversed) != nullptr;
+}</code></pre>
+      </div>
+
+      <p>This design meant that a wildcard entry like <code>.example.com</code> stored as <code>moc.elpmaxe.</code> would match any hostname whose reversed form started with <code>moc.elpmaxe.</code> — which was exactly any subdomain of example.com. The dot prefix became a prefix match in the reversed space.</p>
+      <p>The Path Recognizer knew destinations. The IP Ledger knew origins. Together they defined the two-dimensional space of access control: who is asking, and where are they trying to go.</p>
+    </div>
+  </article>
+
+  <!-- Chapter 9 -->
+  <article class="chapter" id="ch9">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 9</span>
+      <h2 class="chapter-title">The Identity Inquisitors</h2>
+    </div>
+    <div class="chapter-body">
+      <p>The kingdom demanded identity from its subjects. The <code>proxy_auth</code> ACL type required HTTP authentication — Basic, NTLM, Kerberos/Negotiate — before any request could proceed. The authentication subsystem lived in <code>src/auth/</code>.</p>
+      <p>When a request arrived without credentials, the ACL evaluation did not simply return DENY. It returned a special status — <strong>AUTH_REQUIRED</strong> — which caused the Gatekeeper to send a <code>407 Proxy Authentication Required</code> response back to the client, advertising which schemes were available.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">src/auth/basic/Config.cc — Basic auth challenge</div>
+        <pre><code>Auth::UserRequest::Pointer
+Auth::Basic::Config::decode(char const *proxy_auth, ...)
+{
+    // parse "Basic dXNlcjpwYXNz" (base64)
+    auto *result = new Auth::Basic::UserRequest();
+    // decode credentials, look up in helper cache
+    return result;
+}</code></pre>
+      </div>
+
+      <p>NTLM and Kerberos were stateful protocols requiring multiple round-trips. The proxy stored authentication state per TCP connection — because the authentication handshake was bound to the connection, not the request. A connection that completed NTLM negotiation was marked as authenticated; subsequent requests on that connection skipped the challenge.</p>
+      <p>The Identity Inquisitors were relentless. No one passed without a name.</p>
+      <blockquote class="inner-voice">A credential is a key. But a key can be copied. The inquisitors verified not just that you had the key, but that it was yours.</blockquote>
+    </div>
+  </article>
+
+  <!-- Chapter 10 -->
+  <article class="chapter" id="ch10">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 10</span>
+      <h2 class="chapter-title">The Logic Architects</h2>
+    </div>
+    <div class="chapter-body">
+      <p>Simple ACL types — IP, time, domain, regex — were the atoms of the judgment system. But the kingdom also needed to compose them: allow access if the source is local AND the time is business hours AND the URL is not in the blacklist. This compositional logic was the work of the <strong>Logic Architects</strong>.</p>
+      <p>The architects lived in <code>src/acl/AllOf.cc</code>, <code>AnyOf.cc</code>, and <code>Not.cc</code>. They were the boolean operators of the ACL system: AND, OR, NOT. Each was itself an ACL node that contained other ACL nodes as children.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">src/acl/AllOf.cc — AND logic with short-circuit</div>
+        <pre><code>Acl::Answer
+Acl::AllOf::matches(ACLChecklist *checklist) const
+{
+    for (const auto &amp; node : nodes) {
+        const auto result = node-&gt;matches(checklist);
+        if (!result.allowed())
+            return result; // short-circuit: first false ends it
+    }
+    return Acl::Answer(ACCESS_ALLOWED);
+}</code></pre>
+      </div>
+
+      <p>The evaluation was short-circuit. An AND chain stopped at the first DENY. An OR chain stopped at the first ALLOW. This meant that expensive ACL types — like external ACL — could be placed at the end of a chain, and would only be consulted if the cheaper tests hadn't already resolved the question.</p>
+      <p>But short-circuit had a subtlety: asynchronous ACL types could not simply "stop" — they had to suspend the entire checklist. The Logic Architects maintained a <strong>matchPath</strong> breadcrumb trail so that when an async ACL resumed, the evaluation could continue from exactly where it had paused.</p>
+    </div>
+  </article>
+
+  <!-- Chapter 11 -->
+  <article class="chapter" id="ch11">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 11</span>
+      <h2 class="chapter-title">Asynchrony — The Suspended Trial</h2>
+    </div>
+    <div class="chapter-body">
+      <p>The most complex aspect of the ACL system was not any individual judge. It was the mechanism of suspension — how a trial could pause mid-evaluation, yield control back to the event loop, and resume later without losing its place.</p>
+      <p>When an asynchronous ACL was encountered — say, an external ACL helper was being queried — the Checklist set a flag: <code>asyncInProgress_ = true</code>. The evaluation function returned without a final answer. Control returned to the event loop.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">src/acl/Checklist.cc — async suspension and resumption</div>
+        <pre><code>void
+ACLChecklist::checkCallback(Acl::Answer answer)
+{
+    asyncInProgress_ = false;
+    if (finished()) {
+        // trial is over, fire the callback
+        checkNB_callback(this, answer);
+        return;
+    }
+    // resume the trial from where it paused
+    matchAndFinish();
+}</code></pre>
+      </div>
+
+      <p>The suspended trial was vulnerable. While it waited, the world could change. The connection could close. The request could be aborted. The Checklist used <strong>CbcPointer</strong> to detect this — the same use-after-free prevention mechanism that protected all async jobs in the kingdom. If the Checklist's owner had vanished while it waited, the resumption detected this and quietly dissolved the trial rather than operating on dead memory.</p>
+      <blockquote class="inner-voice">The suspended trial was a ghost. It might return to a courtroom that no longer existed. The law had to account for this.</blockquote>
+    </div>
+  </article>
+
+  <!-- Chapter 12 -->
+  <article class="chapter" id="ch12">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 12</span>
+      <h2 class="chapter-title">The Penalty Scribes</h2>
+    </div>
+    <div class="chapter-body">
+      <p>When the Checklist reached its verdict — DENY — the trial was not simply over. The denial had to be communicated to the client. This was the work of the <strong>Penalty Scribes</strong>: the error page generation system in <code>src/errorpage.cc</code>.</p>
+      <p>An <strong>ErrorState</strong> object was created, carrying the error type — <code>ERR_ACCESS_DENIED</code>, <code>ERR_CACHE_ACCESS_DENIED</code>, <code>ERR_TOO_BIG</code>, and dozens more. The error type mapped to an error page template, usually an HTML file stored in the system's error directory.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">src/errorpage.cc — error template expansion</div>
+        <pre><code>// Template variables like %U (URL), %e (errno), %c (Squid error code)
+// are expanded at response-generation time
+MemBuf
+ErrorState::buildBody()
+{
+    const char *m = template_.c_str();
+    // scan for % escape sequences, expand each one
+    // %U → request URL, %w → wait time, %z → DNS error detail
+}</code></pre>
+      </div>
+
+      <p>The error pages were customizable per language, per error type, and even per ACL. Administrators could deploy completely custom HTML with their organization's logo, help desk number, and a message explaining why the site was blocked.</p>
+      <p>The Penalty Scribes took no pleasure in their work. But they were thorough. Every denial was documented, every error code precise, every response properly formatted with the correct HTTP status code.</p>
+    </div>
+  </article>
+
+  <!-- Chapter 13 -->
+  <article class="chapter" id="ch13">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 13</span>
+      <h2 class="chapter-title">The Glass Inspector</h2>
+    </div>
+    <div class="chapter-body">
+      <p>Encrypted traffic was an ancient problem of the courtroom. How could Judge ACL render a verdict on a request it could not read? HTTPS connections arrived as opaque tunnels — the Gatekeeper could see the TCP connection but not the HTTP inside it.</p>
+      <p>The solution was <strong>SSL Bump</strong>, implemented in <code>src/ssl/</code> and <code>src/security/</code>. SSL Bump was a man-in-the-middle technique: the proxy presented its own certificate to the client, terminated the TLS session, read the plaintext, made its ACL decision, then re-encrypted and forwarded to the server.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">SSL Bump three-step protocol</div>
+        <pre><code>// Step 1: peek — read ClientHello, extract SNI hostname
+// ssl_bump peek step1
+// → now we know the hostname, can apply dstdomain ACLs
+
+// Step 2: peek — complete TLS handshake with server
+// ssl_bump peek step2
+// → now we can see server cert, apply cert-based ACLs
+
+// Step 3: splice or bump
+// ssl_bump splice — pass through without decryption
+// ssl_bump bump  — decrypt, inspect, re-encrypt</code></pre>
+      </div>
+
+      <p>The Glass Inspector could see through HTTPS. But this power came with responsibility — and controversy. SSL Bump required installing the proxy's CA certificate on every client device so they would trust the proxy's forged certificates. In corporate environments this was standard practice. In public networks it was deeply problematic.</p>
+      <blockquote class="inner-voice">To inspect the letter, you must open it. The Glass Inspector was always aware of this cost.</blockquote>
+    </div>
+  </article>
+
+  <!-- Chapter 14 -->
+  <article class="chapter" id="ch14">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 14</span>
+      <h2 class="chapter-title">A Day in the Courtroom</h2>
+    </div>
+    <div class="chapter-body">
+      <p>Let us follow a single request through the full courtroom sequence.</p>
+      <p>A client at 10.0.1.42 requested <code>http://news.example.com/article/12345</code> at 14:32 on a Wednesday. The request arrived at the Gatekeeper, was parsed, and passed to ClientHttpRequest, which called doCallouts().</p>
+      <p>First checkpoint: X-Forwarded-For. The request had no XFF header, so no action was needed.</p>
+      <p>Second checkpoint: ICAP. The configuration had no ICAP services, so this was skipped.</p>
+      <p>Third checkpoint: ACL evaluation. The access list was:</p>
+      <pre class="inline-code">acl localnet src 10.0.0.0/8
+acl business_hours time MTWHF 08:00-18:00
+acl blocked_sites dstdomain .gambling.com .adult.com
+http_access deny blocked_sites
+http_access allow localnet business_hours
+http_access deny all</pre>
+
+      <p>The Checklist was created. It walked the access list from top to bottom.</p>
+      <p>Rule 1: <code>deny blocked_sites</code>. Is news.example.com in the blocked_sites list? The Path Recognizer consulted its domain hash. No match. This DENY rule did not apply.</p>
+      <p>Rule 2: <code>allow localnet business_hours</code>. Is 10.0.1.42 in 10.0.0.0/8? The IP Ledger walked the radix trie. Yes. Is Wednesday 14:32 in business hours? The Clock Court checked the bitmask. Yes. Both conditions met — ALLOW.</p>
+      <p>Verdict: ALLOW. The trial was 200 microseconds. The request proceeded to the cache.</p>
+      <blockquote class="inner-voice">Justice at this speed is not justice. It is architecture.</blockquote>
+    </div>
+  </article>
+
+  <!-- Chapter 15 -->
+  <article class="chapter" id="ch15">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 15</span>
+      <h2 class="chapter-title">The Law That Never Ends</h2>
+    </div>
+    <div class="chapter-body">
+      <p>The courtroom was not a place you visited once and left. Every request passed through it. Millions of requests per day, each one submitted to the same sequence of judges, each one receiving a verdict within microseconds.</p>
+      <p>The ACL system had been accumulating laws since Squid's earliest days. Some ACL types were thirty years old. Others — like <code>ssl::server_name</code> for SNI-based SSL Bump decisions — had been added in the past decade. New ACL types were still being added. The law grew.</p>
+      <p>What kept the courtroom from collapsing under its own weight was discipline in design. Each ACL type was a small, focused object with a single responsibility. The composition logic was separate from the individual judges. The async machinery was separate from the evaluation logic. Layers of abstraction that had held for decades.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">Acl::Node hierarchy — the type tree</div>
+        <pre><code>Acl::Node
+├── Acl::InnerNode  (AllOf / AnyOf / NotNode — logic composition)
+│   ├── Acl::AllOf
+│   ├── Acl::AnyOf
+│   └── Acl::NotNode
+└── Acl::LeafNode   (actual data matchers)
+    ├── ACLIP       (src / dst)
+    ├── ACLTime     (time)
+    ├── ACLRegex    (url_regex / etc.)
+    ├── ACLDomain   (dstdomain)
+    └── ACLExternal (external_acl_type)</code></pre>
+      </div>
+
+      <p>The kingdom's law was a tree. Not a flat list, not a monolithic function, but a recursive structure where every node could contain other nodes. A request was evaluated by walking this tree, and the tree could grow arbitrarily complex without changing the walking algorithm.</p>
+      <p>Judge ACL would outlast the current administrators, the current hardware, the current generation of threats. The law was designed to outlast its authors.</p>
+      <blockquote class="inner-voice">Laws are not written for today. They are written for every day that follows — including the days no one has yet imagined.</blockquote>
+    </div>
+  </article>
+
+  <nav class="chapter-nav">
+    <a href="vol1.html" class="chapter-nav-btn">← Volume 1: The Gates Open</a>
+    <a href="vol3.html" class="chapter-nav-btn">Volume 3: The Warehouse of Forgotten Things →</a>
+  </nav>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-logo">The Squid Epic</div>
+    <div class="footer-links">
+      <a href="https://github.com/squid-cache/squid" target="_blank" rel="noopener">squid-cache/squid</a>
+      <a href="https://github.com/NolanKiwi/squid-novel" target="_blank" rel="noopener">This project</a>
+      <a href="/vol2.html">한국어</a>
+    </div>
+    <div class="footer-copy">A technical novel based on the Squid Proxy source code</div>
+  </div>
+</footer>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

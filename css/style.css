@@ -1033,3 +1033,56 @@ blockquote {
 }
 blockquote p { font-family: var(--font-sans); margin: 0; }
 blockquote p::first-letter { float: none; font-size: inherit; line-height: inherit; margin: 0; color: inherit; }
+
+/* ──── 언어 스위처 ──── */
+.lang-switcher {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  margin-left: auto;
+}
+.lang-btn {
+  padding: .25rem .65rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  text-decoration: none;
+  color: var(--text-muted);
+  background: transparent;
+  transition: all .2s;
+  letter-spacing: .04em;
+}
+.lang-btn:hover { color: var(--text-primary); border-color: var(--border-light); }
+.lang-btn.active {
+  color: var(--vol-color, var(--accent-gold));
+  border-color: var(--vol-color, var(--accent-gold));
+  background: rgba(255,255,255,.04);
+}
+.topbar-breadcrumb { flex: 1; }
+.novel-topbar { display: flex; align-items: center; gap: 1rem; }
+
+/* Hero lang switcher (index pages) */
+.hero-lang-switcher {
+  display: flex;
+  gap: .75rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+.hero-lang-btn {
+  padding: .5rem 1.4rem;
+  border: 1.5px solid var(--border);
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: .85rem;
+  text-decoration: none;
+  color: var(--text-secondary);
+  background: rgba(255,255,255,.03);
+  transition: all .2s;
+}
+.hero-lang-btn:hover,
+.hero-lang-btn.active {
+  color: var(--accent-gold);
+  border-color: var(--accent-gold);
+  background: rgba(201,168,76,.08);
+}

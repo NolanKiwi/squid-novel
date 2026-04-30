@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>The Squid Epic — A Technical Novel in Five Volumes</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content fade-in">
+    <div class="hero-badge fade-in fade-in-d1">GitHub: squid-cache/squid · C++ · 30 years of history</div>
+    <h1 class="hero-title fade-in fade-in-d2">The Squid<br>Epic</h1>
+    <p class="hero-subtitle fade-in fade-in-d3">The Squid Proxy source code retold as a five-volume technical novel</p>
+    <p class="hero-desc fade-in fade-in-d4">
+      A server on a rack in a machine room. From the moment power flows through its circuits,
+      it handles hundreds of thousands of connections, hands down verdicts, hoards memories,
+      and dispatches agents beyond its borders. A kingdom in code.
+      <strong style="color:var(--accent-gold)">Every character is a real source file, class, or function.</strong>
+    </p>
+
+    <div class="hero-lang-switcher fade-in fade-in-d5">
+      <a href="/" class="hero-lang-btn">🇰🇷 한국어</a>
+      <span class="hero-lang-btn active">🇺🇸 English</span>
+    </div>
+
+    <div class="hero-volumes fade-in fade-in-d5" style="margin-top:1.5rem">
+      <a href="vol1.html" class="vol-pill" style="--vol-color:#c9a84c">
+        <span class="vol-num">VOL.1</span> The Gates Open
+      </a>
+      <a href="vol2.html" class="vol-pill" style="--vol-color:#e05c5c">
+        <span class="vol-num">VOL.2</span> The Court of the Judge
+      </a>
+      <a href="vol3.html" class="vol-pill" style="--vol-color:#4ecdc4">
+        <span class="vol-num">VOL.3</span> The Warehouse of Forgotten Things
+      </a>
+      <a href="vol4.html" class="vol-pill" style="--vol-color:#5b9bd5">
+        <span class="vol-num">VOL.4</span> Beyond the Border
+      </a>
+      <a href="vol5.html" class="vol-pill" style="--vol-color:#9b72cf">
+        <span class="vol-num">VOL.5</span> The Ledger, the Wounds, the Crown
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <svg width="16" height="24" viewBox="0 0 16 24" fill="none">
+      <rect x="1" y="1" width="14" height="22" rx="7" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M8 6v6M5 9l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ══ 본문 ══ -->
+<div class="index-body">
+
+  <!-- SVG Illustration -->
+  <section class="index-section">
+    <h2 class="section-title">The Kingdom's Blueprint</h2>
+    <div class="svg-container">
+      <img src="../assets/svg/server-room.svg" alt="Server room illustration" style="width:100%;max-width:800px;display:block;margin:0 auto;border-radius:8px"/>
+    </div>
+  </section>
+
+  <!-- Volume Cards -->
+  <section class="index-section">
+    <h2 class="section-title">Five Volumes</h2>
+    <div class="vol-grid">
+
+      <div class="vol-card" style="--vol-color:#c9a84c">
+        <div class="vol-card-num">VOL.1</div>
+        <h3 class="vol-card-title">The Gates Open</h3>
+        <p class="vol-card-sub">The Birth of the Proxy Kingdom</p>
+        <p class="vol-card-desc">Everything begins with a single command. The machine opens its eyes, reads the law, starts its heartbeat, and opens the gates to the first visitor.</p>
+        <div class="vol-card-tags">
+          <span class="tag">src/main.cc</span>
+          <span class="tag">EventLoop.cc</span>
+          <span class="tag">client_side.cc</span>
+        </div>
+        <a href="vol1.html" class="vol-card-btn">Read Volume 1 →</a>
+      </div>
+
+      <div class="vol-card" style="--vol-color:#e05c5c">
+        <div class="vol-card-num">VOL.2</div>
+        <h3 class="vol-card-title">The Court of the Judge</h3>
+        <p class="vol-card-sub">ACL, Rules, and Verdicts</p>
+        <p class="vol-card-desc">The request crossed the gate. But even inside there are checkpoints. Judge ACL interrogates every packet. Allow or deny — the law breathes between 0 and 1.</p>
+        <div class="vol-card-tags">
+          <span class="tag">acl/Checklist.cc</span>
+          <span class="tag">acl/Ip.cc</span>
+          <span class="tag">external.cc</span>
+        </div>
+        <a href="vol2.html" class="vol-card-btn">Read Volume 2 →</a>
+      </div>
+
+      <div class="vol-card" style="--vol-color:#4ecdc4">
+        <div class="vol-card-num">VOL.3</div>
+        <h3 class="vol-card-title">The Warehouse of Forgotten Things</h3>
+        <p class="vol-card-sub">Cache, Memory, and Forgetting</p>
+        <p class="vol-card-desc">Everything changes after the second visit. The Storekeeper remembers what was already fetched and won't fetch it again. Remembering is the kingdom's strength; forgetting is its wisdom.</p>
+        <div class="vol-card-tags">
+          <span class="tag">store/Controller.cc</span>
+          <span class="tag">refresh.cc</span>
+          <span class="tag">repl/lru</span>
+        </div>
+        <a href="vol3.html" class="vol-card-btn">Read Volume 3 →</a>
+      </div>
+
+      <div class="vol-card" style="--vol-color:#5b9bd5">
+        <div class="vol-card-num">VOL.4</div>
+        <h3 class="vol-card-title">Beyond the Border</h3>
+        <p class="vol-card-sub">Forwarding, Connections, and Tunnels</p>
+        <p class="vol-card-desc">Cache miss. The Forward Commander steps up. Consults the DNS oracle, shouts to the peer caches, races IPv6 against IPv4, and sometimes digs a secret tunnel.</p>
+        <div class="vol-card-tags">
+          <span class="tag">FwdState.cc</span>
+          <span class="tag">HappyConnOpener.cc</span>
+          <span class="tag">tunnel.cc</span>
+        </div>
+        <a href="vol4.html" class="vol-card-btn">Read Volume 4 →</a>
+      </div>
+
+      <div class="vol-card" style="--vol-color:#9b72cf">
+        <div class="vol-card-num">VOL.5</div>
+        <h3 class="vol-card-title">The Ledger, the Wounds, the Crown</h3>
+        <p class="vol-card-sub">Logging, Performance, and Squid's Legacy</p>
+        <p class="vol-card-desc">Everything is recorded. Allows and denials, hits and misses. Thirty years of code, millions of lines, thousands of hands. The kingdom still lives.</p>
+        <div class="vol-card-tags">
+          <span class="tag">AccessLogEntry.h</span>
+          <span class="tag">mem/Pool.cc</span>
+          <span class="tag">sbuf/SBuf.h</span>
+        </div>
+        <a href="vol5.html" class="vol-card-btn">Read Volume 5 →</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Architecture -->
+  <section class="index-section">
+    <h2 class="section-title">Full Architecture</h2>
+    <div class="svg-container">
+      <img src="../assets/svg/architecture.svg" alt="Squid architecture diagram" style="width:100%;max-width:900px;display:block;margin:0 auto;border-radius:8px"/>
+    </div>
+  </section>
+
+  <!-- Characters -->
+  <section class="index-section">
+    <h2 class="section-title">Cast of Characters</h2>
+    <div class="char-grid">
+      <div class="char-card"><div class="char-name">The Gatekeeper</div><div class="char-file">client_side.cc · ConnStateData</div></div>
+      <div class="char-card"><div class="char-name">Judge ACL</div><div class="char-file">acl/Checklist.cc</div></div>
+      <div class="char-card"><div class="char-name">The Storekeeper</div><div class="char-file">store/Controller.cc</div></div>
+      <div class="char-card"><div class="char-name">The Forward Commander</div><div class="char-file">FwdState.cc</div></div>
+      <div class="char-card"><div class="char-name">The DNS Oracle</div><div class="char-file">ipcache.cc</div></div>
+      <div class="char-card"><div class="char-name">Happy Eyeballs</div><div class="char-file">HappyConnOpener.cc</div></div>
+      <div class="char-card"><div class="char-name">The Wheel of Time</div><div class="char-file">EventLoop.cc</div></div>
+      <div class="char-card"><div class="char-name">The Freshness Oracle</div><div class="char-file">refresh.cc</div></div>
+      <div class="char-card"><div class="char-name">The Archivist</div><div class="char-file">AccessLogEntry.h</div></div>
+      <div class="char-card"><div class="char-name">The Disguise Artist</div><div class="char-file">ssl/ + security/</div></div>
+      <div class="char-card"><div class="char-name">The Secret Tunnel</div><div class="char-file">tunnel.cc</div></div>
+      <div class="char-card"><div class="char-name">The Peer Caches</div><div class="char-file">neighbors.cc</div></div>
+    </div>
+  </section>
+
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-logo">The Squid Epic</div>
+    <div class="footer-links">
+      <a href="https://github.com/squid-cache/squid" target="_blank" rel="noopener">squid-cache/squid</a>
+      <a href="https://github.com/NolanKiwi/squid-novel" target="_blank" rel="noopener">This project</a>
+      <a href="/">한국어</a>
+    </div>
+    <div class="footer-copy">A technical novel based on the Squid Proxy source code</div>
+  </div>
+</footer>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

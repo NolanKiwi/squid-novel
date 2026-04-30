@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en" data-volume="5">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Vol.5 The Ledger, the Wounds, the Crown — The Squid Epic</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+</head>
+<body>
+
+<nav class="novel-topbar">
+  <a href="index.html" class="topbar-back">← The Squid Epic</a>
+  <div class="topbar-breadcrumb">
+    <span class="topbar-vol">VOLUME 5</span>
+    <span class="topbar-title">The Ledger, the Wounds, the Crown</span>
+  </div>
+  <div class="lang-switcher">
+    <span class="lang-btn active">EN</span>
+    <a href="/vol5.html" class="lang-btn">KO</a>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+</nav>
+
+<aside class="novel-sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-vol">VOLUME 5</div>
+    <div class="sidebar-title">The Ledger, the Wounds, the Crown</div>
+  </div>
+  <nav class="sidebar-toc">
+    <a href="#ch1" class="toc-item">Chapter 1 · The Archivist</a>
+    <a href="#ch2" class="toc-item">Chapter 2 · The Language of the Ledger</a>
+    <a href="#ch3" class="toc-item">Chapter 3 · The Wound of Memory</a>
+    <a href="#ch4" class="toc-item">Chapter 4 · The Pool Keepers</a>
+    <a href="#ch5" class="toc-item">Chapter 5 · The Living String</a>
+    <a href="#ch6" class="toc-item">Chapter 6 · The Async Foundation</a>
+    <a href="#ch7" class="toc-item">Chapter 7 · The Content Inspectors</a>
+    <a href="#ch8" class="toc-item">Chapter 8 · The Many Workers</a>
+    <a href="#ch9" class="toc-item">Chapter 9 · The Watchmen</a>
+    <a href="#ch10" class="toc-item">Chapter 10 · The Diagnosis Room</a>
+    <a href="#ch11" class="toc-item">Chapter 11 · Thirty Years of Scars</a>
+    <a href="#ch12" class="toc-item">Chapter 12 · The Inheritance</a>
+    <a href="#ch13" class="toc-item">Chapter 13 · The Crowning Question</a>
+    <a href="#ch14" class="toc-item">Chapter 14 · The Kingdom's Reckoning</a>
+    <a href="#ch15" class="toc-item">Chapter 15 · The Squid Still Swims</a>
+  </nav>
+</aside>
+
+<button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">☰</button>
+
+<main class="novel-main">
+
+  <header class="vol-hero">
+    <div class="vol-hero-num">VOLUME 5</div>
+    <h1 class="vol-hero-title">The Ledger, the Wounds, the Crown</h1>
+    <p class="vol-hero-sub">Logging, Performance, and Squid's Legacy</p>
+    <p class="vol-hero-desc">
+      Everything is recorded. Allows and denials, hits and misses.
+      Thirty years of code, millions of lines, thousands of hands.
+      The kingdom still lives.
+    </p>
+  </header>
+
+  <!-- Chapter 1 -->
+  <article class="chapter" id="ch1">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 1</span>
+      <h2 class="chapter-title">The Archivist</h2>
+    </div>
+    <div class="chapter-body">
+      <p>Every request that passed through the kingdom was recorded. Not optionally, not approximately — every one. The actor responsible was the <strong>Archivist</strong>: the access logging system built around <code>src/AccessLogEntry.h</code>.</p>
+      <p>The Archivist's raw material was an <strong>AccessLogEntry</strong> — a structure assembled over the lifecycle of a single request. It began empty when the request arrived at the Gatekeeper and accumulated data as the request moved through the kingdom: client IP, request URL, response status, bytes sent, cache status (HIT or MISS), duration, authentication information.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">src/AccessLogEntry.h — the request biography</div>
+        <pre><code>class AccessLogEntry {
+public:
+    // Client information
+    Ip::Address client_addr;
+    char *log_uri;          // the requested URL
+    String extuser;         // authenticated username
+
+    // Response information
+    Http::StatusCode http_code;
+    int64_t reply_size;     // total bytes sent to client
+
+    // Cache decision
+    LogTags cache_status;   // TCP_HIT, TCP_MISS, TCP_DENIED...
+
+    // Timing
+    timeval start_time;
+    int64_t transaction_msec; // total request duration
+
+    // ... and many more fields
+};</code></pre>
+      </div>
+
+      <p>The completed AccessLogEntry was passed to the log daemon when the request finished. The log daemon wrote it to one or more configured log targets — files, syslog, UDP datagram receivers, custom programs.</p>
+    </div>
+  </article>
+
+  <!-- Chapter 2 -->
+  <article class="chapter" id="ch2">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 2</span>
+      <h2 class="chapter-title">The Language of the Ledger</h2>
+    </div>
+    <div class="chapter-body">
+      <p>The Archivist wrote in a language of tokens. Each log format was a string of format codes — <code>%&gt;a</code> for client IP, <code>%ts</code> for timestamp, <code>%Ss</code> for cache status — assembled into a line for each request.</p>
+      <p>The default format was the <strong>native</strong> format — Squid's own line format, familiar to any Squid administrator. But Squid also supported <code>squid</code> (a variant of native), <code>combined</code> (Apache Combined Log Format, for compatibility with Apache log analyzers), and fully custom formats defined with <code>logformat</code> directives.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">src/format/Token.h — log format tokens</div>
+        <pre><code>// Native Squid log format:
+// %ts.%03tu %6tr %>a %Ss/%03&gt;Hs %&lt;st %rm %ru %[un %Sh/%&lt;a %mt
+
+// Decoded:
+// %ts    — Unix timestamp (seconds)
+// %03tu  — milliseconds
+// %6tr   — request duration (ms), 6 chars
+// %>a    — client IP address
+// %Ss    — Squid cache status (TCP_HIT, TCP_MISS, etc.)
+// %03>Hs — HTTP response status code
+// %<st   — total bytes to client
+// %rm    — request method (GET, POST, etc.)
+// %ru    — request URL
+// %[un   — authenticated username (- if none)
+// %Sh    — peer status (DIRECT, FIRST_UP, etc.)
+// %<a    — server IP address
+// %mt    — MIME content type</code></pre>
+      </div>
+
+      <p>The format token system was extensible. New tokens could be added without changing the log output format machinery — just register a new token type and a function to extract the value from an AccessLogEntry. Over thirty years, the token vocabulary had grown to dozens of codes covering every measurable aspect of a request.</p>
+      <blockquote class="inner-voice">The language of the ledger grew richer with each year. Every new field was a new lens through which to see the kingdom's activity.</blockquote>
+    </div>
+  </article>
+
+  <!-- Chapter 3 -->
+  <article class="chapter" id="ch3">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 3</span>
+      <h2 class="chapter-title">The Wound of Memory</h2>
+    </div>
+    <div class="chapter-body">
+      <p>Every C++ program that lived long enough accumulated wounds. Squid's wounds were many — but most were healing or healed. The most important wound was the one that had been fought over for decades: <strong>memory management</strong>.</p>
+      <p>C++ in the 1990s had no garbage collector, no smart pointers in the standard library, and a culture of manual <code>new</code>/<code>delete</code> that invited use-after-free bugs, memory leaks, and double-frees. Squid accumulated all three over its early years.</p>
+      <p>The response came in layers. First: custom allocators via <code>MemPool</code> — pools of same-sized objects where allocation was O(1) and deallocation returned memory to the pool rather than the system. Second: reference counting via <code>RefCount&lt;T&gt;</code>. Third: the <code>CbcPointer</code> mechanism for async safety.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">src/base/CbcPointer.h — use-after-free prevention</div>
+        <pre><code>// Problem: async callback fires after the target object is deleted
+// CbcPointer detects this:
+template &lt;class Cbc&gt;
+class CbcPointer {
+public:
+    bool valid() const {
+        return cbdata_valid(raw_); // CBDATA check
+    }
+    Cbc *get() const {
+        return valid() ? raw_ : nullptr;
+    }
+};</code></pre>
+      </div>
+
+      <p>The CBDATA (CallBack Data) mechanism was Squid-specific: every object registered with the CBDATA system got a validity flag that was cleared on destruction. Any async callback that held a CbcPointer checked this flag before dereferencing. Use-after-free became a checked no-op instead of a crash.</p>
+      <p>It was not elegant. It was a system built by humans who had been burned, over many years, by the absence of such a system. Each wound had left a scar, and the scars had become armor.</p>
+    </div>
+  </article>
+
+  <!-- Chapter 4 -->
+  <article class="chapter" id="ch4">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 4</span>
+      <h2 class="chapter-title">The Pool Keepers</h2>
+    </div>
+    <div class="chapter-body">
+      <p>The general-purpose allocator — <code>malloc</code> and <code>free</code> — was not designed for a proxy's allocation pattern. A proxy created and destroyed thousands of small, same-typed objects per second: HttpRequest objects, StoreEntry objects, conn objects, ACL checklist nodes. The general allocator fragmented memory and incurred syscall overhead for each allocation.</p>
+      <p>The <strong>Pool Keepers</strong> — <code>src/mem/Pool.cc</code> and its <code>MEMPROXY_CLASS</code> macro — solved this with object pooling. Each class that used the macro got its own pool of pre-allocated instances. Allocation took an object from the front of the pool; deallocation returned it. No system calls, no fragmentation, O(1) guaranteed.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">src/mem/Pool.cc — pool allocation</div>
+        <pre><code">// Usage: add MEMPROXY_CLASS(ClassName) to a class definition
+// This generates:
+void *ClassName::operator new(size_t) {
+    MEMPROXY_NEW(ClassName);  // get from pool
+}
+void ClassName::operator delete(void *address) {
+    MEMPROXY_DELETE(ClassName);  // return to pool
+}
+
+// The pool maintains a free list:
+// alloc: pop from free list (or malloc if empty)
+// free: push onto free list</code></pre>
+      </div>
+
+      <p>Pool statistics were available through the cache manager interface: how many objects of each type were currently allocated, how many were in the free list, total memory consumed. This telemetry allowed administrators to understand memory usage in detail — which object types were accumulating, whether the proxy was leaking, whether pool sizes were appropriate for the workload.</p>
+    </div>
+  </article>
+
+  <!-- Chapter 5 -->
+  <article class="chapter" id="ch5">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 5</span>
+      <h2 class="chapter-title">The Living String</h2>
+    </div>
+    <div class="chapter-body">
+      <p>URLs were everywhere in Squid — in cache keys, log entries, ACL evaluations, HTTP headers, debug output. And URLs were strings. In a C-string world, every string operation risked a buffer overflow, every concatenation required a length calculation, every substring required a copy.</p>
+      <p>The solution was <strong>SBuf</strong> — the Squid Buffer, implemented in <code>src/sbuf/SBuf.h</code>. SBuf was a reference-counted, copy-on-write string class with O(1) substring operations and automatic memory management.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">src/sbuf/SBuf.h — copy-on-write string</div>
+        <pre><code>class SBuf {
+    // Backed by a MemBlob (ref-counted buffer)
+    MemBlob::Pointer store_;
+    size_type off_ = 0;  // offset into buffer
+    size_type len_ = 0;  // length of this view
+
+public:
+    // O(1) substring — no copy, shared buffer
+    SBuf substr(size_type pos, size_type n = npos) const;
+
+    // Only copies on write (append, replace)
+    SBuf &amp;append(const SBuf &amp;S);
+};</code></pre>
+      </div>
+
+      <p>The key insight was that most string operations in a proxy were <em>reads</em>. Parsing a URL, logging it, comparing it against ACL patterns — all reads. SBuf's substr() created a new SBuf pointing into the same memory at a different offset, sharing the backing MemBlob. No allocation, no copy.</p>
+      <p>Write operations — appending, modifying — triggered a copy-on-write: if the backing MemBlob was shared with other SBufs, a private copy was made before modification. This kept the copies minimal and the reads free.</p>
+      <blockquote class="inner-voice">The living string was the kingdom's answer to the oldest wound: the buffer overflow. It wrapped every string in a membrane that could not be penetrated.</blockquote>
+    </div>
+  </article>
+
+  <!-- Chapter 6 -->
+  <article class="chapter" id="ch6">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 6</span>
+      <h2 class="chapter-title">The Async Foundation</h2>
+    </div>
+    <div class="chapter-body">
+      <p>Everything in Squid was async. Every operation that could block — file I/O, DNS, network I/O, external helper communication — was deferred to a callback. The event loop ran on a single thread; blocking calls would have paralyzed the entire proxy.</p>
+      <p>The machinery that made async safe and manageable was <code>src/base/AsyncJob.h</code>. Every async component — FwdState, TunnelStateData, PeerConnector, HappyConnOpener — was an AsyncJob. AsyncJob provided: a standard lifecycle (start/stop), automatic deregistration from callbacks on destruction, and RefCount memory management.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">src/base/AsyncJob.h — the async lifecycle</div>
+        <pre><code">class AsyncJob : public RefCountable {
+public:
+    virtual void start() {}    // begin work
+    virtual void swanSong() {} // called before deletion
+
+    // Schedule a callback to self:
+    void callBack(AsyncCall::Pointer &amp;call);
+
+    bool started_ = false;
+    bool stopped_ = false;
+protected:
+    virtual ~AsyncJob(); // only deleted via RefCount
+};</code></pre>
+      </div>
+
+      <p><strong>AsyncCall</strong> was the callback wrapper. Instead of raw function pointers, all callbacks were wrapped in AsyncCall objects that carried their own validity checking. If the target AsyncJob had been stopped before the callback fired, the call was silently dropped. No dangling pointers, no operating on dead objects.</p>
+      <p>This machinery had been built incrementally over years as the async bugs accumulated and were fixed. The final form — AsyncJob + AsyncCall + CbcPointer + RefCount — was an interlocking system of safety nets that made async programming in C++ considerably less dangerous than it had been in 1996.</p>
+    </div>
+  </article>
+
+  <!-- Chapter 7 -->
+  <article class="chapter" id="ch7">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 7</span>
+      <h2 class="chapter-title">The Content Inspectors</h2>
+    </div>
+    <div class="chapter-body">
+      <p>Beyond caching and access control, some deployments required content inspection: antivirus scanning of downloads, data loss prevention for uploads, content transformation for mobile optimization. This was the domain of <strong>ICAP</strong> — the Internet Content Adaptation Protocol.</p>
+      <p>ICAP, implemented in <code>src/adaptation/icap/</code>, defined a simple request/response protocol for connecting Squid to external content modification services. Squid sent either the request (<code>REQMOD</code>) or the response (<code>RESPMOD</code>) to an ICAP server; the server could pass it through unchanged, modify it, or replace it entirely.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">ICAP protocol overview</div>
+        <pre><code">REQMOD: client request → ICAP server → (possibly modified) request → origin
+RESPMOD: origin response → ICAP server → (possibly modified) response → client
+
+// ICAP request format:
+REQMOD icap://icap.example.com/req-service ICAP/1.0
+Host: icap.example.com
+Encapsulated: req-hdr=0, req-body=412
+
+[HTTP request headers]
+[HTTP request body]
+
+// ICAP response:
+ICAP/1.0 200 OK
+Encapsulated: req-hdr=0, req-body=412
+[possibly modified HTTP request]</code></pre>
+      </div>
+
+      <p>Squid maintained persistent connection pools to ICAP servers, reducing per-request overhead. ICAP responses could include a 204 (No Content, pass-through unchanged), avoiding the need to re-send the entire body for requests that passed inspection cleanly.</p>
+      <p>The Content Inspectors stood at the crossroads between the proxy and external intelligence — antivirus engines, DLP systems, transcoding services — that extended the proxy's capabilities far beyond what any single software could implement alone.</p>
+    </div>
+  </article>
+
+  <!-- Chapter 8 -->
+  <article class="chapter" id="ch8">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 8</span>
+      <h2 class="chapter-title">The Many Workers</h2>
+    </div>
+    <div class="chapter-body">
+      <p>For years Squid was single-process. One event loop, one CPU core, one memory space. As servers grew to 64 and 128 cores, and as traffic volumes exploded, the single-process model became a bottleneck.</p>
+      <p>The answer was SMP — Symmetric Multi-Processing mode, introduced in Squid 3.x and refined over subsequent releases. In SMP mode, Squid launched multiple <strong>worker</strong> processes plus a <strong>Coordinator</strong> process.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">SMP process architecture</div>
+        <pre><code"># squid.conf:
+workers 8   # 8 worker processes
+
+# Result:
+# Coordinator process (PID: master)
+# Worker 1 (PID: worker1) — handles subset of connections
+# Worker 2 (PID: worker2) — handles subset of connections
+# ...
+# Worker 8 (PID: worker8)
+
+# Workers share: disk cache (rock store), Transients (shmem)
+# Workers do NOT share: memory cache, connection state</code></pre>
+      </div>
+
+      <p>The kernel distributed incoming connections across workers using <code>SO_REUSEPORT</code> — multiple processes bound to the same port, with the kernel load-balancing connections between them. Each worker ran its own event loop, handled its own connections, maintained its own memory cache.</p>
+      <p>The Coordinator managed worker lifecycle — detecting crashed workers and restarting them, coordinating shared memory initialization, handling signals. It was the kingdom's administrator, separate from the workers who actually processed requests.</p>
+    </div>
+  </article>
+
+  <!-- Chapter 9 -->
+  <article class="chapter" id="ch9">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 9</span>
+      <h2 class="chapter-title">The Watchmen</h2>
+    </div>
+    <div class="chapter-body">
+      <p>The kingdom needed eyes. The <strong>cache manager</strong> — accessed via the special URL <code>http://cache.internal/squid-internal-mgr/</code> — was the proxy's telemetry interface. It exposed hundreds of statistics about the running proxy: current connections, cache hit rates, memory usage, request rates, DNS cache statistics, pool allocator statistics.</p>
+      <p>The cache manager was implemented as a special action on the access list. Requests to the management URL were intercepted before reaching the normal cache lookup code and routed to the cache manager handler instead.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">cache manager actions — the watchmen's reports</div>
+        <pre><code"># Common cache manager actions:
+/squid-internal-mgr/info      — general statistics
+/squid-internal-mgr/counters  — raw counters (hits, misses, etc.)
+/squid-internal-mgr/mem       — memory pool statistics
+/squid-internal-mgr/ipcache   — DNS cache contents
+/squid-internal-mgr/fqdncache — reverse DNS cache
+/squid-internal-mgr/active_requests — current requests
+/squid-internal-mgr/storedir  — disk cache statistics</code></pre>
+      </div>
+
+      <p>SNMP was also supported — <code>src/snmp/</code> implemented a subset of the Squid MIB, allowing standard network monitoring systems to poll the proxy via the Simple Network Management Protocol. Cache managers and MIBs were the Watchmen's official reports to the kingdom's overseers.</p>
+      <blockquote class="inner-voice">A system that cannot be observed cannot be trusted. The Watchmen existed to make the kingdom's behavior legible to those responsible for it.</blockquote>
+    </div>
+  </article>
+
+  <!-- Chapter 10 -->
+  <article class="chapter" id="ch10">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 10</span>
+      <h2 class="chapter-title">The Diagnosis Room</h2>
+    </div>
+    <div class="chapter-body">
+      <p>When the kingdom malfunctioned, the <strong>Diagnosis Room</strong> was where engineers went: the debug logging system. The system's debug infrastructure allowed administrators to enable detailed logging for specific components at specific verbosity levels.</p>
+      <p>Every source file had a <em>debug section</em> — a number from 0 to 99. The <code>debug_options</code> directive in squid.conf could enable logging for specific sections at specific levels (1=basic, 9=verbose).</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">Debug sections — the diagnosis room's filing system</div>
+        <pre><code">debug_options ALL,1    # section ALL, level 1 (default)
+debug_options 17,5    # FwdState verbose (section 17)
+debug_options 20,9    # HTTP state machine maximum verbosity
+debug_options 28,5    # ACL matching verbose
+
+// In code:
+debugs(17, 3, "FwdState::complete " &lt;&lt; entry-&gt;url());
+//     ^section ^level ^message
+// Only emitted if debug section 17 is at level >= 3</code></pre>
+      </div>
+
+      <p>The debug output was prodigiously detailed. At maximum verbosity, Squid printed a line for every ACL evaluation, every DNS lookup, every connection attempt, every cache lookup, every HTTP header sent and received. A single request at maximum verbosity could generate hundreds of debug lines.</p>
+      <p>This verbosity was intentional. The engineers who built Squid knew it would be deployed in situations they had not anticipated, and that the only way to diagnose those situations from afar was to have logged enough information to reconstruct what had happened. The Diagnosis Room was always over-staffed and never regretted it.</p>
+    </div>
+  </article>
+
+  <!-- Chapter 11 -->
+  <article class="chapter" id="ch11">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 11</span>
+      <h2 class="chapter-title">Thirty Years of Scars</h2>
+    </div>
+    <div class="chapter-body">
+      <p>Squid 1.0 was released in 1996. By 2026 it had been three decades. In that time the codebase had been touched by thousands of contributors, maintained through four major version series, and adapted to a world that had changed beyond recognition.</p>
+      <p>The scars were visible to anyone who read the source. Variable names in Hungarian notation. Legacy <code>DEBUG_SECTIONS</code> numbering that dated to the original CERN proxy code. <code>#ifdef</code> guards for platforms no longer in active use. Comments that referred to RFCs that had been superseded. Functions that were 500 lines long because they had been added to incrementally over twenty years without ever being refactored.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">A comment from the deep past</div>
+        <pre><code">// squid.h circa 2001, still present in later versions:
+/*
+ * This code was originally derived from
+ * the Harvest Object Cache, version 1.38
+ * (Copyright 1994-1996, The Harvest Project)
+ * which itself was derived from the CERN httpd proxy.
+ */</code></pre>
+      </div>
+
+      <p>The Harvest cache. The CERN proxy. Lineage that stretched back to the earliest days of the World Wide Web, when Mosaic was the browser and the internet was a novelty. Squid carried these ancestors in its code like geological strata — layer upon layer of decisions made in contexts long vanished.</p>
+      <blockquote class="inner-voice">Every scar had a story. Every strange variable name was someone's best judgment in a moment that no longer existed. To read the source was to read the history of the web itself.</blockquote>
+    </div>
+  </article>
+
+  <!-- Chapter 12 -->
+  <article class="chapter" id="ch12">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 12</span>
+      <h2 class="chapter-title">The Inheritance</h2>
+    </div>
+    <div class="chapter-body">
+      <p>Squid 6.x, the current major version, was C++17. But beneath the modern surface, the inheritance of the past was inescapable. The memory pool macros were designed before smart pointers. The debug section numbering was inherited from CERN. The ACL type names were defined in the 1990s and could not be changed without breaking millions of squid.conf files in production.</p>
+      <p>The Squid development team's challenge was not just writing new code. It was managing the tension between backward compatibility and modernization. Every deprecated feature carried a maintenance cost; every removal broke someone's deployment. The team chose carefully.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">Modernization in progress — the SBuf migration</div>
+        <pre><code">// Old C-string style (still found in legacy code):
+char url[MAX_URL];
+snprintf(url, MAX_URL, "http://%s%s", host, path);
+
+// New SBuf style (used in modern code):
+SBuf url;
+url.appendf("http://%s%s", host.c_str(), path.c_str());
+
+// Migration is gradual — both styles coexist
+// New code uses SBuf; old code is converted opportunistically</code></pre>
+      </div>
+
+      <p>The migration from C strings to SBuf, from manual memory management to RefCount, from raw callbacks to AsyncJob — each was a project spanning years, executed alongside the continuous maintenance of a production system serving millions of users. Not a rewrite, but a renovation — one room at a time, while the building remained open.</p>
+    </div>
+  </article>
+
+  <!-- Chapter 13 -->
+  <article class="chapter" id="ch13">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 13</span>
+      <h2 class="chapter-title">The Crowning Question</h2>
+    </div>
+    <div class="chapter-body">
+      <p>Did Squid still matter? In a world of CDNs, cloud load balancers, service meshes, and browser-native TLS everywhere, the forward proxy model had lost its 1990s necessity. Corporate networks still ran Squid for content filtering. Developing-world ISPs still ran it for bandwidth optimization. Security researchers ran it for traffic analysis. Universities ran it for caching research.</p>
+      <p>But the question hung in the air: was this a diminishing use case, a technology in managed decline, a kingdom whose time had passed?</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">squid-users mailing list, 2024</div>
+        <pre><code">"We're running Squid in front of 50,000 students.
+ Without it our internet link would be saturated
+ by 9 AM. The hit ratio on YouTube CDN alone
+ is running at 73%. This software saves us $40,000
+ a year in bandwidth costs."
+ — University network administrator, Southeast Asia</code></pre>
+      </div>
+
+      <p>The kingdom's subjects were not hypothetical. They were real institutions, real users, real network links that Squid made usable. The use cases had shifted — less "download the whole internet once and share it" and more "control what your users can access" — but the software adapted. SSL Bump for HTTPS inspection. ICAP for content scanning. SMP for high throughput. Rock store for concurrent access.</p>
+      <blockquote class="inner-voice">The question of relevance is answered by those who use it, not by those who theorize about it.</blockquote>
+    </div>
+  </article>
+
+  <!-- Chapter 14 -->
+  <article class="chapter" id="ch14">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 14</span>
+      <h2 class="chapter-title">The Kingdom's Reckoning</h2>
+    </div>
+    <div class="chapter-body">
+      <p>We have followed the request from its first SYN packet through the Gatekeeper, through the courtroom of Judge ACL, into the Storekeeper's vaults, across the borders via the Forward Commander, and back — all in the space of milliseconds. Let us take stock of what we have seen.</p>
+      <p>A kingdom of 500,000 lines of C++. Thirty years of commits. Four major version series. Dozens of active contributors. Millions of production deployments worldwide. One fundamental mission: sit between clients and servers and be useful.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">The full request path — a kingdom in 20 lines</div>
+        <pre><code>// 1. EventLoop: epoll_wait() → new connection event
+// 2. Comm::AcceptLimiter: accept() → ConnStateData
+// 3. client_side.cc: Http1::RequestParser → HttpRequest
+// 4. client_side_request.cc: doCallouts() chain
+// 5. acl/Checklist: fastCheck() → ALLOW
+// 6. store/Controller: find(key) → null (MISS)
+// 7. FwdState::Start()
+// 8. neighbors.cc: peerSelect() → DIRECT
+// 9. ipcache: DNS lookup (or cached answer)
+// 10. HappyConnOpener: IPv6/IPv4 race
+// 11. Security::PeerConnector: TLS handshake
+// 12. HttpStateData: send GET, read 200 OK
+// 13. StoreEntry: STORE_PENDING → streaming
+// 14. StoreClients notified: data ready
+// 15. client_side.cc: write to client socket
+// 16. StoreEntry: STORE_OK
+// 17. Disk write: aufs thread pool
+// 18. Connection: returned to pool
+// 19. AccessLogEntry: written to access.log
+// 20. EventLoop: back to epoll_wait()</code></pre>
+      </div>
+
+      <p>Twenty steps. Hundreds of source files involved. Thousands of lines of code executed. All to serve one HTTP GET request. And then, immediately, the next one. And the next. The wheel never stopped turning.</p>
+    </div>
+  </article>
+
+  <!-- Chapter 15 -->
+  <article class="chapter" id="ch15">
+    <div class="chapter-header">
+      <span class="chapter-num">Chapter 15</span>
+      <h2 class="chapter-title">The Squid Still Swims</h2>
+    </div>
+    <div class="chapter-body">
+      <p>The squid is an ancient animal. It appeared in the fossil record over 300 million years ago. It has survived every mass extinction. It has adapted to pressures that killed more specialized creatures. It is not beautiful. It is not simple. But it is effective, and it endures.</p>
+      <p>The Squid proxy shares something with its namesake. It is not the most elegant software ever written. Its codebase bears the marks of decades of evolution — structures that made perfect sense in 1996 coexisting uneasily with C++17 idioms. Its configuration language is both powerful and overwhelming. Its feature set is vast and partially undiscovered by most users.</p>
+      <p>But it works. It has worked, in production, at scale, under load, for thirty years. Every optimization it implements — the radix trie, the LRU wheel, the MD5 key, the Happy Eyeballs race — was earned through exposure to real workloads, real failures, real user reports. The code is not theoretical. It is empirical — the accumulated evidence of what worked.</p>
+
+      <div class="tech-box">
+        <div class="tech-box-title">git log --oneline src/FwdState.cc | wc -l</div>
+        <pre><code"># The commit count for a single file:
+$ git log --oneline src/FwdState.cc | wc -l
+847
+
+# 847 commits to one file.
+# Each commit is a decision, a fix, a feature, a lesson.
+# 847 moments when someone understood something about
+# forwarding that they hadn't understood before,
+# and encoded that understanding into code.</code></pre>
+      </div>
+
+      <p>This novel has followed the code as story. But the reverse is also true: the code is a story. Read the commit log of any major file and you read a narrative — of features added, bugs fixed, performance improved, protocols supported, security hardened. Each commit message is a sentence in a novel that spans thirty years and will continue to be written.</p>
+      <p>The kingdom is not finished. The Gatekeeper still opens the gate. The Wheel of Time still turns. The Storekeeper still remembers and forgets. Judge ACL still renders verdicts. The Forward Commander still crosses borders. The Archivist still records everything.</p>
+      <p>The squid still swims.</p>
+      <blockquote class="inner-voice">Power flows through the circuits. The machine opens its eyes. The gates open. The kingdom begins again.</blockquote>
+    </div>
+  </article>
+
+  <nav class="chapter-nav">
+    <a href="vol4.html" class="chapter-nav-btn">← Volume 4: Beyond the Border</a>
+    <a href="index.html" class="chapter-nav-btn">↑ Back to The Squid Epic</a>
+  </nav>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-logo">The Squid Epic</div>
+    <div class="footer-links">
+      <a href="https://github.com/squid-cache/squid" target="_blank" rel="noopener">squid-cache/squid</a>
+      <a href="https://github.com/NolanKiwi/squid-novel" target="_blank" rel="noopener">This project</a>
+      <a href="/vol5.html">한국어</a>
+    </div>
+    <div class="footer-copy">A technical novel based on the Squid Proxy source code</div>
+  </div>
+</footer>
+
+<script src="../js/main.js"></script>
+</body>
+</html>
